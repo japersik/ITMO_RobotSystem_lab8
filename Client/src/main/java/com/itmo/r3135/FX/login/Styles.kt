@@ -10,8 +10,8 @@ class Styles : Stylesheet() {
     init {
         loginScreen {
             padding = box(15.px)
-            vgap = 7.px
-            hgap = 10.px
+            vgap = 50.px
+            hgap = 50.px
         }
     }
 }
