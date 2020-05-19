@@ -13,6 +13,19 @@ class Styles : Stylesheet() {
         val catPicture by cssclass()
         val transparentOverlay by cssclass()
         val loginScreen by cssclass()
+        val zip by cssclass()
+    }
+
+    init {
+        s(form) {
+            padding = box(25.px)
+            prefWidth = 450.px
+
+            s(zip) {
+                maxWidth = 60.px
+                minWidth = maxWidth
+            }
+        }
     }
 
     init {
