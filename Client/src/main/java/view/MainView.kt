@@ -14,12 +14,9 @@ class MainView : View("DataBase") {
         prefWidth = 1600.0
         top(Toolbar::class)
         left(Interface::class)
-
-//        add<ProductsMap>()
         center(gridpane {
             row { add<ProductsMap>() }
             row { add<ProductsTable>() }
-
         })
 
         //left(BottomView::class)
