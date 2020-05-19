@@ -1,26 +1,23 @@
 package view
 
 import com.itmo.r3135.World.Color
-import com.itmo.r3135.app.Styles.Companion.zip
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.HOME
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import model.CustomerModel
 import org.controlsfx.control.Notifications
 import tornadofx.*
-import javax.xml.bind.Unmarshaller
 
 class AddForm : View("Register Customer") {
     val model: CustomerModel by inject()
 
     override val root = form {
         fieldset("Owner", FontAwesomeIconView(USER)) {
-            field("Name") {
-                textfield(model.name).required()
+            field("Owner name") {
+                textfield(model.ownername).required()
             }
             field("Birthday") {
-                datepicker(model.birthday)
+                datepicker(model.birthday).required()
             }
             field("Owner's eye color") {
                 combobox<Color>(model.eyeColor, values = Color.values().toList()) {
@@ -35,26 +32,35 @@ class AddForm : View("Register Customer") {
         }
 
         fieldset("Products", FontAwesomeIconView(FontAwesomeIcon.APPLE)) {
+            field("Name") {
+                textfield(model.name).required()
+            }
             field("Price") {
                 textfield(model.price) {
-                    filterInput { it.controlNewText.isDouble() && it.controlNewText.toDouble()>=0 }
+                    filterInput { it.controlNewText.isDouble() && it.controlNewText.toDouble() >= 0 }
                     required()
                 }
-
             }
-
-        }
-
-        fieldset("Address", FontAwesomeIconView(HOME)) {
-            field("Street") {
-                textfield(model.street).required()
-            }
-            field("Zip / City") {
-                textfield(model.zip) {
-                    addClass(zip)
+            field("X / Y") {
+                textfield(model.xcoordinate) {
+                    filterInput { it.controlNewText.isDouble() }
                     required()
                 }
-                textfield(model.city).required()
+                textfield(model.ycoordinate) {
+                    filterInput { it.controlNewText.isDouble() }
+                    required()
+                }
+            }
+            field("Partnumeber") {
+                textfield(model.partnumeber) {
+                    required()
+                }
+            }
+            field("Manufacture cost") {
+                textfield(model.manufacturecost) {
+                    filterInput { it.controlNewText.isDouble() && it.controlNewText.toDouble() >= 0 }
+                    required()
+                }
             }
         }
 
@@ -64,7 +70,7 @@ class AddForm : View("Register Customer") {
                     val customer = model.item
                     Notifications.create()
                             .title("Customer saved!")
-                            .text("${customer.name} was born ${customer.birthday}\nand lives in\n${customer.street}, ${customer.zip} ${customer.city}")
+                            .text("${customer.ownername} was born ${customer.birthday}\nand lives in\n${customer.xcoordinate}, ${customer.ycoordinate} ${customer.eyecolor}")
                             .owner(this)
                             .showInformation()
                 }
@@ -75,4 +81,6 @@ class AddForm : View("Register Customer") {
     }
 
 }
+
+
 
