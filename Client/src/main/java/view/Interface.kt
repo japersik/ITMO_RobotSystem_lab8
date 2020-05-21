@@ -1,11 +1,18 @@
 package view
 
-import com.itmo.r3135.app.Styles
-import javafx.application.Application
+import controller.ProductsController
+import model.Products
+import model.ProductsModel
 import tornadofx.*
 import view.testApp.AddApp
+import kotlin.streams.toList
 
 class Interface : View("My View") {
+    val controller: ProductsController by inject()
+    val model: ProductsModel by inject()
+    val productsTable: ProductsTable by inject()
+    val productsMap: ProductsMap by inject()
+
     override val root = stackpane {
         prefHeight = 800.0
         prefWidth = 80.0
@@ -34,7 +41,8 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        //action
+                        controller.persons.removeAll(controller.persons.stream().filter { t: Products? -> t == controller.selectedPerson.item }.toList())
+                        productsMap.repaint()
                     }
                 }
             }
