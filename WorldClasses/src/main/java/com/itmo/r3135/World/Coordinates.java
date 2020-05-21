@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Класс координат.
  */
 public class Coordinates implements Serializable {
-    private Float x; //Значение поля должно быть больше -50, Поле не может быть null
+    private double x; //Значение поля должно быть больше -50, Поле не может быть null
     private double y;
 
     /**
@@ -15,7 +15,7 @@ public class Coordinates implements Serializable {
      * @param x float.
      * @param y double.
      */
-    public Coordinates(Float x, double y) {
+    public Coordinates(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -25,7 +25,7 @@ public class Coordinates implements Serializable {
      *
      * @return float значение координаты по X.
      */
-    public Float getX() {
+    public double getX() {
         return x;
     }
 

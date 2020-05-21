@@ -10,7 +10,7 @@ import javafx.event.EventHandler
 import javafx.util.Duration
 import tornadofx.*
 
-class LoginScreen : Fragment("Please log in") {
+class LoginScreen : View("Please log in") {
     val loginController: LoginController by inject()
 
     private val model = object : ViewModel() {

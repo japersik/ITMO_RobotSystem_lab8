@@ -4,12 +4,12 @@ import com.itmo.r3135.World.Color
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
-import model.CustomerModel
+import model.ProductsModel
 import org.controlsfx.control.Notifications
 import tornadofx.*
 
 class AddForm : View("Register Customer") {
-    val model: CustomerModel by inject()
+    val model: ProductsModel by inject()
 
     override val root = form {
         fieldset("Owner", FontAwesomeIconView(USER)) {
@@ -20,7 +20,7 @@ class AddForm : View("Register Customer") {
                 datepicker(model.birthday).required()
             }
             field("Owner's eye color") {
-                combobox<Color>(model.eyeColor, values = Color.values().toList()) {
+                combobox<Color>(model.eyecolor, values = Color.values().toList()) {
                     required()
                 }
             }

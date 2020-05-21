@@ -1,5 +1,8 @@
 package com.itmo.r3135.World;
 
+import com.sun.deploy.util.Property;
+import javafx.beans.property.ObjectProperty;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -86,7 +89,7 @@ public class Product implements Comparable<Product>, Serializable {
         try {
             if (this.creationDate == null) this.creationDate = LocalDateTime.now();
             return name == null || name.isEmpty() || coordinates == null ||
-                    coordinates.getX() == null || coordinates.getX() >= 82 || coordinates.getY() <= -50 ||
+                    coordinates.getX() >= 82 || coordinates.getY() <= -50 ||
                     creationDate == null || price == null || price <= 0 ||
                     partNumber == null || partNumber.length() < 21 ||
                     manufactureCost == null || unitOfMeasure == null || owner == null ||
@@ -143,7 +146,6 @@ public class Product implements Comparable<Product>, Serializable {
     public Coordinates getCoordinates() {
         return coordinates;
     }
-
     /**
      * Возвращает поле price элемента коллекции.
      *
@@ -172,7 +174,7 @@ public class Product implements Comparable<Product>, Serializable {
                 if (coordinates.getY() <= -50) {
                     s += String.format(format, "(coordinates)Long y ", coordinates.getY(), "Значение поля должно быть больше -244, Поле не может быть null");
                 }
-                if (coordinates.getX() == null || coordinates.getX() >= 82) {
+                if (coordinates.getX() >= 82) {
                     s += String.format(format, "(coordinates)Long y ", coordinates.getY(), "Максимальное значение поля: 82, Поле не может быть null");
                 }
             }
@@ -281,4 +283,6 @@ public class Product implements Comparable<Product>, Serializable {
                 "Создатель: " + userName + "\n" +
                 "------------------------------------------------------------------------\n";
     }
+
 }
+
