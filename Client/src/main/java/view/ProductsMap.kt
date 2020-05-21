@@ -13,10 +13,19 @@ class ProductsMap : View("My View") {
         prefHeight = 700.0
         prefWidth = 1500.0
 
-        bubblechart("", NumberAxis(), NumberAxis()) {
-            titleSide = Side.LEFT
-            series("series 1") {
-                controller.persons.stream().forEach { t: Products? -> data(t?.xcoordinate,t?.ycoordinate, 10) }
+        scatterchart("", NumberAxis(), NumberAxis()) {
+            titleSide = Side.RIGHT
+            series("Products") {
+                controller.persons.stream().forEach { t: Products? -> data(t?.xcoordinate, t?.ycoordinate) }
+            }
+        }
+    }
+
+    fun repaint() {
+        scatterchart("", NumberAxis(), NumberAxis()) {
+            titleSide = Side.RIGHT
+            series("Products") {
+                controller.persons.stream().forEach { t: Products? -> data(t?.xcoordinate, t?.ycoordinate) }
             }
         }
     }

@@ -1,15 +1,21 @@
 package view
 
 import com.itmo.r3135.World.Color
+import controller.ProductsController
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import model.Products
 import model.ProductsModel
 import org.controlsfx.control.Notifications
 import tornadofx.*
 
 class AddForm : View("Register Customer") {
+    val controller: ProductsController by inject()
     val model: ProductsModel by inject()
+    val productsTable: ProductsTable by inject()
+    val productsMap: ProductsMap by inject()
+
 
     override val root = form {
         fieldset("Owner", FontAwesomeIconView(USER)) {
@@ -32,6 +38,9 @@ class AddForm : View("Register Customer") {
         }
 
         fieldset("Products", FontAwesomeIconView(FontAwesomeIcon.APPLE)) {
+//            field("ID") {
+//                textfield(model.id).required()
+//            }
             field("Name") {
                 textfield(model.name).required()
             }
@@ -67,12 +76,17 @@ class AddForm : View("Register Customer") {
         button("Add") {
             action {
                 model.commit {
-                    val customer = model.item
-                    Notifications.create()
-                            .title("Customer saved!")
-                            .text("${customer.ownername} was born ${customer.birthday}\nand lives in\n${customer.xcoordinate}, ${customer.ycoordinate} ${customer.eyecolor}")
-                            .owner(this)
-                            .showInformation()
+                    val product = model.item
+                    //вставить проверку от БД
+
+                    controller.persons.add(product)
+                    productsMap.repaint()
+                    //productsMap.root
+//                    Notifications.create()
+//                            .title("Customer saved!")
+//                            .text("${customer.ownername} was born ${customer.birthday}\nand lives in\n${customer.xcoordinate}, ${customer.ycoordinate} ${customer.eyecolor}")
+//                            .owner(this)
+//                            .showInformation()
                 }
             }
 

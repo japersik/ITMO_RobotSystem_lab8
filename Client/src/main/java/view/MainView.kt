@@ -1,11 +1,11 @@
 package com.itmo.r3135.view
 
 
+import com.itmo.r3135.app.Styles
+import javafx.application.Application
 import tornadofx.*
-import view.Interface
-import view.ProductsMap
-import view.ProductsTable
-import view.Toolbar
+import view.*
+import view.testApp.AddApp
 
 class MainView : View("DataBase") {
 
@@ -18,6 +18,7 @@ class MainView : View("DataBase") {
             row { add<ProductsMap>() }
             row { add<ProductsTable>() }
         })
+        right(AddForm::class)
 
         //left(BottomView::class)
         //addClass(Styles.main)

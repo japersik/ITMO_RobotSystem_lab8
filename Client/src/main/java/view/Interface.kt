@@ -1,6 +1,9 @@
 package view
 
+import com.itmo.r3135.app.Styles
+import javafx.application.Application
 import tornadofx.*
+import view.testApp.AddApp
 
 class Interface : View("My View") {
     override val root = stackpane {
@@ -17,7 +20,7 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        //action
+                        launch<AddApp>("Add")
                     }
                 }
             }
