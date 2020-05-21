@@ -14,14 +14,15 @@ class Styles : Stylesheet() {
         val transparentOverlay by cssclass()
         val loginScreen by cssclass()
         val zip by cssclass()
+        val xy by cssclass()
     }
 
     init {
         s(form) {
-            padding = box(25.px)
+            padding = box(50.px)
             prefWidth = 450.px
 
-            s(zip) {
+            s(xy) {
                 maxWidth = 60.px
                 minWidth = maxWidth
             }
