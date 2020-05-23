@@ -127,6 +127,9 @@ public class StringCommandManager {
                     case "print_field_descending_price":
                         command = new Command(CommandList.PRINT_FIELD_DESCENDING_PRICE);
                         break;
+                    case "get_updates":
+                        command = new Command(CommandList.GET_UPDATES);
+                        break;
                     default:
                         System.out.println("Неопознанная команда. Наберите 'help' для получения доступных команд.");
                         command = null;

@@ -1,13 +1,12 @@
 package view
 
 import com.itmo.r3135.World.Color
+import com.itmo.r3135.World.Product
 import controller.ProductsController
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
-import model.Products
 import model.ProductsModel
-import org.controlsfx.control.Notifications
 import tornadofx.*
 
 class AddForm : View("Register Customer") {
@@ -79,7 +78,7 @@ class AddForm : View("Register Customer") {
                     val product = model.item
                     //вставить проверку от БД
 
-                    controller.persons.add(product)
+                    controller.addProduct(product.toProduct())
                     productsMap.repaint()
                     //productsMap.root
 //                    Notifications.create()

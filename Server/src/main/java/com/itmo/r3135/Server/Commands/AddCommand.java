@@ -3,6 +3,7 @@ package com.itmo.r3135.Server.Commands;
 import com.itmo.r3135.Server.DataManager;
 import com.itmo.r3135.Server.Mediator;
 import com.itmo.r3135.System.Command;
+import com.itmo.r3135.System.ProductWithStatus;
 import com.itmo.r3135.System.ServerMessage;
 import com.itmo.r3135.World.Person;
 import com.itmo.r3135.World.Product;
@@ -40,7 +41,7 @@ public class AddCommand extends AbstractCommand {
                 dataManager.getLock().writeLock().lock();
                 HashSet<Product> products = dataManager.getProducts();
                 if (products.add(addProduct)) {
-                    dataManager.updateDateChange();
+                    dataManager.addChange(addProduct, ProductWithStatus.ObjectStatus.UPDATE);
                     dataManager.getLock().writeLock().unlock();
                     return new ServerMessage("Элемент c id " + id + " успешно добавлен.");
                 } else {
@@ -65,7 +66,7 @@ public class AddCommand extends AbstractCommand {
                             "values (?,?,?,?,?,?,?,(select id from unitofmeasures where unitname = ?),?) returning id"
             );
             statement.setString(1, product.getName());
-            statement.setFloat(2, product.getCoordinates().getX());
+            statement.setDouble(2, product.getCoordinates().getX());
             statement.setDouble(3, product.getCoordinates().getY());
             statement.setTimestamp(4, new Timestamp(product.getCreationDate().toEpochSecond(ZoneOffset.UTC) * 1000));
             statement.setDouble(5, product.getPrice());

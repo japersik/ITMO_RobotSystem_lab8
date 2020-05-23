@@ -1,9 +1,9 @@
 package com.itmo.r3135.Server;
 
-import com.itmo.r3135.Server.Commands.*;
 import com.itmo.r3135.Connector.Executor;
 import com.itmo.r3135.Connector.Reader;
 import com.itmo.r3135.Connector.Sender;
+import com.itmo.r3135.Server.Commands.*;
 import com.itmo.r3135.Server.SQLconnect.MailManager;
 import com.itmo.r3135.Server.SQLconnect.SQLManager;
 import com.itmo.r3135.System.Command;
@@ -16,7 +16,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -42,6 +41,7 @@ public class ServerWorker implements Mediator, Executor {
     private final AbstractCommand executeScriptCommand;
     private final AbstractCommand infoCommand;
     private final AbstractCommand regCommand;
+    private final AbstractCommand getUpdateIdCommand;
     private final ExecutorService executePool = Executors.newFixedThreadPool(50);
     private final ExecutorService sendPool = Executors.newFixedThreadPool(50);
     private Sender sender;
@@ -65,6 +65,7 @@ public class ServerWorker implements Mediator, Executor {
         executeScriptCommand = new ExecuteScriptCommand(dataManager, this);
         infoCommand = new InfoCommand(dataManager, this);
         regCommand = new RegCommand(dataManager, this);
+        getUpdateIdCommand = new GetUpdatesCommand(dataManager, this);
     }
 
     public ServerWorker(int port) {
@@ -234,14 +235,16 @@ public class ServerWorker implements Mediator, Executor {
                 dataManager.getSqlManager().clearStatus(
                         dataManager.getSqlManager().getUserId(command.getLogin()));
                 return new ServerMessage("Подтверждение успешно!");
-            } else return new ServerMessage("Код неверный!",false);
+            } else return new ServerMessage("Код неверный!", false);
         } else if (command.getCommand() != CommandList.LOGIN && dataManager.getSqlManager().isReg(
                 dataManager.getSqlManager().getUserId(command.getLogin()))) {
             return new ServerMessage("Аккаунт не подтверждён! Проведьте почту\n" +
-                    "Отправьте код подтвеждения командой 'code [код]'",false);
+                    "Отправьте код подтвеждения командой 'code [код]'", false);
         } else
             try {
                 switch (command.getCommand()) {
+                    case GET_UPDATES:
+                        return getUpdateIdCommand.activate(command);
                     case LOGIN:
                         return new ServerMessage("Good login!");
                     case HELP:

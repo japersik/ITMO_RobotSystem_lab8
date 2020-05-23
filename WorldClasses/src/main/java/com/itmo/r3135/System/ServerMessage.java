@@ -3,19 +3,18 @@ package com.itmo.r3135.System;
 import com.itmo.r3135.World.Product;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
  * Класс ответа сервера
  */
 public class ServerMessage implements Serializable {
-    private final String message;
+    private LocalDateTime updateTime;
+    private String message;
     private ArrayList<Product> products;
-    private Boolean login;
-
-    {
-        login = true;
-    }
+    private Boolean login = true;
+    private ArrayList<ProductWithStatus> productWithStatuses;
 
     public ServerMessage(String message) {
         this.message = message;
@@ -24,7 +23,11 @@ public class ServerMessage implements Serializable {
     public ServerMessage(String message, ArrayList<Product> products) {
         this.message = message;
         this.products = products;
+    }
 
+    public ServerMessage(ArrayList<Product> products, LocalDateTime updateTime) {
+        this.products = products;
+        this.updateTime = updateTime;
     }
 
     public ServerMessage(String message, Boolean login) {
@@ -32,8 +35,21 @@ public class ServerMessage implements Serializable {
         this.login = login;
     }
 
+    public ServerMessage(LocalDateTime updateTime,ArrayList<ProductWithStatus> productWithStatuses) {
+        this.productWithStatuses = productWithStatuses;
+        this.updateTime = updateTime;
+    }
+
     public ArrayList<Product> getProducts() {
         return products;
+    }
+
+    public ArrayList<ProductWithStatus> getProductWithStatuses() {
+        return productWithStatuses;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
     }
 
     public String getMessage() {
@@ -48,3 +64,4 @@ public class ServerMessage implements Serializable {
         this.login = login;
     }
 }
+

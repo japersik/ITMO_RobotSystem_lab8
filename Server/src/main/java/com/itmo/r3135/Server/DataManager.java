@@ -2,9 +2,11 @@ package com.itmo.r3135.Server;
 
 import com.itmo.r3135.Server.SQLconnect.MailManager;
 import com.itmo.r3135.Server.SQLconnect.SQLManager;
+import com.itmo.r3135.System.ProductWithStatus;
 import com.itmo.r3135.World.Product;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -13,11 +15,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Класс, хранящий всё необходимое для использования команд.
  */
 public class DataManager {
-    private final Date dateInitialization = new Date();
+    private final LocalDateTime dateInitialization = LocalDateTime.now();
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final ArrayList<ProductWithStatus> changeProducts = new ArrayList<>();
     private HashSet<Product> products = new HashSet<>();
+    private LocalDateTime dateChange = LocalDateTime.now();
     private SQLManager sqlManager;
-    private Date dateChange = new Date();
     private MailManager mailManager;
 
     public DataManager() {
@@ -43,7 +46,7 @@ public class DataManager {
         return lock;
     }
 
-    public Date getDateChange() {
+    public LocalDateTime getDateChange() {
         return dateChange;
     }
 
@@ -56,8 +59,19 @@ public class DataManager {
     }
 
     public void updateDateChange() {
-        this.dateChange = new Date();
+        this.dateChange = LocalDateTime.now();
     }
+
+    public void addChange(Product product, ProductWithStatus.ObjectStatus status) {
+        updateDateChange();
+        changeProducts.add(new ProductWithStatus(product, status));
+
+    }
+
+    public ArrayList<ProductWithStatus> getChangeProducts() {
+        return changeProducts;
+    }
+
 
     @Override
     public String toString() {

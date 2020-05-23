@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 
-public class ClientWorker implements Executor {
+public class ClientWorker{
     private final Sender sender;
     private final Reader reader;
     private final SocketAddress socketAddress;
@@ -37,7 +37,7 @@ public class ClientWorker implements Executor {
         DatagramChannel datagramChannel = DatagramChannel.open();
         sender = new Sender(datagramChannel);
         reader = new Reader(datagramChannel);
-        reader.setExecutor(this);
+        reader.setExecutor(new MessageController());
     }
 
     public void startWork() {
@@ -94,24 +94,4 @@ public class ClientWorker implements Executor {
         return PingChecker.ping(new Command(CommandList.PING), socketAddress);
     }
 
-    @Override
-    public void execute(byte[] data, SocketAddress inputAddress) {
-        try (
-                ObjectInputStream objectInputStream = new ObjectInputStream(
-                        new ByteArrayInputStream(data))
-        ) {
-            ServerMessage serverMessage = (ServerMessage) objectInputStream.readObject();
-            objectInputStream.close();
-            if (serverMessage != null) {
-                if (serverMessage.getMessage() != null)
-                    System.out.println(serverMessage.getMessage());
-                if (serverMessage.getProducts() != null)
-                    for (Product p : serverMessage.getProducts()) System.out.println(p);
-            } else System.out.println("Ответ сервера некорректен.");
-
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Ошибка десериализации.");
-        }
-
-    }
 }

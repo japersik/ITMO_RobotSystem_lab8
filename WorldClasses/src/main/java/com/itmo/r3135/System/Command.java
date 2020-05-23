@@ -3,6 +3,7 @@ package com.itmo.r3135.System;
 import com.itmo.r3135.World.Product;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -10,6 +11,7 @@ import java.util.ArrayList;
  */
 public class Command implements Serializable {
     private final CommandList command;
+    private LocalDateTime lastUpdate;
     private ArrayList<Command> executeCommands;
     private Product product;
     private String string;
@@ -91,5 +93,13 @@ public class Command implements Serializable {
 
     public String getString() {
         return string;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

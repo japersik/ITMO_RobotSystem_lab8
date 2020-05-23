@@ -54,7 +54,6 @@ public class UpdeteIdCommand extends AbstractCommand {
     }
 
     private int updateProductSQL(Product product, int id) {
-        int idRet = -1;
         if (updateOwnerSQL(product.getOwner(), id) != -1)
             try {
                 PreparedStatement statement = dataManager.getSqlManager().getConnection().prepareStatement(
@@ -63,7 +62,7 @@ public class UpdeteIdCommand extends AbstractCommand {
                                 "WHERE id = ? returning id"
                 );
                 statement.setString(1, product.getName());
-                statement.setFloat(2, product.getCoordinates().getX());
+                statement.setDouble(2, product.getCoordinates().getX());
                 statement.setDouble(3, product.getCoordinates().getY());
                 statement.setTimestamp(4, new Timestamp(product.getCreationDate().toEpochSecond(ZoneOffset.UTC) * 1000));
                 statement.setDouble(5, product.getPrice());

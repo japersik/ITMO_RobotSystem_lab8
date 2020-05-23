@@ -16,7 +16,7 @@ class ProductsMap : View("My View") {
         scatterchart("", NumberAxis(), NumberAxis()) {
             titleSide = Side.RIGHT
             series("Products") {
-                controller.persons.stream().forEach { t: Products? -> data(t?.xcoordinate, t?.ycoordinate) }
+                controller.products.stream().forEach { t: Products? -> data(t?.xcoordinate, t?.ycoordinate) }
             }
         }
     }
@@ -25,7 +25,7 @@ class ProductsMap : View("My View") {
         scatterchart("", NumberAxis(), NumberAxis()) {
             titleSide = Side.RIGHT
             series("Products") {
-                controller.persons.stream().forEach { t: Products? -> data(t?.xcoordinate, t?.ycoordinate) }
+                controller.products.stream().forEach { t: Products? -> data(t?.xcoordinate, t?.ycoordinate) }
             }
         }
     }
