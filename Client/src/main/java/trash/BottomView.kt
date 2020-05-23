@@ -5,10 +5,9 @@ import com.itmo.r3135.app.Styles
 import com.itmo.r3135.controller.BottomViewController
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
-import model.CatSchedule
-import model.CatScheduleModel
+import trash.CatSchedule
+import trash.CatScheduleModel
 import tornadofx.*
-import tornadofx.Stylesheet.Companion.tab
 
 class BottomView: View() {
 
@@ -52,7 +51,7 @@ class BottomView: View() {
                 height = 200.0
                 fill = Color.TRANSPARENT
             }
-            imageview("/kitty/kitty1.png", true)
+            imageview("/trash/kitty/kitty1.png", true)
         }
     }
 }

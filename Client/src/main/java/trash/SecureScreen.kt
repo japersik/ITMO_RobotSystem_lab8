@@ -1,4 +1,4 @@
-package view
+package trash
 
 import controller.LoginController
 import javafx.application.Platform

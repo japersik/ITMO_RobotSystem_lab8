@@ -1,18 +1,19 @@
-package view
+package view.WorkView
 
+import com.itmo.r3135.System.Command
+import com.itmo.r3135.System.CommandList
+import com.itmo.r3135.controller.MainController
 import controller.ProductsController
-import model.Products
-import model.ProductsModel
 import tornadofx.*
-import view.testApp.AddApp
 import kotlin.streams.toList
+
 
 class Interface : View("My View") {
     val controller: ProductsController by inject()
     val model: ProductsModel by inject()
     val productsTable: ProductsTable by inject()
     val productsMap: ProductsMap by inject()
-
+    val mainController: MainController by inject()
     override val root = stackpane {
         prefHeight = 800.0
         prefWidth = 80.0
@@ -27,7 +28,7 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        launch<AddApp>("Add")
+                        AddForm().openWindow()
                     }
                 }
             }
@@ -41,7 +42,7 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        controller.products.removeAll(controller.products.stream().filter { t: Products? -> t == controller.selectedPerson.item }.toList())
+                        controller.products.removeAll(controller.products.stream().filter { t: Products? -> t == controller.selectedProduct.item }.toList())
                         productsMap.repaint()
                     }
                 }
@@ -57,6 +58,20 @@ class Interface : View("My View") {
                     }
                     action {
                         //action
+                    }
+                }
+            }
+            row {
+                button("UPDATE SHOW") {
+                    tooltip("FOR TEST!!!")
+                    prefHeight = 50.0
+                    prefWidth = 80.0
+                    gridpaneConstraints {
+                        marginTop = 2.0
+                        marginLeft = 10.0
+                    }
+                    action {
+                        mainController.sendReceiveManager.send(Command(CommandList.GET_UPDATES))
                     }
                 }
             }

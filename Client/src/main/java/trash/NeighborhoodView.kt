@@ -69,13 +69,13 @@ class NeighborhoodView: View() {
             addClass(Styles.transparentOverlay)
             gridpane {
                 row {
-                    imageview("speech_bubble4.png") {
+                    imageview("trash/speech_bubble4.png") {
                         gridpaneConstraints {
                             marginTop = 100.0
                             marginLeft = 260.0
                         }
                     }
-                    imageview("speech_bubble5.png") {
+                    imageview("trash/speech_bubble5.png") {
                         gridpaneConstraints {
                             marginTop = 100.0
                             marginLeft = 240.0
@@ -83,17 +83,17 @@ class NeighborhoodView: View() {
                     }
                 }
                 row {
-                    imageview("speech_bubble1.png") {
+                    imageview("trash/speech_bubble1.png") {
                         gridpaneConstraints {
                             marginLeft = 140.0
                         }
                     }
-                    imageview("speech_bubble2.png") {
+                    imageview("trash/speech_bubble2.png") {
                         gridpaneConstraints {
                             marginLeft = 20.0
                         }
                     }
-                    imageview("speech_bubble3.png") {
+                    imageview("trash/speech_bubble3.png") {
                         gridpaneConstraints {
                             marginLeft = -150.0
                         }

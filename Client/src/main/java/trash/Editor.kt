@@ -2,7 +2,7 @@ package com.itmo.r3135.view
 
 
 import javafx.scene.control.TextField
-import model.CatScheduleScope
+import trash.CatScheduleScope
 import tornadofx.*
 
 class Editor: Fragment() {
