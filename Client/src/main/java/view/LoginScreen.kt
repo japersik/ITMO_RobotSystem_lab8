@@ -1,8 +1,11 @@
 package view
 
-import com.itmo.r3135.Client.ClientWorker
+import com.itmo.r3135.System.Command
+import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.app.Styles.Companion.loginScreen
+import com.itmo.r3135.controller.MainController
 import controller.LoginController
+import controller.ProductsController
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
 import javafx.beans.property.SimpleBooleanProperty
@@ -13,12 +16,13 @@ import tornadofx.*
 
 class LoginScreen : View("Please log in") {
     val loginController: LoginController by inject()
+    val mainController: MainController by inject()
 
     private val model = object : ViewModel() {
         val username = bind { SimpleStringProperty() }
         val password = bind { SimpleStringProperty() }
         val remember = bind { SimpleBooleanProperty() }
-        val code = bind { SimpleStringProperty() }
+//        val code = bind { SimpleStringProperty() }
     }
 
     override val root = form {
@@ -33,11 +37,11 @@ class LoginScreen : View("Please log in") {
             field("Password") {
                 passwordfield(model.password).required()
             }
-            field("Code") {
-                passwordfield(model.code)
-            }
+//            field("Code") {
+//                passwordfield(model.code)
+//            }
             field("Remember me") {
-                checkbox(property = model.remember){
+                checkbox(property = model.remember) {
                     tooltip("It's not safe.")
                 }
             }
@@ -51,7 +55,7 @@ class LoginScreen : View("Please log in") {
                 model.commit {
                     loginController.tryLogin(
                             model.username.value,
-                            ClientWorker.sha384(model.password.value),
+                            model.password.value,
                             model.remember.value
                     )
                 }
@@ -75,7 +79,7 @@ class LoginScreen : View("Please log in") {
         val timelineX = Timeline(KeyFrame(keyframeDuration, EventHandler {
             if (x == 0) {
                 stage.x = stage.x + move
-                x = 1
+                x = 4
             } else {
                 stage.x = stage.x - move
                 x = 0

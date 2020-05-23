@@ -22,7 +22,7 @@ class NeighborhoodController: Controller() {
                 width = 100.0
                 height = 100.0
             }
-            imageview("house2.png").apply {
+            imageview("trash/house2.png").apply {
                 alignment = position
             }
         }

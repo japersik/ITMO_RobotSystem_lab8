@@ -1,11 +1,8 @@
 package com.itmo.r3135.view
 
 
-import com.itmo.r3135.app.Styles
-import javafx.application.Application
 import tornadofx.*
-import view.*
-import view.testApp.AddApp
+import view.WorkView.*
 
 class MainView : View("BestApplication") {
 

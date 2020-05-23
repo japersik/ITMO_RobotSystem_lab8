@@ -29,7 +29,7 @@ class ConnectionView : View("Register Customer") {
             field("Port") {
                 textfield(model.port){
                     required()
-                filterInput { it.controlNewText.isInt()&&it.controlNewText.toInt()>1000&&it.controlNewText.toInt()< }
+                filterInput { it.controlNewText.isInt()&&it.controlNewText.toInt()< 64000}
                 }
             }
         }
@@ -39,7 +39,10 @@ class ConnectionView : View("Register Customer") {
 
             action {
                 model.commit {
+                    mainController.connectionCheck(model.host.value,
+                            model.port.value.toInt())
                 }
+
             }
         }
     }

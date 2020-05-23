@@ -1,4 +1,4 @@
-package model
+package trash
 
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*

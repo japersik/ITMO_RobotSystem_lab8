@@ -1,7 +1,6 @@
-package view
+package view.WorkView
 
 import controller.ProductsController
-import model.Products
 import tornadofx.*
 
 class ProductsTable : View("My View") {
@@ -9,7 +8,7 @@ class ProductsTable : View("My View") {
 
     override val root = tableview(controller.products)
     {
-        bindSelected(controller.selectedPerson)
+        bindSelected(controller.selectedProduct)
 
         column("Id", Products::idProperty)
         column("Name", Products::nameProperty)

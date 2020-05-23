@@ -1,9 +1,8 @@
-package view
+package view.WorkView
 
 import controller.ProductsController
 import javafx.geometry.Side
 import javafx.scene.chart.NumberAxis
-import model.Products
 import tornadofx.*
 
 class ProductsMap : View("My View") {

@@ -1,4 +1,4 @@
-package view
+package view.WorkView
 
 import com.itmo.r3135.controller.MainController
 import tornadofx.*
