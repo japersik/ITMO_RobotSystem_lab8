@@ -1,5 +1,7 @@
 package controller
 
+import com.itmo.r3135.System.Command
+import com.itmo.r3135.System.CommandList
 import tornadofx.*
 import view.LoginScreen
 import view.SecureScreen
@@ -29,13 +31,14 @@ class LoginController : Controller() {
     }
 
     fun tryLogin(username: String, password: String, remember: Boolean) {
+        val command:Command = Command(CommandList.LOGIN)
+        command.setLoginPassword(username,password)
+
         runAsync {
             username == "admin" && password == "secret"
         } ui { successfulLogin ->
-
             if (successfulLogin) {
-                loginScreen.clear()
-
+                loginScreen.close()
                 if (remember) {
                     with(config) {
                         set(USERNAME to username)
@@ -43,8 +46,6 @@ class LoginController : Controller() {
                         save()
                     }
                 }
-
-                showSecureScreen()
             } else {
                 showLoginScreen("Login failed. Please try again.", true)
             }

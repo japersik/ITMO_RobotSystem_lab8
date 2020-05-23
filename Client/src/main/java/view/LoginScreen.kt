@@ -1,5 +1,6 @@
 package view
 
+import com.itmo.r3135.Client.ClientWorker
 import com.itmo.r3135.app.Styles.Companion.loginScreen
 import controller.LoginController
 import javafx.animation.KeyFrame
@@ -17,6 +18,7 @@ class LoginScreen : View("Please log in") {
         val username = bind { SimpleStringProperty() }
         val password = bind { SimpleStringProperty() }
         val remember = bind { SimpleBooleanProperty() }
+        val code = bind { SimpleStringProperty() }
     }
 
     override val root = form {
@@ -31,10 +33,16 @@ class LoginScreen : View("Please log in") {
             field("Password") {
                 passwordfield(model.password).required()
             }
+            field("Code") {
+                passwordfield(model.code)
+            }
             field("Remember me") {
-                checkbox(property = model.remember)
+                checkbox(property = model.remember){
+                    tooltip("It's not safe.")
+                }
             }
         }
+
 
         button("Login") {
             isDefaultButton = true
@@ -43,7 +51,7 @@ class LoginScreen : View("Please log in") {
                 model.commit {
                     loginController.tryLogin(
                             model.username.value,
-                            model.password.value,
+                            ClientWorker.sha384(model.password.value),
                             model.remember.value
                     )
                 }
