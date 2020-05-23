@@ -1,11 +1,17 @@
 package view
 
+import com.itmo.r3135.World.Generator
 import controller.ProductsController
+import javafx.scene.Scene
+import javafx.scene.control.Label
+import javafx.scene.layout.StackPane
+import javafx.stage.Stage
 import model.Products
 import model.ProductsModel
 import tornadofx.*
 import view.testApp.AddApp
 import kotlin.streams.toList
+
 
 class Interface : View("My View") {
     val controller: ProductsController by inject()
@@ -27,7 +33,7 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        launch<AddApp>("Add")
+                        AddForm().openWindow()
                     }
                 }
             }

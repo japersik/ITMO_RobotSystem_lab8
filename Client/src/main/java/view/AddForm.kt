@@ -2,6 +2,7 @@ package view
 
 import com.itmo.r3135.World.Color
 import com.itmo.r3135.World.Product
+import com.itmo.r3135.World.UnitOfMeasure
 import controller.ProductsController
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
@@ -70,14 +71,17 @@ class AddForm : View("Register Customer") {
                     required()
                 }
             }
-        }
+            field("Unit of measure") {
+                combobox<UnitOfMeasure>(model.unitOfMeasure, values = UnitOfMeasure.values().toList()) {
+                    required()
+                }
+        }}
 
         button("Add") {
             action {
                 model.commit {
                     val product = model.item
                     //вставить проверку от БД
-
                     controller.addProduct(product.toProduct())
                     productsMap.repaint()
                     //productsMap.root

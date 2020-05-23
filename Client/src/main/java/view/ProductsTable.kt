@@ -17,6 +17,7 @@ class ProductsTable : View("My View") {
         column("X coordinate", Products::xcoordinatePropetry)
         column("Y coordinate", Products::ycoordinatePropetry)
         column("Partnumber", Products::partnumeberProperty)
+        column("Unit of measure", Products::unitOfMeasureProperty)
         column("Manufacture cost", Products::manufacturecostProperty)
         column("Owner's name", Products::ownernameProperty)
         column("Owner's birthday", Products::birthdayProperty)

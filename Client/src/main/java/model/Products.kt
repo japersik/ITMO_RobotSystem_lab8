@@ -42,6 +42,9 @@ class Products {
     var id by property<Number>()
     fun idProperty() = getProperty(Products::id)
 
+    var unitOfMeasure by property<UnitOfMeasure>()
+    fun unitOfMeasureProperty() = getProperty(Products::unitOfMeasure)
+
     constructor()
 
     constructor(product: Product) {
@@ -56,6 +59,7 @@ class Products {
         this.birthday = product.owner.birthday.toLocalDate()
         this.eyecolor = product.owner.eyeColor
         this.haircolor = product.owner.hairColor
+        this.unitOfMeasure = product.unitOfMeasure
     }
 
 
@@ -88,6 +92,7 @@ class Products {
 
 class ProductsModel : ItemViewModel<Products>(Products()) {
     val ownername: StringProperty = bind { item?.ownernameProperty() }
+    val unitOfMeasure: Property<UnitOfMeasure> = bind { item?.unitOfMeasureProperty() }
     val birthday: Property<LocalDate> = bind { item?.birthdayProperty() }
     val eyecolor: Property<Color> = bind { item?.eyecolorProperty() }
     val haircolor: Property<Color> = bind { item?.haircolorProperty() }
