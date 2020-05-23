@@ -74,7 +74,12 @@ public class ClientWorker{
         }
     }
 
-    public String sha384(String password) {
+    public void commandSender(Command command){
+
+
+    }
+
+    public static String sha384(String password) {
         if (password == null) return null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-384");
