@@ -1,12 +1,13 @@
 package controller
 
 import tornadofx.*
+import view.ConnectionView
 import view.LoginScreen
 import view.SecureScreen
 
 class LoginController : Controller() {
     val loginScreen: LoginScreen by inject()
-    val secureScreen: SecureScreen by inject()
+    val secureScreen: ConnectionView by inject()
 
     fun init() {
         with(config) {
