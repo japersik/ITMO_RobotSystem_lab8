@@ -7,7 +7,7 @@ import tornadofx.*
 class ProductsTable : View("My View") {
     val controller: ProductsController by inject()
 
-    override val root = tableview(controller.persons)
+    override val root = tableview(controller.products)
     {
         bindSelected(controller.selectedPerson)
 

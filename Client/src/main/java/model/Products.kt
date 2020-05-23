@@ -1,7 +1,6 @@
 package model
 
-import com.itmo.r3135.World.Color
-import com.itmo.r3135.World.Product
+import com.itmo.r3135.World.*
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.Property
 import javafx.beans.property.StringProperty
@@ -45,7 +44,7 @@ class Products {
 
     constructor()
 
-    constructor(product: Product){
+    constructor(product: Product) {
         this.id = product.id
         this.name = product.name
         this.price = product.price
@@ -59,19 +58,32 @@ class Products {
         this.haircolor = product.owner.hairColor
     }
 
-//    constructor(ownername: String, birthday: LocalDate, eyecolor: Color, haircolor: Color, price: Number, ycoordinate: Number, xcoordinate: Number, partnumeber: String, manufacturecost: Number, name: String, id: Number) {
-//        this.ownername = ownername
-//        this.birthday = birthday
-//        this.eyecolor = eyecolor
-//        this.haircolor = haircolor
-//        this.price = price
-//        this.ycoordinate = ycoordinate
-//        this.xcoordinate = xcoordinate
-//        this.partnumeber = partnumeber
-//        this.manufacturecost = manufacturecost
-//        this.name = name
-//        this.id = id
-//    }
+
+/*    constructor(ownername: String, birthday: LocalDate, eyecolor: Color, haircolor: Color, price: Number, ycoordinate: Number, xcoordinate: Number, partnumeber: String, manufacturecost: Number, name: String, id: Number) {
+        this.ownername = ownername
+        this.birthday = birthday
+        this.eyecolor = eyecolor
+        this.haircolor = haircolor
+        this.price = price
+        this.ycoordinate = ycoordinate
+        this.xcoordinate = xcoordinate
+        this.partnumeber = partnumeber
+        this.manufacturecost = manufacturecost
+        this.name = name
+        this.id = id
+    }*/
+  fun toProduct(): Product {
+    var product = Product()
+    product.name = this.name
+    product.partNumber = this.partnumeber
+    product.manufactureCost = this.manufacturecost.toFloat()
+    product.unitOfMeasure = UnitOfMeasure.GRAMS
+    product.creationDate = this.birthday.atStartOfDay()
+    product.price = this.price.toDouble()
+    product.coordinates = Coordinates(this.xcoordinate.toDouble(),this.ycoordinate.toDouble() )
+    product.owner = Person(this.ownername as String, this.birthday.atStartOfDay(), this.eyecolor as Color, this.haircolor as Color)
+    return product
+}
 }
 
 class ProductsModel : ItemViewModel<Products>(Products()) {
@@ -80,12 +92,13 @@ class ProductsModel : ItemViewModel<Products>(Products()) {
     val eyecolor: Property<Color> = bind { item?.eyecolorProperty() }
     val haircolor: Property<Color> = bind { item?.haircolorProperty() }
     val price: ObjectProperty<Number> = bind { item?.priceProperty() }
-    val ycoordinate : ObjectProperty<Number> = bind { item?.ycoordinatePropetry() }
-    val xcoordinate : ObjectProperty<Number> = bind { item?.xcoordinatePropetry() }
+    val ycoordinate: ObjectProperty<Number> = bind { item?.ycoordinatePropetry() }
+    val xcoordinate: ObjectProperty<Number> = bind { item?.xcoordinatePropetry() }
     val partnumeber: StringProperty = bind { item?.partnumeberProperty() }
     val manufacturecost: ObjectProperty<Number> = bind { item?.manufacturecostProperty() }
     val name: StringProperty = bind { item?.nameProperty() }
-    val id : ObjectProperty<Number> = bind { item?.idProperty() }
+    val id: ObjectProperty<Number> = bind { item?.idProperty() }
+
 }
 
 

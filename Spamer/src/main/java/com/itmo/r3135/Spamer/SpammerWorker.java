@@ -6,6 +6,7 @@ import com.itmo.r3135.Connector.Reader;
 import com.itmo.r3135.Connector.Sender;
 import com.itmo.r3135.System.Command;
 import com.itmo.r3135.System.CommandList;
+import com.itmo.r3135.System.ProductWithStatus;
 import com.itmo.r3135.System.ServerMessage;
 import com.itmo.r3135.System.Tools.StringCommandManager;
 import com.itmo.r3135.World.Product;
@@ -19,6 +20,7 @@ import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class SpammerWorker implements Executor {
@@ -30,6 +32,7 @@ public class SpammerWorker implements Executor {
     public boolean isLogin = false;
     public String login = "";
     public String password = "";
+    private LocalDateTime lastUpdate;
 
     public SpammerWorker(SocketAddress socketAddress) throws IOException {
         this.socketAddress = socketAddress;
@@ -64,6 +67,7 @@ public class SpammerWorker implements Executor {
                             } else {
                                 command.setLoginPassword(login, password);
                             }
+                            command.setLastUpdate(lastUpdate);
                             sender.send(command, socketAddress);
                         } else {
                             System.out.println("Команда не была отправлена.");
@@ -91,13 +95,16 @@ public class SpammerWorker implements Executor {
         ) {
             ServerMessage serverMessage = (ServerMessage) objectInputStream.readObject();
             if (serverMessage != null) {
+                if (serverMessage.getUpdateTime() != null) lastUpdate = serverMessage.getUpdateTime();
                 isLogin = serverMessage.getLogin();
                 if (!isLogin) System.out.println(serverMessage.getMessage());
                 else if (spamrun.isSpam()) {
                     //обработка пришедших сообшений для spam - режима
                 } else {
-                    if (serverMessage.getMessage() != null)
-                        System.out.println(serverMessage.getMessage());
+                    if (serverMessage.getProductWithStatuses() != null && !serverMessage.getProductWithStatuses().isEmpty())
+                        for (ProductWithStatus p : serverMessage.getProductWithStatuses()) System.out.println(p.getAddDateTime());
+                        if (serverMessage.getMessage() != null)
+                            System.out.println(serverMessage.getMessage());
                     if (serverMessage.getProducts() != null)
                         for (Product p : serverMessage.getProducts()) System.out.println(p);
                     System.out.print("//: ");

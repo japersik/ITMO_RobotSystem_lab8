@@ -20,6 +20,7 @@ public class ShowCommand extends AbstractCommand {
     }
 
     /**
+     *
      */
     @Override
     public ServerMessage activate(Command command) {
@@ -27,7 +28,7 @@ public class ShowCommand extends AbstractCommand {
         ArrayList<Product> products = new ArrayList<>(dataManager.getProducts());
         dataManager.getLock().readLock().unlock();
         if (products.size() != 0) {
-            return new ServerMessage("Список коллекции: ", products);
+            return new ServerMessage(products, dataManager.getDateChange());
         } else return new ServerMessage("Коллекция пуста.");
 
     }

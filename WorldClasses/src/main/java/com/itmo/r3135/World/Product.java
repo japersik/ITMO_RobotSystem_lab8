@@ -1,8 +1,5 @@
 package com.itmo.r3135.World;
 
-import com.sun.deploy.util.Property;
-import javafx.beans.property.ObjectProperty;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -10,6 +7,13 @@ import java.time.LocalDateTime;
  * Класс Коллекции
  */
 public class Product implements Comparable<Product>, Serializable {
+    private final static String format = "%-30s%-20s%-20s%n";
+    private static int idCounter;
+
+    static {
+        idCounter = 1;
+    }
+
     private int id;
     private String name;
     private Coordinates coordinates;
@@ -20,14 +24,6 @@ public class Product implements Comparable<Product>, Serializable {
     private UnitOfMeasure unitOfMeasure;
     private Person owner;
     private String userName = null;
-
-    private final static String format = "%-30s%-20s%-20s%n";
-
-    private static int idCounter;
-
-    static {
-        idCounter = 1;
-    }
 
     {
         creationDate = LocalDateTime.now();
@@ -56,6 +52,9 @@ public class Product implements Comparable<Product>, Serializable {
         idCounter++;
     }
 
+    public Product() {
+    }
+
     public Product(int id, String name, Coordinates coordinates, LocalDateTime creationDate, Double price, String partNumber, Float manufactureCost, UnitOfMeasure unitOfMeasure, Person owner) {
         this.id = id;
         this.name = name;
@@ -68,11 +67,76 @@ public class Product implements Comparable<Product>, Serializable {
         this.owner = owner;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setPartNumber(String partNumber) {
+        this.partNumber = partNumber;
+    }
+
+    public void setManufactureCost(Float manufactureCost) {
+        this.manufactureCost = manufactureCost;
+    }
+
+    public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
+    }
+
+    public void setOwner(Person owner) {
+        this.owner = owner;
+    }
+
+    public static String printRequest() {
+        return ("------------------------\n" +
+                "Требования к элементу:\n" +
+                "------------------------\n" +
+                "Product: {\n" +
+                "    String name --- Поле не может быть null, Строка не может быть пустой\n" +
+                "    Coordinates coordinates; --- Поле не может быть null\n" +
+                "    Long price --- Поле может быть null, Значение поля должно быть больше 0\n" +
+                "    String partNumber --- Длина строки должна быть не меньше 21, Поле не может быть null\n" +
+                "    manufactureCost --- Поле не может быть null;\n" +
+                "    UnitOfMeasure unitOfMeasure --- Поле не может быть null\n" +
+                "    Person owner --- Поле не может быть null\n" +
+                "}\n" +
+                "Coordinates: {\n" +
+                "    Float x --- Максимальное значение поля: 82, Поле не может быть null\n" +
+                "    Long y --- Значение поля должно быть больше -244, Поле не может быть null\n" +
+                "}\n" +
+                "Person : {\n" +
+                "    String name --- Поле не может быть null, Строка не может быть пустой\n" +
+                "    java.time.LocalDateTime birthday --- Поле не может быть null\n" +
+                "    Color eyeColor --- Поле не может быть null\n" +
+                "    Color hairColor --- Поле не может быть null\n" +
+                "}\n" +
+                "UnitOfMeasure: {\n" +
+                "    PCS,\n" +
+                "    LITERS,\n" +
+                "    GRAMS,\n" +
+                "    MILLIGRAMS;\n" +
+                "}\n" +
+                "Color: {\n" +
+                "    GREEN,\n" +
+                "    RED,\n" +
+                "    BLACK,\n" +
+                "    BLUE,\n" +
+                "    YELLOW;\n}");
+    }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public void updateProduct(Product product){
+    public void updateProduct(Product product) {
         this.name = product.getName();
         this.coordinates = product.coordinates;
         this.creationDate = product.getCreationDate();
@@ -82,6 +146,7 @@ public class Product implements Comparable<Product>, Serializable {
         this.unitOfMeasure = product.getUnitOfMeasure();
         this.owner = product.getOwner();
     }
+
     /**
      * Проверяет элемент на сообтетвтвовение требованиям коллекции
      */
@@ -101,6 +166,14 @@ public class Product implements Comparable<Product>, Serializable {
         }
     }
 
+    /**
+     * Возвращает id элемента.
+     *
+     * @return id элемента коллекции.
+     */
+    public int getId() {
+        return id;
+    }
 
     /**
      * Устанавливает id орпеделенному элементу коллекции.
@@ -109,15 +182,6 @@ public class Product implements Comparable<Product>, Serializable {
      */
     public void setId(int id) {
         this.id = id;
-    }
-
-    /**
-     * Возвращает id элемента.
-     *
-     * @return id элемента коллекции.
-     */
-    public int getId() {
-        return id;
     }
 
     /**
@@ -130,15 +194,6 @@ public class Product implements Comparable<Product>, Serializable {
     }
 
     /**
-     * Устанавливает дату создания.
-     *
-     * @param creationDate - дата создания.
-     */
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    /**
      * Возвращает координаты в формате класса com.itmo.com.itmo.r3135.World.Coordinates.
      *
      * @return - класс com.itmo.com.itmo.r3135.World.Coordinates
@@ -146,6 +201,7 @@ public class Product implements Comparable<Product>, Serializable {
     public Coordinates getCoordinates() {
         return coordinates;
     }
+
     /**
      * Возвращает поле price элемента коллекции.
      *
@@ -214,6 +270,15 @@ public class Product implements Comparable<Product>, Serializable {
         return creationDate;
     }
 
+    /**
+     * Устанавливает дату создания.
+     *
+     * @param creationDate - дата создания.
+     */
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public String getPartNumber() {
         return partNumber;
     }
@@ -228,43 +293,6 @@ public class Product implements Comparable<Product>, Serializable {
 
     public Person getOwner() {
         return owner;
-    }
-
-    public static String printRequest() {
-        return ("------------------------\n" +
-                "Требования к элементу:\n" +
-                "------------------------\n" +
-                "Product: {\n" +
-                "    String name --- Поле не может быть null, Строка не может быть пустой\n" +
-                "    Coordinates coordinates; --- Поле не может быть null\n" +
-                "    Long price --- Поле может быть null, Значение поля должно быть больше 0\n" +
-                "    String partNumber --- Длина строки должна быть не меньше 21, Поле не может быть null\n" +
-                "    manufactureCost --- Поле не может быть null;\n" +
-                "    UnitOfMeasure unitOfMeasure --- Поле не может быть null\n" +
-                "    Person owner --- Поле не может быть null\n" +
-                "}\n" +
-                "Coordinates: {\n" +
-                "    Float x --- Максимальное значение поля: 82, Поле не может быть null\n" +
-                "    Long y --- Значение поля должно быть больше -244, Поле не может быть null\n" +
-                "}\n" +
-                "Person : {\n" +
-                "    String name --- Поле не может быть null, Строка не может быть пустой\n" +
-                "    java.time.LocalDateTime birthday --- Поле не может быть null\n" +
-                "    Color eyeColor --- Поле не может быть null\n" +
-                "    Color hairColor --- Поле не может быть null\n" +
-                "}\n" +
-                "UnitOfMeasure: {\n" +
-                "    PCS,\n" +
-                "    LITERS,\n" +
-                "    GRAMS,\n" +
-                "    MILLIGRAMS;\n" +
-                "}\n" +
-                "Color: {\n" +
-                "    GREEN,\n" +
-                "    RED,\n" +
-                "    BLACK,\n" +
-                "    BLUE,\n" +
-                "    YELLOW;\n}");
     }
 
     @Override

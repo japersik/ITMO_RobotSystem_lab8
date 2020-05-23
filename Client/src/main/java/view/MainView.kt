@@ -7,7 +7,7 @@ import tornadofx.*
 import view.*
 import view.testApp.AddApp
 
-class MainView : View("DataBase") {
+class MainView : View("BestApplication") {
 
     override val root = borderpane() {
         prefHeight = 900.0
@@ -19,7 +19,6 @@ class MainView : View("DataBase") {
             row { add<ProductsTable>() }
         })
         right(AddForm::class)
-
         //left(BottomView::class)
         //addClass(Styles.main)
     }

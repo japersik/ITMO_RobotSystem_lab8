@@ -22,16 +22,16 @@ public enum CommandList implements Serializable {
     FILTER_CONTAINS_NAME("filter_contains_name"),
     PRINT_FIELD_DESCENDING_PRICE("print_field_descending_price"),
 
+    GET_UPDATES("get_updates"),
     PING("ping"),
     CODE("code"),
     LOGIN("login"),
     REG("reg");
 
 
+    private String toText;
 
     private CommandList(String toText) {
         this.toText = toText;
     }
-
-    private String toText;
 }
