@@ -5,7 +5,7 @@ import controller.ConnectController
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
-class ConnectionView : View("Register Customer") {
+class ConnectionView : View("Connect controller") {
     val connectController: ConnectController by inject()
 
     private val model = object : ViewModel() {

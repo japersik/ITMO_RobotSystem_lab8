@@ -14,6 +14,7 @@ public class ServerMessage implements Serializable {
     private String message;
     private ArrayList<Product> products;
     private Boolean login = true;
+    private Boolean needCode = false;
     private ArrayList<ProductWithStatus> productWithStatuses;
 
     public ServerMessage(String message) {
@@ -35,9 +36,19 @@ public class ServerMessage implements Serializable {
         this.login = login;
     }
 
-    public ServerMessage(LocalDateTime updateTime,ArrayList<ProductWithStatus> productWithStatuses) {
+    public ServerMessage(String message, Boolean login, Boolean needCode) {
+        this.message = message;
+        this.login = login;
+        this.needCode = needCode;
+    }
+
+    public ServerMessage(LocalDateTime updateTime, ArrayList<ProductWithStatus> productWithStatuses) {
         this.productWithStatuses = productWithStatuses;
         this.updateTime = updateTime;
+    }
+
+    public Boolean getNeedCode() {
+        return needCode;
     }
 
     public ArrayList<Product> getProducts() {

@@ -1,5 +1,8 @@
 package view
 
+import com.itmo.r3135.System.Command
+import com.itmo.r3135.System.CommandList
+import com.itmo.r3135.app.Styles
 import com.itmo.r3135.app.Styles.Companion.loginScreen
 import controller.ConnectController
 import javafx.animation.KeyFrame
@@ -107,3 +110,40 @@ class LoginScreen : View("Please log in") {
         model.remember.value = false
     }
 }
+
+class CodeView : View("Verification Code Checker") {
+    val connectController: ConnectController by inject()
+
+    private val model = object : ViewModel() {
+        val code = bind { SimpleStringProperty() }
+    }
+
+    override val root = form {
+        addClass(Styles.loginScreen)
+        fieldset {
+            field("Code") {
+                textfield(model.code) {
+                    required()
+                    whenDocked { requestFocus() }
+                }
+            }
+        }
+
+
+        button("Send code") {
+            isDefaultButton = true
+            action {
+                model.commit {
+                    connectController.sendReceiveManager.send(
+                            Command(CommandList.CODE, model.code.value))
+                    close()
+                }
+
+            }
+        }
+    }
+
+}
+
+
+

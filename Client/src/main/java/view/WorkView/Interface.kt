@@ -13,6 +13,7 @@ class Interface : View("My View") {
     val controller: ProductsController by inject()
     val model: ProductsModel by inject()
     val productsMap: ProductsMap by inject()
+    val addForm: AddForm by inject()
     override val root = stackpane {
         prefHeight = 800.0
         prefWidth = 80.0
@@ -27,7 +28,7 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        AddForm().openWindow()
+                        AddForm().openModal()
                     }
                 }
             }
