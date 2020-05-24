@@ -1,11 +1,7 @@
 package view
 
-import com.itmo.r3135.System.Command
-import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.app.Styles.Companion.loginScreen
-import com.itmo.r3135.controller.MainController
-import controller.LoginController
-import controller.ProductsController
+import controller.ConnectController
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
 import javafx.beans.property.SimpleBooleanProperty
@@ -15,8 +11,7 @@ import javafx.util.Duration
 import tornadofx.*
 
 class LoginScreen : View("Please log in") {
-    val loginController: LoginController by inject()
-    val mainController: MainController by inject()
+    val connectController: ConnectController by inject()
 
     private val model = object : ViewModel() {
         val username = bind { SimpleStringProperty() }
@@ -53,7 +48,7 @@ class LoginScreen : View("Please log in") {
 
             action {
                 model.commit {
-                    loginController.tryLogin(
+                    connectController.tryLogin(
                             model.username.value,
                             model.password.value,
                             model.remember.value

@@ -1,13 +1,13 @@
 package trash
 
-import controller.LoginController
+import controller.ConnectController
 import javafx.application.Platform
 import javafx.geometry.Pos
 import javafx.scene.text.Font
 import tornadofx.*
 
 class SecureScreen : View("Secure Screen") {
-    val loginController: LoginController by inject()
+    val connectController: ConnectController by inject()
 
     override val root = borderpane {
         setPrefSize(800.0, 600.0)
@@ -29,7 +29,7 @@ class SecureScreen : View("Secure Screen") {
 
                     button("Logout") {
                         setOnAction {
-                            loginController.logout()
+                            connectController.logout()
                         }
                     }
 

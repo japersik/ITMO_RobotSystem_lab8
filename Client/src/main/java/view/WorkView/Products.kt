@@ -87,6 +87,16 @@ class Products {
         product.owner = Person(this.ownername as String, this.birthday.atStartOfDay(), this.eyecolor as Color, this.haircolor as Color)
         return product
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Products
+        if (this.id != other.id) return false
+        return true
+    }
+
+
 }
 
 class ProductsModel : ItemViewModel<Products>(Products()) {
@@ -102,7 +112,6 @@ class ProductsModel : ItemViewModel<Products>(Products()) {
     val manufacturecost: ObjectProperty<Number> = bind { item?.manufacturecostProperty() }
     val name: StringProperty = bind { item?.nameProperty() }
     val id: ObjectProperty<Number> = bind { item?.idProperty() }
-
 }
 
 

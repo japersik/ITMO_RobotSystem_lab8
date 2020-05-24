@@ -27,8 +27,6 @@ public class Reader {
      * Полезных данных в пакете
      */
     private static final int DATA_SIZE = FULL_SIZE - HEAD_SIZE;
-
-
     private final boolean datagramMode;
     private final HashMap<Integer, Collector> collectors = new HashMap<>();
     private Executor executor;
@@ -42,14 +40,11 @@ public class Reader {
      */
     public Reader(DatagramChannel datagramChannel) {
         this.datagramMode = false;
-
         this.datagramChannel = datagramChannel;
-
     }
 
     /**
      * Создаёт приёмник данных, использующий DatagramSocket
-     *
      */
     public Reader(DatagramSocket datagramSocket) {
         this.datagramMode = true;

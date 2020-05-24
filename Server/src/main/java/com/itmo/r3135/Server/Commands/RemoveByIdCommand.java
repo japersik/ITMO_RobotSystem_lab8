@@ -3,6 +3,7 @@ package com.itmo.r3135.Server.Commands;
 import com.itmo.r3135.Server.DataManager;
 import com.itmo.r3135.Server.Mediator;
 import com.itmo.r3135.System.Command;
+import com.itmo.r3135.System.ProductWithStatus;
 import com.itmo.r3135.System.ServerMessage;
 import com.itmo.r3135.World.Product;
 
@@ -41,9 +42,14 @@ public class RemoveByIdCommand extends AbstractCommand {
                 statement.setInt(1, userId);
                 statement.setInt(2, id);
                 ResultSet resultSet = statement.executeQuery();
-                if (resultSet.next())
-                    products.removeAll((products.parallelStream().filter(product -> product.getId() == id)
-                            .collect(Collectors.toCollection(HashSet::new))));
+                if (resultSet.next()) {
+                    HashSet p = (products.parallelStream().filter(product -> product.getId() == id)
+                            .collect(Collectors.toCollection(HashSet::new)));
+                    products.removeAll(p);
+                    for (Object pp : p) {
+                        dataManager.addChange((Product) pp, ProductWithStatus.ObjectStatus.REMOVE);
+                    }
+                }
             } catch (SQLException e) {
                 return new ServerMessage(" Ошибка работы с базой данных");
             }

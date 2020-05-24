@@ -4,7 +4,7 @@ package com.itmo.r3135.view
 import tornadofx.*
 import view.WorkView.*
 
-class MainView : View("BestApplication") {
+class   MainView : View("BestApplication") {
 
     override val root = borderpane() {
         prefHeight = 900.0

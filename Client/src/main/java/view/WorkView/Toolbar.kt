@@ -1,14 +1,8 @@
 package view.WorkView
 
-import com.itmo.r3135.controller.MainController
 import tornadofx.*
-import javafx.scene.control.Menu
-import javafx.scene.control.MenuItem
-import tornadofx.Drawer
 
 class Toolbar : View("Toolbar") {
-    private val controller: MainController by inject()
-
     override val root = stackpane {
 
         menubar {
