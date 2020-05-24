@@ -14,19 +14,6 @@ import tornadofx.*
 class AddForm : View("Register Customer") {
     val connectController: ConnectController by inject()
     val model: ProductsModel by inject()
-//    override val closeable = false
-//    override val complete: BooleanExpression
-//        get() = super.complete
-//    override val creatable: BooleanExpression
-//        get() = super.creatable
-//    override val deletable: BooleanExpression
-//        get() = super.deletable
-//    override val refreshable: BooleanExpression
-//        get() = super.refreshable
-//    val productsTable: ProductsTable by inject()
-//    val productsMap: ProductsMap by inject()
-
-
 
     override val root = form {
         fieldset("Owner", FontAwesomeIconView(USER)) {
