@@ -1,23 +1,24 @@
 package view
 
-import com.itmo.r3135.Client.ClientWorker
-import com.itmo.r3135.app.Styles
-import javafx.beans.property.SimpleBooleanProperty
+import com.itmo.r3135.System.Command
+import com.itmo.r3135.System.CommandList
+import controller.ConnectController
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
 class RegistrationView : View("Please reg") {
+    val connectController: ConnectController by inject()
+
     private val model = object : ViewModel() {
-        val username = bind { SimpleStringProperty() }
+        val login = bind { SimpleStringProperty() }
         val password = bind { SimpleStringProperty() }
-        val code = bind { SimpleStringProperty() }
     }
 
     override val root = form {
-
         fieldset {
-            field("Username") {
-                textfield(model.username) {
+            //добавть проверку
+            field("Email") {
+                textfield(model.login) {
                     required()
                     whenDocked { requestFocus() }
                 }
@@ -29,11 +30,19 @@ class RegistrationView : View("Please reg") {
 
         button("Reg") {
             isDefaultButton = true
-
             action {
                 model.commit {
-                    //reg
+                    val command = Command(CommandList.REG)
+                    command.setLoginPassword(model.login.value, model.password.value)
+                    connectController.sendReceiveManager.send(command)
+                    close()
                 }
+            }
+        }
+        button("cancel") {
+            isCancelButton = true
+            action {
+                     close()
             }
         }
     }

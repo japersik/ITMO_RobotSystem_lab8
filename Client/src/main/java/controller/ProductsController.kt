@@ -21,7 +21,7 @@ class ProductsController() : Controller() {
         connectController.sendReceiveManager.send(Command(CommandList.SHOW))
     }
 
-    public fun show(showList: ArrayList<Product>) {
+    fun show(showList: ArrayList<Product>) {
         for (p in showList)
             addProduct(p)
         productsMap.repaint()

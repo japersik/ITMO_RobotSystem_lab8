@@ -114,8 +114,6 @@ public class ServerWorker implements Mediator, Executor {
 
     /**
      * Зарускает работу сервера
-     *
-     * @throws IOException
      */
     public void startWork() throws IOException {
         logger.info("Server start.");
@@ -235,13 +233,15 @@ public class ServerWorker implements Mediator, Executor {
                 dataManager.getSqlManager().clearStatus(
                         dataManager.getSqlManager().getUserId(command.getLogin()));
                 return new ServerMessage("Подтверждение успешно!");
-            } else return new ServerMessage("Код неверный!", true,true);
+            } else return new ServerMessage("Код неверный!", true, true);
         } else if (dataManager.getSqlManager().isReg(dataManager.getSqlManager().getUserId(command.getLogin()))) {
             return new ServerMessage("Аккаунт не подтверждён! Проведьте почту\n" +
-                    "Отправьте код подтвеждения командой 'code [код]'", true,true);
+                    "Отправьте код подтвеждения командой 'code [код]'", true, true);
         } else
             try {
                 switch (command.getCommand()) {
+                    case LOGIN:
+                        return new ServerMessage("Good connect");
                     case GET_UPDATES:
                         return getUpdateIdCommand.activate(command);
                     case HELP:

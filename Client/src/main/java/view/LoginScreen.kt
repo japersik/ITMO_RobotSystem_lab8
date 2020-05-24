@@ -59,6 +59,13 @@ class LoginScreen : View("Please log in") {
                 }
             }
         }
+        button("Registration") {
+            isDefaultButton = false
+
+            action {
+                RegistrationView().openModal()
+            }
+        }
     }
 
     override fun onDock() {
