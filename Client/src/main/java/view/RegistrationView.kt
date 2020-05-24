@@ -5,6 +5,7 @@ import com.itmo.r3135.System.CommandList
 import controller.ConnectController
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
+import java.util.regex.Pattern
 
 class RegistrationView : View("Please reg") {
     val connectController: ConnectController by inject()
@@ -19,8 +20,11 @@ class RegistrationView : View("Please reg") {
             //добавть проверку
             field("Email") {
                 textfield(model.login) {
+                    id = "login"
                     required()
-                    whenDocked { requestFocus() }
+                    whenDocked {
+                        requestFocus()
+                    }
                 }
             }
             field("Password") {
@@ -32,18 +36,27 @@ class RegistrationView : View("Please reg") {
             isDefaultButton = true
             action {
                 model.commit {
-                    val command = Command(CommandList.REG)
-                    command.setLoginPassword(model.login.value, model.password.value)
-                    connectController.sendReceiveManager.send(command)
-                    close()
+                    if (!validate(model.login.value)) connectController.shakeStage()
+                    else {
+                        val command = Command(CommandList.REG)
+                        command.setLoginPassword(model.login.value, model.password.value)
+                        connectController.sendReceiveManager.send(command)
+                        close()
+                    }
                 }
             }
         }
         button("cancel") {
             isCancelButton = true
             action {
-                     close()
+                close()
             }
         }
+    }
+    val VALIDEMAIL: Pattern =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    fun validate(emailStr: String): Boolean {
+        return VALIDEMAIL.matcher(emailStr).find();
     }
 }
