@@ -1,22 +1,18 @@
 package view
 
 import com.itmo.r3135.app.Styles
-import com.itmo.r3135.controller.MainController
-import controller.LoginController
-import javafx.animation.KeyFrame
-import javafx.animation.Timeline
-import javafx.beans.property.SimpleBooleanProperty
+import controller.ConnectController
 import javafx.beans.property.SimpleStringProperty
-import javafx.util.Duration
 import tornadofx.*
 
 class ConnectionView : View("Register Customer") {
-    val mainController: MainController by inject()
+    val connectController: ConnectController by inject()
 
     private val model = object : ViewModel() {
         val host = bind { SimpleStringProperty() }
         val port = bind { SimpleStringProperty() }
     }
+
     override val root = form {
         addClass(Styles.loginScreen)
         fieldset {
@@ -27,19 +23,18 @@ class ConnectionView : View("Register Customer") {
                 }
             }
             field("Port") {
-                textfield(model.port){
+                textfield(model.port) {
                     required()
-                filterInput { it.controlNewText.isInt()&&it.controlNewText.toInt()< 64000}
+                    filterInput { it.controlNewText.isInt() && it.controlNewText.toInt() < 64000 }
                 }
             }
         }
 
         button("Ping") {
             isDefaultButton = true
-
             action {
                 model.commit {
-                    mainController.connectionCheck(model.host.value,
+                    connectController.connectionCheck(model.host.value,
                             model.port.value.toInt())
                 }
 

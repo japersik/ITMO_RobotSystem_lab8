@@ -1,7 +1,8 @@
 package controller
 
+import com.itmo.r3135.System.Command
+import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.System.ProductWithStatus
-import com.itmo.r3135.World.Generator
 import com.itmo.r3135.World.Product
 import javafx.collections.FXCollections
 import tornadofx.*
@@ -13,11 +14,11 @@ class ProductsController() : Controller() {
     val products = FXCollections.observableArrayList<Products>()
     val selectedProduct = ProductsModel()
     val productsMap: ProductsMap by inject()
+    val connectController: ConnectController by inject()
 
-    init {
-        repeat(10) {
-            addProduct(Generator.nextProduct())
-        }
+    fun init() {
+        products.clear()
+        connectController.sendReceiveManager.send(Command(CommandList.SHOW))
     }
 
     public fun show(showList: ArrayList<Product>) {

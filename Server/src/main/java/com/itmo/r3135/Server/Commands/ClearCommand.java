@@ -3,6 +3,7 @@ package com.itmo.r3135.Server.Commands;
 import com.itmo.r3135.Server.DataManager;
 import com.itmo.r3135.Server.Mediator;
 import com.itmo.r3135.System.Command;
+import com.itmo.r3135.System.ProductWithStatus;
 import com.itmo.r3135.System.ServerMessage;
 import com.itmo.r3135.World.Product;
 
@@ -37,10 +38,16 @@ public class ClearCommand extends AbstractCommand {
             ArrayList<Integer> ids = new ArrayList<>();
             while (resultSet.next())
                 ids.add(resultSet.getInt("id"));
-            dataManager.getLock().writeLock().lock();
-            HashSet<Product> products = dataManager.getProducts();
-                products.removeAll((products.parallelStream().filter(product -> ids.indexOf(product.getId())!=-1)
-                        .collect(Collectors.toCollection(HashSet::new))));
+            if (!ids.isEmpty()) {
+                dataManager.getLock().writeLock().lock();
+                HashSet<Product> products = dataManager.getProducts();
+                HashSet p = (products.parallelStream().filter(product -> ids.indexOf(product.getId()) != -1)
+                        .collect(Collectors.toCollection(HashSet::new)));
+                products.removeAll(p);
+                for (Object pp : p) {
+                    dataManager.addChange((Product) pp, ProductWithStatus.ObjectStatus.REMOVE);
+                }
+            }
         } catch (SQLException e) {
             return new ServerMessage("Ошибка поиска объектов пользователя в базе.");
         }

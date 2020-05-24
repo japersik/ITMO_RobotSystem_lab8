@@ -2,6 +2,7 @@ package com.itmo.r3135.World;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Класс Коллекции
@@ -64,34 +65,6 @@ public class Product implements Comparable<Product>, Serializable {
         this.partNumber = partNumber;
         this.manufactureCost = manufactureCost;
         this.unitOfMeasure = unitOfMeasure;
-        this.owner = owner;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public void setPartNumber(String partNumber) {
-        this.partNumber = partNumber;
-    }
-
-    public void setManufactureCost(Float manufactureCost) {
-        this.manufactureCost = manufactureCost;
-    }
-
-    public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
-        this.unitOfMeasure = unitOfMeasure;
-    }
-
-    public void setOwner(Person owner) {
         this.owner = owner;
     }
 
@@ -193,6 +166,10 @@ public class Product implements Comparable<Product>, Serializable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     /**
      * Возвращает координаты в формате класса com.itmo.com.itmo.r3135.World.Coordinates.
      *
@@ -202,6 +179,10 @@ public class Product implements Comparable<Product>, Serializable {
         return coordinates;
     }
 
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
     /**
      * Возвращает поле price элемента коллекции.
      *
@@ -209,6 +190,10 @@ public class Product implements Comparable<Product>, Serializable {
      */
     public Double getPrice() {
         return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override
@@ -283,16 +268,32 @@ public class Product implements Comparable<Product>, Serializable {
         return partNumber;
     }
 
+    public void setPartNumber(String partNumber) {
+        this.partNumber = partNumber;
+    }
+
     public Float getManufactureCost() {
         return manufactureCost;
+    }
+
+    public void setManufactureCost(Float manufactureCost) {
+        this.manufactureCost = manufactureCost;
     }
 
     public UnitOfMeasure getUnitOfMeasure() {
         return unitOfMeasure;
     }
 
+    public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
+    }
+
     public Person getOwner() {
         return owner;
+    }
+
+    public void setOwner(Person owner) {
+        this.owner = owner;
     }
 
     @Override
@@ -310,6 +311,23 @@ public class Product implements Comparable<Product>, Serializable {
                 "Владелец: " + owner + "\n" +
                 "Создатель: " + userName + "\n" +
                 "------------------------------------------------------------------------\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(coordinates, product.coordinates) &&
+                Objects.equals(creationDate, product.creationDate) &&
+                Objects.equals(price, product.price) &&
+                Objects.equals(partNumber, product.partNumber) &&
+                Objects.equals(manufactureCost, product.manufactureCost) &&
+                unitOfMeasure == product.unitOfMeasure &&
+                Objects.equals(owner, product.owner) &&
+                Objects.equals(userName, product.userName);
     }
 
 }

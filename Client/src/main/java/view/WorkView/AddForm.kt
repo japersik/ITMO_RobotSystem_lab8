@@ -4,16 +4,14 @@ import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.World.Color
 import com.itmo.r3135.World.UnitOfMeasure
-import com.itmo.r3135.controller.MainController
-import controller.ProductsController
+import controller.ConnectController
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import tornadofx.*
 
 class AddForm : View("Register Customer") {
-    val mainController: MainController by inject()
-//    val controller: ProductsController by inject()
+    val connectController: ConnectController by inject()
     val model: ProductsModel by inject()
 //    val productsTable: ProductsTable by inject()
 //    val productsMap: ProductsMap by inject()
@@ -77,13 +75,14 @@ class AddForm : View("Register Customer") {
                 combobox<UnitOfMeasure>(model.unitOfMeasure, values = UnitOfMeasure.values().toList()) {
                     required()
                 }
-        }}
+            }
+        }
 
         button("Add") {
             action {
                 model.commit {
                     val product = model.item
-                    mainController.sendReceiveManager.send(Command(CommandList.ADD,product.toProduct()))
+                    connectController.sendReceiveManager.send(Command(CommandList.ADD, product.toProduct()))
                     //вставить проверку от БД
 //                    controller.addProduct(product.toProduct())
 //                    productsMap.repaint()

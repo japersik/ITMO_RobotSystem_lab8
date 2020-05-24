@@ -2,18 +2,17 @@ package view.WorkView
 
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
-import com.itmo.r3135.controller.MainController
+import controller.ConnectController
 import controller.ProductsController
 import tornadofx.*
 import kotlin.streams.toList
 
 
 class Interface : View("My View") {
+    val connectController: ConnectController by inject()
     val controller: ProductsController by inject()
     val model: ProductsModel by inject()
-    val productsTable: ProductsTable by inject()
     val productsMap: ProductsMap by inject()
-    val mainController: MainController by inject()
     override val root = stackpane {
         prefHeight = 800.0
         prefWidth = 80.0
@@ -48,6 +47,21 @@ class Interface : View("My View") {
                 }
             }
             row {
+                button("CLEAR") {
+                    tooltip("Delete yours objects")
+                    prefHeight = 50.0
+                    prefWidth = 80.0
+                    gridpaneConstraints {
+                        marginTop = 2.0
+                        marginLeft = 10.0
+                    }
+                    action {
+                        connectController.sendReceiveManager.send(Command(CommandList.CLEAR))
+
+                    }
+                }
+            }
+            row {
                 button("button") {
                     tooltip("remove object")
                     prefHeight = 50.0
@@ -71,7 +85,7 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        mainController.sendReceiveManager.send(Command(CommandList.GET_UPDATES))
+                        connectController.sendReceiveManager.send(Command(CommandList.GET_UPDATES))
                     }
                 }
             }
