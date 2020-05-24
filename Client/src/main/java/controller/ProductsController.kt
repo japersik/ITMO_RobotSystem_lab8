@@ -30,7 +30,6 @@ class ProductsController() : Controller() {
     public fun updateList(updateList: ArrayList<ProductWithStatus>) {
         for (p in updateList) {
             if (p.status == ProductWithStatus.ObjectStatus.UPDATE)
-            //доработать
                 addProduct(p.product)
             if (p.status == ProductWithStatus.ObjectStatus.REMOVE)
                 removeProduct(p.product)

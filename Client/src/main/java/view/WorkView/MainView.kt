@@ -7,6 +7,7 @@ import view.WorkView.*
 class   MainView : View("BestApplication") {
 
     override val root = borderpane() {
+
         prefHeight = 900.0
         prefWidth = 1600.0
         top(Toolbar::class)

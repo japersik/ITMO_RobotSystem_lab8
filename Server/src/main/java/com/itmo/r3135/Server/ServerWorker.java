@@ -235,18 +235,15 @@ public class ServerWorker implements Mediator, Executor {
                 dataManager.getSqlManager().clearStatus(
                         dataManager.getSqlManager().getUserId(command.getLogin()));
                 return new ServerMessage("Подтверждение успешно!");
-            } else return new ServerMessage("Код неверный!", false);
-        } else if (command.getCommand() != CommandList.LOGIN && dataManager.getSqlManager().isReg(
-                dataManager.getSqlManager().getUserId(command.getLogin()))) {
+            } else return new ServerMessage("Код неверный!", true,true);
+        } else if (dataManager.getSqlManager().isReg(dataManager.getSqlManager().getUserId(command.getLogin()))) {
             return new ServerMessage("Аккаунт не подтверждён! Проведьте почту\n" +
-                    "Отправьте код подтвеждения командой 'code [код]'", false);
+                    "Отправьте код подтвеждения командой 'code [код]'", true,true);
         } else
             try {
                 switch (command.getCommand()) {
                     case GET_UPDATES:
                         return getUpdateIdCommand.activate(command);
-                    case LOGIN:
-                        return new ServerMessage("Good login!");
                     case HELP:
                         return helpCommand.activate(command);
                     case INFO:

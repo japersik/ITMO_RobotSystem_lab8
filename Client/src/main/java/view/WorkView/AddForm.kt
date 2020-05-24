@@ -8,13 +8,24 @@ import controller.ConnectController
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
+import javafx.beans.binding.BooleanExpression
 import tornadofx.*
 
 class AddForm : View("Register Customer") {
     val connectController: ConnectController by inject()
     val model: ProductsModel by inject()
+//    override val closeable = false
+//    override val complete: BooleanExpression
+//        get() = super.complete
+//    override val creatable: BooleanExpression
+//        get() = super.creatable
+//    override val deletable: BooleanExpression
+//        get() = super.deletable
+//    override val refreshable: BooleanExpression
+//        get() = super.refreshable
 //    val productsTable: ProductsTable by inject()
 //    val productsMap: ProductsMap by inject()
+
 
 
     override val root = form {
@@ -98,6 +109,8 @@ class AddForm : View("Register Customer") {
             enableWhen(model.valid)
         }
     }
+    override val savable: BooleanExpression
+        get() = super.savable
 
 }
 

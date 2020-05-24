@@ -7,6 +7,7 @@ import com.itmo.r3135.System.ServerMessage
 import com.itmo.r3135.view.MainView
 import javafx.application.Platform
 import tornadofx.*
+import view.CodeView
 import view.ConnectionView
 import view.LoginScreen
 import java.io.ByteArrayInputStream
@@ -111,7 +112,7 @@ class ConnectController : Controller(), Executor {
 
     fun processing(serverMessage: ServerMessage) {
         Platform.runLater {
-            newLoginCode(serverMessage.login, false)
+            newLoginCode(serverMessage.login, serverMessage.needCode)
             if (serverMessage.productWithStatuses != null) {
                 productsController.updateList(serverMessage.productWithStatuses)
                 sendReceiveManager.lastUpdateTime = serverMessage.updateTime
@@ -128,19 +129,18 @@ class ConnectController : Controller(), Executor {
      * Обновелние статуса пользователя и переход между окнами
      */
     private fun newLoginCode(newIsLogin: Boolean, newNeedCode: Boolean) {
-        if (this.needCode) {
-            if (!newNeedCode) {
-                //переход от кода к базе
-            }
-            //else неверный код
-        }
-        if (!this.isLogin)
-            if (newIsLogin) {
-                loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
-                productsController.init()
-                this.isLogin = true
-            } else loginScreen.shakeStage()
-        //если пароль изменился в процессе работы(вдруг)
-        else if (!newIsLogin) println("Пароль был изменён. Ошибка авторизации")
+        if (newNeedCode) {
+            CodeView().openModal()
+            return
+        } else
+            if (!this.isLogin)
+                if (newIsLogin) {
+                    loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
+                    productsController.init()
+                } else loginScreen.shakeStage()
+            //если пароль изменился в процессе работы(вдруг)
+            else if (!newIsLogin) println("Пароль был изменён. Ошибка авторизации")
+        this.needCode = newNeedCode
+        this.isLogin = newIsLogin
     }
 }

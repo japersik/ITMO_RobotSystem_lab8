@@ -26,6 +26,7 @@ public class ClearCommand extends AbstractCommand {
 
     @Override
     public ServerMessage activate(Command command) {
+        dataManager.getLock().writeLock().lock();
         int userId = dataManager.getSqlManager().getUserId(command.getLogin());
         if (userId == -1) return new ServerMessage("Ошибка авторизации!");
 
@@ -39,7 +40,6 @@ public class ClearCommand extends AbstractCommand {
             while (resultSet.next())
                 ids.add(resultSet.getInt("id"));
             if (!ids.isEmpty()) {
-                dataManager.getLock().writeLock().lock();
                 HashSet<Product> products = dataManager.getProducts();
                 HashSet p = (products.parallelStream().filter(product -> ids.indexOf(product.getId()) != -1)
                         .collect(Collectors.toCollection(HashSet::new)));
