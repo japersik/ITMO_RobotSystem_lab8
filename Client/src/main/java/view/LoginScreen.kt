@@ -20,7 +20,7 @@ class LoginScreen : View("Please log in") {
         val username = bind { SimpleStringProperty() }
         val password = bind { SimpleStringProperty() }
         val remember = bind { SimpleBooleanProperty() }
-//        val code = bind { SimpleStringProperty() }
+
     }
 
     override val root = form {
@@ -35,9 +35,6 @@ class LoginScreen : View("Please log in") {
             field("Password") {
                 passwordfield(model.password).required()
             }
-//            field("Code") {
-//                passwordfield(model.code)
-//            }
             field("Remember me") {
                 checkbox(property = model.remember) {
                     tooltip("It's not safe.")
@@ -70,45 +67,6 @@ class LoginScreen : View("Please log in") {
 
     override fun onDock() {
         model.validate(decorateErrors = false)
-    }
-
-    fun shakeStage() {
-        var x = 0
-        var y = 0
-        val cycleCount = 10
-        val move = 10
-        val keyframeDuration = Duration.seconds(0.04)
-
-        val stage = FX.primaryStage
-
-        val timelineX = Timeline(KeyFrame(keyframeDuration, EventHandler {
-            if (x == 0) {
-                stage.x = stage.x + move
-                x = 4
-            } else {
-                stage.x = stage.x - move
-                x = 0
-            }
-        }))
-
-        timelineX.cycleCount = cycleCount
-        timelineX.isAutoReverse = false
-
-        val timelineY = Timeline(KeyFrame(keyframeDuration, EventHandler {
-            if (y == 0) {
-                stage.y = stage.y + move
-                y = 1
-            } else {
-                stage.y = stage.y - move
-                y = 0
-            }
-        }))
-
-        timelineY.cycleCount = cycleCount
-        timelineY.isAutoReverse = false
-
-        timelineX.play()
-        timelineY.play()
     }
 
     fun clear() {

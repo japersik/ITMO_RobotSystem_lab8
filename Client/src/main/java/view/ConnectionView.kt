@@ -29,7 +29,6 @@ class ConnectionView : View("Connect controller") {
                 }
             }
         }
-
         button("Ping") {
             isDefaultButton = true
             action {
