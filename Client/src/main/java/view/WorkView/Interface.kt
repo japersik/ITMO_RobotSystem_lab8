@@ -4,6 +4,7 @@ import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.World.Generator
 import controller.ConnectController
+import controller.CoolMapController
 import controller.ProductsController
 import tornadofx.*
 import kotlin.streams.toList
@@ -11,7 +12,7 @@ import kotlin.streams.toList
 
 class Interface : View("My View") {
     val connectController: ConnectController by inject()
-    val controller: ProductsController by inject()
+    val controller: CoolMapController by inject()
     val model: ProductsModel by inject()
     val productsMap: ProductsMap by inject()
     val addForm: AddForm by inject()
@@ -43,8 +44,12 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        val removelist = controller.products.stream().filter { t: Products? -> t == controller.selectedProduct.item }.toList()
-                        controller.products.removeAll(removelist)
+
+                        if (controller.selectedProduct.item != null) {
+                            connectController.sendReceiveManager.send(Command(CommandList.REMOVE_BY_ID, controller.selectedProduct.item.id.toInt()))
+                        }
+//                        val removelist = controller.products.stream().filter { t: Products? -> t == controller.selectedProduct.item }.toList()
+//                        controller.products.removeAll(removelist)
                     }
                 }
             }
