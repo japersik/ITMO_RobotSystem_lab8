@@ -81,18 +81,8 @@ class AddForm : View("Register Customer") {
                 model.commit {
                     val product = model.item
                     connectController.sendReceiveManager.send(Command(CommandList.ADD, product.toProduct()))
-                    //вставить проверку от БД
-//                    controller.addProduct(product.toProduct())
-//                    productsMap.repaint()
-                    //productsMap.root
-//                    Notifications.create()
-//                            .title("Customer saved!")
-//                            .text("${customer.ownername} was born ${customer.birthday}\nand lives in\n${customer.xcoordinate}, ${customer.ycoordinate} ${customer.eyecolor}")
-//                            .owner(this)
-//                            .showInformation()
                 }
             }
-
             enableWhen(model.valid)
         }
     }

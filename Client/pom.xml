@@ -56,10 +56,10 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>lab7-client</finalName>
+                    <finalName>lab8-client</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.itmo.r3135.Client.ClientMain</mainClass>
+                            <mainClass>com.itmo.r3135.app.MyApp</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

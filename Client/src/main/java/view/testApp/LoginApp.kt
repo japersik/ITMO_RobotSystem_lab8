@@ -12,7 +12,6 @@ class LoginApp : App(LoginScreen::class, Styles::class) {
 
     override fun start(stage: Stage) {
         super.start(stage)
-        connectController.init()
     }
 }
 

@@ -43,6 +43,8 @@ class Products {
 
     var unitOfMeasure by property<UnitOfMeasure>()
     fun unitOfMeasureProperty() = getProperty(Products::unitOfMeasure)
+    var userName by property<String>()
+    fun userNameProperty() = getProperty(Products::userName)
 
     constructor()
 
@@ -59,6 +61,7 @@ class Products {
         this.eyecolor = product.owner.eyeColor
         this.haircolor = product.owner.hairColor
         this.unitOfMeasure = product.unitOfMeasure
+        this.userName = product.userName
     }
 
 
@@ -111,6 +114,7 @@ class ProductsModel : ItemViewModel<Products>(Products()) {
     val partnumeber: StringProperty = bind { item?.partnumeberProperty() }
     val manufacturecost: ObjectProperty<Number> = bind { item?.manufacturecostProperty() }
     val name: StringProperty = bind { item?.nameProperty() }
+    val username: StringProperty = bind { item?.userNameProperty() }
     val id: ObjectProperty<Number> = bind { item?.idProperty() }
 }
 

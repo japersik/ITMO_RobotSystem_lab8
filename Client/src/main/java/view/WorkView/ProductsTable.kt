@@ -1,10 +1,10 @@
 package view.WorkView
 
-import controller.ProductsController
+import controller.CoolMapController
 import tornadofx.*
 
 class ProductsTable : View("My View") {
-    val controller: ProductsController by inject()
+    val controller: CoolMapController by inject()
 
     override val root = tableview(controller.products)
     {
@@ -21,5 +21,6 @@ class ProductsTable : View("My View") {
         column("Owner's birthday", Products::birthdayProperty)
         column("Eye color", Products::eyecolorProperty)
         column("Hair color", Products::haircolorProperty)
+        column("Creator", Products::userNameProperty)
     }
 }

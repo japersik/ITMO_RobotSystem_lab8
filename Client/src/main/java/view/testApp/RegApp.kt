@@ -9,11 +9,6 @@ import view.RegistrationView
 
 class RegApp : App(RegistrationView::class, Styles::class){
     val connectController: ConnectController by inject()
-
-    override fun start(stage: Stage) {
-        super.start(stage)
-        connectController.init()
-    }
 }
 
 fun main(args: Array<String>) {

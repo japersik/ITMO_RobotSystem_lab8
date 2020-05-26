@@ -13,9 +13,11 @@ class   MainView : View("BestApplication") {
         top(Toolbar::class)
         left(Interface::class)
         center(gridpane {
-            row { add<ProductsMap>() }
+//            row { add<ProductsMap>() }
+            row { add<CoolMap>() }
             row { add<ProductsTable>() }
         })
+//        right(AddForm::class)
         //left(BottomView::class)
         //addClass(Styles.main)
     }
