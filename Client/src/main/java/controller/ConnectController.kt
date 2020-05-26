@@ -27,6 +27,7 @@ class ConnectController : Controller(), Executor {
     private val loginScreen: LoginScreen by inject()
     private val mainView: MainView by inject()
     private val productsController: CoolMapController by inject()
+//    private val productsController: ProductsController by inject()
     var isConnect = false
     var isLogin = false
     var needCode = false

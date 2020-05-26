@@ -2,6 +2,7 @@ package com.itmo.r3135.app
 
 import javafx.scene.text.FontWeight
 import tornadofx.*
+import view.WorkView.ProductsSearch
 
 class Styles : Stylesheet() {
     companion object {
@@ -15,6 +16,7 @@ class Styles : Stylesheet() {
         val loginScreen by cssclass()
         val zip by cssclass()
         val xy by cssclass()
+        val productsSearch by cssclass()
     }
 
     init {
@@ -34,6 +36,14 @@ class Styles : Stylesheet() {
             padding = box(15.px)
             vgap = 50.px
             hgap = 50.px
+        }
+    }
+
+    init {
+        productsSearch {
+            padding = box(15.px)
+            vgap = 10.px
+            hgap = 10.px
         }
     }
 
