@@ -24,7 +24,7 @@ public class Product implements Comparable<Product>, Serializable {
     private Float manufactureCost;
     private UnitOfMeasure unitOfMeasure;
     private Person owner;
-    private String userName = null;
+    private String userName = "";
 
     {
         creationDate = LocalDateTime.now();
@@ -190,6 +190,10 @@ public class Product implements Comparable<Product>, Serializable {
      */
     public Double getPrice() {
         return price;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public void setPrice(Double price) {
