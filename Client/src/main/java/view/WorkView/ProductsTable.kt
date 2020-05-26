@@ -1,12 +1,14 @@
 package view.WorkView
 
 import controller.CoolMapController
+import controller.ProductsController
 import tornadofx.*
 
 class ProductsTable : View("My View") {
+    //    val controller: CoolMapController by inject()
     val controller: CoolMapController by inject()
 
-    override val root = tableview(controller.products)
+    override val root = tableview(controller.productssearh)
     {
         bindSelected(controller.selectedProduct)
         column("Id", Products::idProperty)

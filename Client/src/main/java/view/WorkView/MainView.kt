@@ -4,7 +4,7 @@ package com.itmo.r3135.view
 import tornadofx.*
 import view.WorkView.*
 
-class   MainView : View("BestApplication") {
+class MainView : View("BestApplication") {
 
     override val root = borderpane() {
 
@@ -15,6 +15,7 @@ class   MainView : View("BestApplication") {
         center(gridpane {
 //            row { add<ProductsMap>() }
             row { add<CoolMap>() }
+            row { add<ProductsSearch>() }
             row { add<ProductsTable>() }
         })
 //        right(AddForm::class)
