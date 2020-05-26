@@ -23,22 +23,13 @@ import java.nio.channels.UnresolvedAddressException
 
 class ConnectController : Controller(), Executor {
     lateinit var sendReceiveManager: SendReceiveManager
-    val connectionView: ConnectionView by inject()
-    val loginScreen: LoginScreen by inject()
-    val mainView: MainView by inject()
-    val productsController: ProductsController by inject()
+    private val connectionView: ConnectionView by inject()
+    private val loginScreen: LoginScreen by inject()
+    private val mainView: MainView by inject()
+    private val productsController: CoolMapController by inject()
     var isConnect = false
     var isLogin = false
     var needCode = false
-
-    fun init() {
-        with(config) {
-            if (containsKey(USERNAME) && containsKey(PASSWORD))
-                tryLogin(USERNAME, PASSWORD, true)
-            else
-                showLoginScreen("Please log in")
-        }
-    }
 
     fun connectionCheck(host: String, port: Int) {
         try {
@@ -53,12 +44,7 @@ class ConnectController : Controller(), Executor {
         }
     }
 
-    fun showLoginScreen(message: String, shake: Boolean = false) {
-//        secureScreen.replaceWith(loginScreen, sizeToScene = true, centerOnScreen = true)
-//        runLater {
-//            if (shake) loginScreen.shakeStage()
-//        }
-    }
+
 
     fun tryLogin(username: String, password: String, remember: Boolean) {
         val command = Command(CommandList.LOGIN)
@@ -82,16 +68,6 @@ class ConnectController : Controller(), Executor {
 //        }
     }
 
-    //
-    fun logout() {
-        with(config) {
-            remove(USERNAME)
-            remove(PASSWORD)
-            save()
-        }
-
-        showLoginScreen("Log in as another user")
-    }
 
     companion object {
         val USERNAME = "username"
@@ -117,14 +93,15 @@ class ConnectController : Controller(), Executor {
     fun processing(serverMessage: ServerMessage) {
         Platform.runLater {
             newLoginCode(serverMessage.login, serverMessage.needCode)
+            if (serverMessage.updateTime != null) {
+                sendReceiveManager.lastUpdateTime = serverMessage.updateTime
+            }
             if (serverMessage.productWithStatuses != null) {
                 productsController.updateList(serverMessage.productWithStatuses)
-                sendReceiveManager.lastUpdateTime = serverMessage.updateTime
             }
             if (serverMessage.message != null) println(serverMessage.message)
             if (serverMessage.products != null) {
                 productsController.show(serverMessage.products)
-                sendReceiveManager.lastUpdateTime = serverMessage.updateTime
             }
         }
     }
@@ -140,13 +117,14 @@ class ConnectController : Controller(), Executor {
             if (!this.isLogin)
                 if (newIsLogin) {
                     loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
-                    productsController.init()
+//                    productsController.init()
                 } else shakeStage()
             //если пароль изменился в процессе работы(вдруг)
             else if (!newIsLogin) println("Пароль был изменён. Ошибка авторизации")
         this.needCode = newNeedCode
         this.isLogin = newIsLogin
     }
+
     fun shakeStage() {
         var x = 0
         var y = 0

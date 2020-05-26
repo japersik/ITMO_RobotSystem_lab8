@@ -2,6 +2,7 @@ package view.WorkView
 
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
+import com.itmo.r3135.World.Generator
 import controller.ConnectController
 import controller.ProductsController
 import tornadofx.*
@@ -87,6 +88,20 @@ class Interface : View("My View") {
                     }
                     action {
                         connectController.sendReceiveManager.send(Command(CommandList.GET_UPDATES))
+                    }
+                }
+            }
+            row {
+                button("ADD RANDOM") {
+                    tooltip("add new object")
+                    prefHeight = 50.0
+                    prefWidth = 80.0
+                    gridpaneConstraints {
+                        marginTop = 10.0
+                        marginLeft = 10.0
+                    }
+                    action {
+                        connectController.sendReceiveManager.send(Command(CommandList.ADD, Generator.nextProduct()))
                     }
                 }
             }
