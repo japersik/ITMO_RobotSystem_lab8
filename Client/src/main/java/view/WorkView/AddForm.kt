@@ -81,6 +81,7 @@ class AddForm : View("Register Customer") {
                 model.commit {
                     val product = model.item
                     connectController.sendReceiveManager.send(Command(CommandList.ADD, product.toProduct()))
+                    close()
                 }
             }
             enableWhen(model.valid)
