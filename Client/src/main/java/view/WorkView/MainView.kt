@@ -16,7 +16,6 @@ class   MainView : View("BestApplication") {
             row { add<ProductsMap>() }
             row { add<ProductsTable>() }
         })
-        right(AddForm::class)
         //left(BottomView::class)
         //addClass(Styles.main)
     }

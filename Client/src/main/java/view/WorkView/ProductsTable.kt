@@ -9,7 +9,6 @@ class ProductsTable : View("My View") {
     override val root = tableview(controller.products)
     {
         bindSelected(controller.selectedProduct)
-
         column("Id", Products::idProperty)
         column("Name", Products::nameProperty)
         column("Price", Products::priceProperty)
