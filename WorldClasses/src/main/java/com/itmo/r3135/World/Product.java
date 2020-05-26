@@ -127,7 +127,7 @@ public class Product implements Comparable<Product>, Serializable {
         try {
             if (this.creationDate == null) this.creationDate = LocalDateTime.now();
             return name == null || name.isEmpty() || coordinates == null ||
-                    coordinates.getX() >= 82 || coordinates.getY() <= -50 ||
+//                    coordinates.getX() >= 82 || coordinates.getY() <= -50 ||
                     creationDate == null || price == null || price <= 0 ||
                     partNumber == null || partNumber.length() < 21 ||
                     manufactureCost == null || unitOfMeasure == null || owner == null ||
@@ -215,14 +215,14 @@ public class Product implements Comparable<Product>, Serializable {
                 s += String.format(format, "String name", name, "Поле не может быть null, Строка не может быть пустой");
             if (coordinates == null)
                 s += String.format(format, "Coordinates coordinates", coordinates, "Поле не может быть null");
-            else {
-                if (coordinates.getY() <= -50) {
-                    s += String.format(format, "(coordinates)Long y ", coordinates.getY(), "Значение поля должно быть больше -244, Поле не может быть null");
-                }
-                if (coordinates.getX() >= 82) {
-                    s += String.format(format, "(coordinates)Long y ", coordinates.getY(), "Максимальное значение поля: 82, Поле не может быть null");
-                }
-            }
+//            else {
+//                if (coordinates.getY() <= -50) {
+//                    s += String.format(format, "(coordinates)Long y ", coordinates.getY(), "Значение поля должно быть больше -244, Поле не может быть null");
+//                }
+//                if (coordinates.getX() >= 82) {
+//                    s += String.format(format, "(coordinates)Long y ", coordinates.getY(), "Максимальное значение поля: 82, Поле не может быть null");
+//                }
+//            }
             if (price == null || price <= 0) {
                 s += String.format(format, "Double price", price, "Поле может быть null, Значение поля должно быть больше 0");
             }
