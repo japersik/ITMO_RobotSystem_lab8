@@ -4,6 +4,7 @@ import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.World.Color
 import com.itmo.r3135.World.UnitOfMeasure
+import com.itmo.r3135.app.Styles.Companion.addform
 import controller.ConnectController
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
@@ -16,6 +17,7 @@ class AddForm : View("Register Customer") {
     val model: ProductsModel by inject()
 
     override val root = form {
+        addClass(addform)
         fieldset("Owner", FontAwesomeIconView(USER)) {
             field("Owner name") {
                 textfield(model.ownername).required()
