@@ -16,7 +16,7 @@ class ProductsController() : Controller() {
     val productsMap: ProductsMap by inject()
     val connectController: ConnectController by inject()
 
-    fun init() {
+    init{
         products.clear()
         connectController.sendReceiveManager.send(Command(CommandList.SHOW))
     }

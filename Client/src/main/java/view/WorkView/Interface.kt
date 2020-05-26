@@ -43,8 +43,8 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        controller.products.removeAll(controller.products.stream().filter { t: Products? -> t == controller.selectedProduct.item }.toList())
-                        productsMap.repaint()
+                        val removelist = controller.products.stream().filter { t: Products? -> t == controller.selectedProduct.item }.toList()
+                        controller.products.removeAll(removelist)
                     }
                 }
             }

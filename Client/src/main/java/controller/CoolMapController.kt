@@ -8,15 +8,15 @@ import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.util.Duration
 import tornadofx.*
-import view.WorkView.CoolMap
-import view.WorkView.ProductPoint
-import view.WorkView.Products
-import view.WorkView.ProductsModel
+import view.WorkView.*
+import kotlin.streams.toList
 
 class CoolMapController : Controller() {
     val coolMap: CoolMap by inject()
+    val productsSearch: ProductsSearch by inject()
     val connectController: ConnectController by inject()
     val products = FXCollections.observableArrayList<Products>()
+    val productssearh = FXCollections.observableArrayList<Products>()
     val figures = FXCollections.observableHashMap<Int, ProductPoint>()
     val selectedProduct = ProductsModel()
     var currentMinCoordinatesX = -100.0
@@ -30,6 +30,7 @@ class CoolMapController : Controller() {
         products.clear()
         connectController.sendReceiveManager.send(Command(CommandList.SHOW))
         products.addListener(ListChangeListener<Products> { c ->
+
 //            while (c.next()) {
 //                if (c.wasRemoved()) {
 //                    //работка удаления
@@ -42,6 +43,9 @@ class CoolMapController : Controller() {
 //                    println("UPDATED")
 //                }
 //            }
+
+            updatetable(productsSearch.search)
+
         })
     }
 
@@ -189,5 +193,7 @@ class CoolMapController : Controller() {
         removeFromMap(product)
     }
 
-
+    fun updatetable(searchString: String){
+         productssearh.setAll(products.stream().filter { t: Products? -> t?.name?.toLowerCase()?.contains(searchString.toLowerCase())!! }.toList())
+    }
 }
