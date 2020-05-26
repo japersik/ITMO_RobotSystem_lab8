@@ -12,9 +12,9 @@ import view.WorkView.*
 import kotlin.streams.toList
 
 class CoolMapController : Controller() {
-    val coolMap: CoolMap by inject()
-    val productsSearch: ProductsSearch by inject()
-    val connectController: ConnectController by inject()
+    private val coolMap: CoolMap by inject()
+    private val productsSearch: ProductsSearch by inject()
+    private val connectController: ConnectController by inject()
     val products = FXCollections.observableArrayList<Products>()
     val productssearh = FXCollections.observableArrayList<Products>()
     val figures = FXCollections.observableHashMap<Int, ProductPoint>()
@@ -66,7 +66,7 @@ class CoolMapController : Controller() {
         val updater = Thread(Runnable {
             while (true) {
                 connectController.sendReceiveManager.send(Command(CommandList.GET_UPDATES))
-                Thread.sleep(500)
+                Thread.sleep(1000)
             }
         })
         updater.isDaemon = true

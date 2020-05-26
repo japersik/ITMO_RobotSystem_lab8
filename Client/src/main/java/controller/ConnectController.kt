@@ -27,46 +27,38 @@ class ConnectController : Controller(), Executor {
     private val loginScreen: LoginScreen by inject()
     private val mainView: MainView by inject()
     private val productsController: CoolMapController by inject()
-//    private val productsController: ProductsController by inject()
+    private val notificationsController: NotificationsController by inject()
+
+    //    private val productsController: ProductsController by inject()
     var isConnect = false
     var isLogin = false
     var needCode = false
 
     fun connectionCheck(host: String, port: Int) {
-        try {
-            sendReceiveManager = SendReceiveManager(InetSocketAddress(host, port), this)
-            if (sendReceiveManager.ping() != -1L) {
+        sendReceiveManager = SendReceiveManager(InetSocketAddress(host, port), this)
+        runAsync {
+            try {
+                sendReceiveManager.ping()
+            } catch (e: UnresolvedAddressException) {
+                -1L
+            }
+        } ui { ping ->
+            if (ping != -1L) {
                 isConnect = true
                 connectionView.replaceWith(loginScreen, sizeToScene = true, centerOnScreen = true)
                 sendReceiveManager.startListening()
-            } else println("Bad connect")
-        } catch (e: UnresolvedAddressException) {
-            println("wrong address!!!")
+            } else {
+                shakeStage()
+                notificationsController.errorMessage(text = "Connecting Error")
+            }
         }
     }
-
 
 
     fun tryLogin(username: String, password: String, remember: Boolean) {
         val command = Command(CommandList.LOGIN)
         command.setLoginPassword(username, password)
         sendReceiveManager.send(command)
-//        runAsync {
-//            username == "admin" && password == "secret"
-//        } ui { successfulLogin ->
-//            if (successfulLogin) {
-//                loginScreen.close()
-//                if (remember) {
-//                    with(config) {
-//                        set(USERNAME to username)
-//                        set(PASSWORD to password)
-//                        save()
-//                    }
-//                }
-//            } else {
-//                showLoginScreen("Login failed. Please try again.", true)
-//            }
-//        }
     }
 
 
@@ -113,13 +105,17 @@ class ConnectController : Controller(), Executor {
     private fun newLoginCode(newIsLogin: Boolean, newNeedCode: Boolean) {
         if (newNeedCode) {
             CodeView().openModal()
+            notificationsController.infoMessage(text = "Check your e-mail and write a code :)")
             return
         } else
             if (!this.isLogin)
                 if (newIsLogin) {
                     loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
 //                    productsController.init()
-                } else shakeStage()
+                } else {
+                    shakeStage()
+                    notificationsController.errorMessage(text = "Incorrect login or password!")
+                }
             //если пароль изменился в процессе работы(вдруг)
             else if (!newIsLogin) println("Пароль был изменён. Ошибка авторизации")
         this.needCode = newNeedCode

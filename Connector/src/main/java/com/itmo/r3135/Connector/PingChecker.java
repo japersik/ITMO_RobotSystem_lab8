@@ -26,7 +26,7 @@ public class PingChecker {
         ByteBuffer buffer = ByteBuffer.wrap(b);
         SocketAddress from = null;
         Thread.sleep(5);
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 500; i++) {
             if (i % 100 == 0) System.out.print(".");
             from = datagramChannel.receive(buffer);
             if (from != null) break;
