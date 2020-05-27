@@ -4,6 +4,7 @@ import com.google.gson.JsonSyntaxException;
 import com.itmo.r3135.Server.DataManager;
 import com.itmo.r3135.Server.Mediator;
 import com.itmo.r3135.System.Command;
+import com.itmo.r3135.System.ProductWithStatus;
 import com.itmo.r3135.System.ServerMessage;
 import com.itmo.r3135.World.Person;
 import com.itmo.r3135.World.Product;
@@ -26,6 +27,7 @@ public class UpdeteIdCommand extends AbstractCommand {
 
     @Override
     public ServerMessage activate(Command command) {
+
         int userId = dataManager.getSqlManager().getUserId(command.getLogin());
         if (userId == -1) return new ServerMessage("Ошибка авторизации!");
         try {
@@ -34,13 +36,16 @@ public class UpdeteIdCommand extends AbstractCommand {
             if (newProduct.checkNull()) {
                 return new ServerMessage("Элемент не удовлетворяет требованиям коллекции");
             } else {
+                dataManager.getLock().writeLock().lock();
                 if (updateProductSQL(newProduct, id) != -1) {
                     HashSet<Product> products = dataManager.getProducts();
                     for (Product productFoUpdate : products) {
-                        if (productFoUpdate.getId() == id)
+                        if (productFoUpdate.getId() == id) {
                             productFoUpdate.updateProduct(newProduct);
-                        dataManager.getLock().writeLock().unlock();
-                        return new ServerMessage("Элемент успешно обновлён.");
+                            dataManager.addChange(productFoUpdate, ProductWithStatus.ObjectStatus.UPDATE);
+                            dataManager.getLock().writeLock().unlock();
+                            return new ServerMessage("Элемент успешно обновлён.");
+                        }
                     }
                     return new ServerMessage("Как такое могло произойти?! В базе обновлён, а в коллекци - нет?!");
                 } else

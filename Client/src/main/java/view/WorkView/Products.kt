@@ -88,6 +88,8 @@ class Products {
         product.price = this.price.toDouble()
         product.coordinates = Coordinates(this.xcoordinate.toDouble(), this.ycoordinate.toDouble())
         product.owner = Person(this.ownername as String, this.birthday.atStartOfDay(), this.eyecolor as Color, this.haircolor as Color)
+        if(this.id !=null) product.id = this.id.toInt()
+        if(this.userName !=null)product.userName = this.userName.toString()
         return product
     }
 
@@ -97,6 +99,10 @@ class Products {
         other as Products
         if (this.id != other.id) return false
         return true
+    }
+
+    override fun hashCode(): Int {
+        return this.id.toInt()
     }
 
 

@@ -5,17 +5,17 @@ import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.System.ProductWithStatus
 import com.itmo.r3135.World.Product
 import javafx.collections.FXCollections
-import javafx.collections.ListChangeListener
+import javafx.collections.SetChangeListener
 import javafx.util.Duration
 import tornadofx.*
 import view.WorkView.*
 import kotlin.streams.toList
 
 class CoolMapController : Controller() {
-    val coolMap: CoolMap by inject()
-    val productsSearch: ProductsSearch by inject()
-    val connectController: ConnectController by inject()
-    val products = FXCollections.observableArrayList<Products>()
+    private val coolMap: CoolMap by inject()
+    private val productsSearch: ProductsSearch by inject()
+    private val connectController: ConnectController by inject()
+    val products = FXCollections.observableSet<Products>()
     val productssearh = FXCollections.observableArrayList<Products>()
     val figures = FXCollections.observableHashMap<Int, ProductPoint>()
     val selectedProduct = ProductsModel()
@@ -29,8 +29,13 @@ class CoolMapController : Controller() {
     init {
         products.clear()
         connectController.sendReceiveManager.send(Command(CommandList.SHOW))
-        products.addListener(ListChangeListener<Products> { c ->
-
+        products.addListener(SetChangeListener<Products> { c ->
+            if (c.elementAdded != null) {
+                addToMap(c.elementAdded.toProduct())
+            }
+            if (c.elementRemoved != null) {
+                removeFromMap(c.elementRemoved.toProduct())
+            }
 //            while (c.next()) {
 //                if (c.wasRemoved()) {
 //                    //работка удаления
@@ -62,25 +67,28 @@ class CoolMapController : Controller() {
     /**
      *
      */
-    private fun startGetUpdates(){
+    private fun startGetUpdates() {
         val updater = Thread(Runnable {
             while (true) {
                 connectController.sendReceiveManager.send(Command(CommandList.GET_UPDATES))
-                Thread.sleep(500)
+                Thread.sleep(100)
             }
         })
         updater.isDaemon = true
         updater.start()
     }
+
     /**
      * Вносит изменеия в существующий набор объектов
      */
     fun updateList(updateList: ArrayList<ProductWithStatus>) {
         for (p in updateList) {
-            if (p.status == ProductWithStatus.ObjectStatus.UPDATE)
+            if (p.status == ProductWithStatus.ObjectStatus.ADD)
                 addProduct(p.product)
             if (p.status == ProductWithStatus.ObjectStatus.REMOVE)
                 removeProduct(p.product)
+            if (p.status == ProductWithStatus.ObjectStatus.UPDATE)
+                updateProduct(p.product)
         }
         updateAllPoints()
     }
@@ -168,7 +176,7 @@ class CoolMapController : Controller() {
                 keyframe(Duration.seconds(1.5)) {
                     figures[product.id]?.removeAnimation()
                     setOnFinished {
-                        coolMap.p.children.remove((figures[product.id])?.group)
+                        figures[product.id]?.group?.removeFromParent()
                         figures.remove(product.id)
                         updateCoordinates()
                     }
@@ -182,18 +190,29 @@ class CoolMapController : Controller() {
      */
     private fun addProduct(product: Product) {
         products.add(Products(product))
-        addToMap(product)
+//        addToMap(product)
     }
 
     /**
      * Добавяет объект из коллекции
      */
     private fun removeProduct(product: Product) {
+//        removeFromMap(product)
         products.remove(Products(product))
-        removeFromMap(product)
     }
 
-    fun updatetable(searchString: String){
-         productssearh.setAll(products.stream().filter { t: Products? -> t?.name?.toLowerCase()?.contains(searchString.toLowerCase())!! }.toList())
+    /**
+     * Обновляет объект из коллекции
+     */
+    private fun updateProduct(product: Product) {
+        products.remove(Products(product))
+        products.add(Products(product))
+        figures[product.id]?.xReal = product.coordinates.x
+        figures[product.id]?.yReal = product.coordinates.y
+        figures[product.id]?.let { updatePoint(it) }
+    }
+
+    fun updatetable(searchString: String) {
+        productssearh.setAll(products.stream().filter { t: Products? -> t?.name?.toLowerCase()?.contains(searchString.toLowerCase())!! }.toList())
     }
 }
