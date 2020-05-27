@@ -79,7 +79,7 @@ class ProductPoint(product: Product) {
 
     fun updateXY(xGraph: Double, yGraph: Double) {
         timeline {
-            keyframe(Duration.seconds(2.0)) {
+            keyframe(Duration.seconds(0.75)) {
                 keyvalue(group.translateXProperty(), xGraph)
                 keyvalue(group.translateYProperty(), yGraph)
             }

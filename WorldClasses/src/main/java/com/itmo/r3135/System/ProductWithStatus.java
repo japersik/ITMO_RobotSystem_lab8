@@ -30,6 +30,7 @@ public class ProductWithStatus implements Serializable {
     public static enum ObjectStatus implements Serializable {
         UPDATE,
         REMOVE,
+        ADD,
     }
 
 }
