@@ -66,7 +66,7 @@ class CoolMapController : Controller() {
         val updater = Thread(Runnable {
             while (true) {
                 connectController.sendReceiveManager.send(Command(CommandList.GET_UPDATES))
-                Thread.sleep(500)
+                Thread.sleep(1000)
             }
         })
         updater.isDaemon = true
