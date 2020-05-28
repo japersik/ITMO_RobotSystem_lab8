@@ -50,6 +50,7 @@ class ConnectController : Controller(), Executor {
             } else {
                 shakeStage()
                 notificationsController.errorMessage(text = "Connecting Error")
+                notificationsController.errorMessageAlert(text = "Connecting Error")
             }
         }
     }
