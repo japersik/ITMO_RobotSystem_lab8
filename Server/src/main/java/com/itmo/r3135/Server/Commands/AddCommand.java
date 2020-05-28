@@ -41,7 +41,7 @@ public class AddCommand extends AbstractCommand {
                 dataManager.getLock().writeLock().lock();
                 HashSet<Product> products = dataManager.getProducts();
                 if (products.add(addProduct)) {
-                    dataManager.addChange(addProduct, ProductWithStatus.ObjectStatus.UPDATE);
+                    dataManager.addChange(addProduct, ProductWithStatus.ObjectStatus.ADD);
                     dataManager.getLock().writeLock().unlock();
                     return new ServerMessage("Элемент c id " + id + " успешно добавлен.");
                 } else {
