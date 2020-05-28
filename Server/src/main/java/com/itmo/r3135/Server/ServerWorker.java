@@ -187,6 +187,8 @@ public class ServerWorker implements Mediator, Executor {
      */
     private void threadProcessing(Command command, SocketAddress inputAddress) {
         executePool.execute(() -> {
+            if (DataManager.ActiveSendList.isSending(inputAddress) && command.getCommand() == CommandList.GET_UPDATES)
+                return;
             ServerMessage message = processing(command);
             logger.info("Command " + command.getCommand() + " from user " + command.getLogin() + "." +
                     " Address: " + inputAddress + " complete.");
@@ -202,8 +204,10 @@ public class ServerWorker implements Mediator, Executor {
      */
     private void threadSend(ServerMessage message, SocketAddress inputAddress) {
         sendPool.execute(() -> {
+            DataManager.ActiveSendList.setSending(inputAddress, true);
             logger.info("Sending server message to " + inputAddress + ".");
             sender.send(message, inputAddress);
+            DataManager.ActiveSendList.setSending(inputAddress, false);
         });
     }
 
