@@ -5,6 +5,7 @@ import com.itmo.r3135.Server.SQLconnect.SQLManager;
 import com.itmo.r3135.System.ProductWithStatus;
 import com.itmo.r3135.World.Product;
 
+import java.net.SocketAddress;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -72,7 +73,6 @@ public class DataManager {
         return changeProducts;
     }
 
-
     @Override
     public String toString() {
         return "------------------------" +
@@ -81,6 +81,26 @@ public class DataManager {
                 "\n Количество элементов коллекции: " + products.size() +
                 "\n Дата инициализации: " + dateInitialization +
                 "\n Дата последнего изменения: " + dateChange;
+    }
+
+    public static class ActiveSendList {
+        private static final HashSet list = new HashSet<SocketAddress>();
+        private static final ReadWriteLock lock = new ReentrantReadWriteLock();
+
+        public static boolean isSending(SocketAddress address) {
+            lock.readLock().lock();
+            boolean status = list.contains(address);
+            lock.readLock().unlock();
+            return status;
+        }
+
+        public static void setSending(SocketAddress address, boolean status) {
+            lock.writeLock().lock();
+            if (status) {
+                list.add(address);
+            } else list.remove(address);
+            lock.writeLock().unlock();
+        }
     }
 
 }

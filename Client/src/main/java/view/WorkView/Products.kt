@@ -52,14 +52,18 @@ class Products {
         this.id = product.id
         this.name = product.name
         this.price = product.price
-        this.ycoordinate = product.coordinates.y
-        this.xcoordinate = product.coordinates.x
+        if (product.coordinates != null) {
+            this.ycoordinate = product.coordinates.y
+            this.xcoordinate = product.coordinates.x
+        }
         this.partnumeber = product.partNumber
         this.manufacturecost = product.manufactureCost
-        this.ownername = product.owner.name
-        this.birthday = product.owner.birthday.toLocalDate()
-        this.eyecolor = product.owner.eyeColor
-        this.haircolor = product.owner.hairColor
+        if (product.owner != null) {
+            this.ownername = product.owner.name
+            this.birthday = product.owner.birthday.toLocalDate()
+            this.eyecolor = product.owner.eyeColor
+            this.haircolor = product.owner.hairColor
+        }
         this.unitOfMeasure = product.unitOfMeasure
         this.userName = product.userName
     }
@@ -82,14 +86,15 @@ class Products {
         var product = Product()
         product.name = this.name
         product.partNumber = this.partnumeber
-        product.manufactureCost = this.manufacturecost.toFloat()
+        product.manufactureCost = this.manufacturecost?.toFloat()
         product.unitOfMeasure = UnitOfMeasure.GRAMS
-        product.creationDate = this.birthday.atStartOfDay()
-        product.price = this.price.toDouble()
-        product.coordinates = Coordinates(this.xcoordinate.toDouble(), this.ycoordinate.toDouble())
-        product.owner = Person(this.ownername as String, this.birthday.atStartOfDay(), this.eyecolor as Color, this.haircolor as Color)
-        if(this.id !=null) product.id = this.id.toInt()
-        if(this.userName !=null)product.userName = this.userName.toString()
+        product.creationDate = this.birthday?.atStartOfDay()
+        product.price = this.price?.toDouble()
+        if(this.xcoordinate!=null && this.ycoordinate!=null)
+            product.coordinates = Coordinates(this.xcoordinate.toDouble(), this.ycoordinate.toDouble())
+        product.owner = Person(this.ownername, this.birthday?.atStartOfDay(), this.eyecolor, this.haircolor)
+        if (this.id != null) product.id = this.id.toInt()
+        if (this.userName != null) product.userName = this.userName.toString()
         return product
     }
 

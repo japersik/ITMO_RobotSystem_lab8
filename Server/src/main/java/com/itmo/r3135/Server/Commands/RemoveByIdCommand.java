@@ -47,7 +47,9 @@ public class RemoveByIdCommand extends AbstractCommand {
                             .collect(Collectors.toCollection(HashSet::new)));
                     products.removeAll(p);
                     for (Object pp : p) {
-                        dataManager.addChange((Product) pp, ProductWithStatus.ObjectStatus.REMOVE);
+                        Product sending = new Product();
+                        sending.setId(((Product) pp).getId());
+                        dataManager.addChange(sending, ProductWithStatus.ObjectStatus.REMOVE);
                     }
                 }
             } catch (SQLException e) {
