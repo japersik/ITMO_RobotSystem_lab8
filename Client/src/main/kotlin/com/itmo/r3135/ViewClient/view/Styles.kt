@@ -1,8 +1,9 @@
 package com.itmo.r3135.ViewClient.view
 
-import javafx.scene.Cursor
+import javafx.scene.image.Image
 import javafx.scene.text.FontWeight
 import tornadofx.*
+import tornadofx.FX.Companion.primaryStage
 import tornadofx.WizardStyles.Companion.heading
 
 class Styles : Stylesheet() {
@@ -27,6 +28,7 @@ class Styles : Stylesheet() {
     }
 
     init {
+        primaryStage.icons.add(Image("/icon.png"))
         println(comfortaa)
         label and heading {
             padding = box(100.px)
