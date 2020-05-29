@@ -16,7 +16,7 @@ class ConnectionView : View("Connect controller") {
     override val root = form {
         addClass(Styles.loginScreen)
         fieldset {
-            field("Host") {
+            field("Host | Хостяра") {
                 textfield(model.host) {
                     required()
                     whenDocked { requestFocus() }

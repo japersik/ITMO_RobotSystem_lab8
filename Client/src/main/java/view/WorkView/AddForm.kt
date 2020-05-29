@@ -4,13 +4,17 @@ import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.World.Color
 import com.itmo.r3135.World.UnitOfMeasure
+import com.itmo.r3135.app.Styles
 import com.itmo.r3135.app.Styles.Companion.addform
+import com.itmo.r3135.app.Styles.Companion.xy
 import controller.ConnectController
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.binding.BooleanExpression
 import tornadofx.*
+import tornadofx.Stylesheet.Companion.fieldset
+import tornadofx.Stylesheet.Companion.textField
 
 class AddForm : View("Register Customer") {
     val connectController: ConnectController by inject()
@@ -18,7 +22,8 @@ class AddForm : View("Register Customer") {
 
     override val root = form {
         addClass(addform)
-        fieldset("Owner", FontAwesomeIconView(USER)) {
+        fieldset("Хозяина", FontAwesomeIconView(USER))
+        {
             field("Owner name") {
                 textfield(model.ownername).required()
             }
@@ -37,7 +42,8 @@ class AddForm : View("Register Customer") {
             }
         }
 
-        fieldset("Products", FontAwesomeIconView(FontAwesomeIcon.APPLE)) {
+        fieldset("Products", FontAwesomeIconView(FontAwesomeIcon.APPLE))
+        {
 //            field("ID") {
 //                textfield(model.id).required()
 //            }
@@ -78,7 +84,8 @@ class AddForm : View("Register Customer") {
             }
         }
 
-        button("Add") {
+        button("Add")
+        {
             action {
                 model.commit {
                     val product = model.item
@@ -89,6 +96,7 @@ class AddForm : View("Register Customer") {
             enableWhen(model.valid)
         }
     }
+
     override val savable: BooleanExpression
         get() = super.savable
 

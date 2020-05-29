@@ -1,5 +1,6 @@
 package view.WorkView
 
+import com.itmo.r3135.app.Styles.Companion.table
 import controller.CoolMapController
 import controller.ProductsController
 import tornadofx.*
