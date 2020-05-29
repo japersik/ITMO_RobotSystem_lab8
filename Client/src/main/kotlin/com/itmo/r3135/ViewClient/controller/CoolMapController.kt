@@ -7,9 +7,12 @@ import com.itmo.r3135.ViewClient.view.WorkView.*
 import com.itmo.r3135.World.Product
 import javafx.collections.FXCollections
 import javafx.collections.SetChangeListener
+import javafx.scene.Group
+import javafx.scene.shape.Line
+import javafx.scene.text.Text
 import javafx.util.Duration
 import tornadofx.*
-import com.itmo.r3135.ViewClient.view.WorkView.*
+import java.lang.Math.abs
 import kotlin.streams.toList
 
 class CoolMapController : Controller() {
@@ -26,6 +29,11 @@ class CoolMapController : Controller() {
     var currentMaxCoordinatesY = 100.0
     val border = 40.0
     val indent = 10.0
+    val lineGroup = Group()
+    val textGroup = Group()
+
+    private var stepXLine: Double = 0.0
+    private var stepYLine: Double = 0.0
 
     init {
         products.clear()
@@ -37,22 +45,60 @@ class CoolMapController : Controller() {
             if (c.elementRemoved != null) {
                 removeFromMap(c.elementRemoved.toProduct())
             }
-//            while (c.next()) {
-//                if (c.wasRemoved()) {
-//                    //работка удаления
-//                    println("REMOVED")
-//                } else if (c.wasAdded()) {
-//                    //обавление
-//                    println("ADDED")
-//                } else if (c.wasUpdated()) {
-//                    //изменение
-//                    println("UPDATED")
-//                }
-//            }
-
             updatetable(productsSearch.search)
 
         })
+        coolMap.p.children.add(lineGroup)
+        coolMap.p.children.add(textGroup)
+        repaintNewWindowsSize()
+    }
+
+    fun repaintNewWindowsSize() {
+        stepXLine = (coolMap.p.width - 2 * border) / 10
+        stepYLine = (coolMap.p.height - 2 * border) / 10
+        lineGroup.children.clear()
+        var i = border
+        while (i <= coolMap.p.width - border) {
+            lineGroup.children.add(Line(i, border, i, coolMap.p.height - border))
+            i += stepXLine
+        }
+        lineGroup.children.add(Line(coolMap.p.width - border, border,
+                coolMap.p.width - border, coolMap.p.height - border))
+        i = border
+        while (i <= coolMap.p.height - border) {
+            lineGroup.children.add(Line(border, i, coolMap.p.width - border, i))
+            i += stepYLine
+        }
+        lineGroup.children.add(Line(border, coolMap.p.height - border,
+                coolMap.p.width - border, coolMap.p.height - border))
+        updateAllPoints()
+        repaintNewCoordinateText()
+    }
+
+    private fun repaintNewCoordinateText() {
+        textGroup.children.clear()
+        val deltaX = currentMaxCoordinatesX - currentMinCoordinatesX
+        var kX = (coolMap.p.width-2*border)/deltaX
+        var i = currentMinCoordinatesX
+        while (i <= currentMaxCoordinatesX+5.0) {
+            val text = Text()
+            text.text = String.format("%.2f",i)
+            text.x = (i-currentMinCoordinatesX)*kX+border
+            text.y = coolMap.p.height-border/3
+            textGroup.children.add(text)
+            i += deltaX/10
+        }
+        val deltaY = currentMaxCoordinatesY - currentMinCoordinatesY
+        var kY = (coolMap.p.height-2*border)/deltaY
+         i = currentMinCoordinatesY
+        while (i <= currentMaxCoordinatesY+5.0) {
+            val text = Text()
+            text.text = String.format("%.2f",i)
+            text.x = 2/3*border
+            text.y = (currentMaxCoordinatesY-i)*kY+border
+            textGroup.children.add(text)
+            i += deltaY/10
+        }
     }
 
     /**
@@ -63,6 +109,7 @@ class CoolMapController : Controller() {
             addProduct(p)
         startGetUpdates()
         updateAllPoints()
+        repaintNewCoordinateText()
     }
 
     /**
@@ -92,6 +139,7 @@ class CoolMapController : Controller() {
                 updateProduct(p.product)
         }
         updateAllPoints()
+
     }
 
     /**
@@ -111,6 +159,7 @@ class CoolMapController : Controller() {
         for (pp: MutableMap.MutableEntry<Int, ProductPoint> in figures) {
             updatePoint(pp.value)
         }
+        repaintNewCoordinateText()
     }
 
     /**
@@ -139,9 +188,9 @@ class CoolMapController : Controller() {
      */
     private fun updatePoint(pp: ProductPoint) {
         uppingCoordinates(pp)
-        val x = border + (coolMap.p.minWidth - 2 * border) * (pp.xReal - currentMinCoordinatesX) /
+        val x = border + (coolMap.p.width - 2 * border) * (pp.xReal - currentMinCoordinatesX) /
                 (currentMaxCoordinatesX - currentMinCoordinatesX)
-        val y = coolMap.p.minHeight - (border + (coolMap.p.minHeight - 2 * border) * (pp.yReal - currentMinCoordinatesY) /
+        val y = coolMap.p.height - (border + (coolMap.p.height - 2 * border) * (pp.yReal - currentMinCoordinatesY) /
                 (currentMaxCoordinatesY - currentMinCoordinatesY))
         pp.updateXY(x, y)
     }
@@ -151,9 +200,9 @@ class CoolMapController : Controller() {
      */
     private fun setPoint(pp: ProductPoint) {
         uppingCoordinates(pp)
-        val x = border + (coolMap.p.minWidth - 2 * border) * (pp.xReal - currentMinCoordinatesX) /
+        val x = border + (coolMap.p.width - 2 * border) * (pp.xReal - currentMinCoordinatesX) /
                 (currentMaxCoordinatesX - currentMinCoordinatesX)
-        val y = coolMap.p.minHeight - (border + (coolMap.p.minHeight - 2 * border) * (pp.yReal - currentMinCoordinatesY) /
+        val y = coolMap.p.height - (border + (coolMap.p.height - 2 * border) * (pp.yReal - currentMinCoordinatesY) /
                 (currentMaxCoordinatesY - currentMinCoordinatesY))
         pp.setXY(x, y)
     }

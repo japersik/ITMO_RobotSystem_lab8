@@ -8,32 +8,25 @@ import tornadofx.*
 class CoolMap : View("My View") {
     val controller: CoolMapController by inject()
     val p: Pane = pane {
-        minWidth = 1500.0
-        minHeight = 600.0
-        maxWidth = 1500.0
-        maxHeight = 600.0
+        minWidth = 700.0
+        minHeight = 400.0
+        prefWidth = 1500.0
+        prefHeight = 900.0
+        layoutBoundsProperty().addListener(ChangeListener() { observable, oldValue, newValue ->
+            Thread.sleep(20)
+            controller.repaintNewWindowsSize()
+//            val dw = newValue.width-oldValue.width
+//            val dh = newValue.height-oldValue.height
+            //productsTable.size(width+dw, height+dh)
+        })
     }
     override val root = p
 
     init {
-        val border = controller.border
-        var i = border
-        while (i <= p.minWidth-border) {
-            println(i)
-            p.line(i, border, i, p.minHeight-border)
-            i += 50
-        }
-        p.line(p.minWidth-border, border, p.minWidth-border, p.minHeight-border)
-        i = border
-        while (i <= p.minHeight-border) {
-            println(i)
-            p.line(border, i, p.minWidth-border, i)
-            i += 50
-        }
-        p.line(border, p.minHeight-border, p.minWidth-border, p.minHeight-border)
+//       repaint()
+
     }
-    fun clear() {
-    }
+
 }
 
 

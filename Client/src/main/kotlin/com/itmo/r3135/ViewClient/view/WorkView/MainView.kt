@@ -11,15 +11,16 @@ class MainView : View("BestApplication") {
         addClass(main)
         prefHeight = 900.0
         prefWidth = 1600.0
+
         top( Toolbar::class)
         left(Interface::class)
         center(gridpane {
-            layoutBoundsProperty().addListener(ChangeListener() { observable, oldValue, newValue ->
-                println(newValue)
-                val dw = newValue.width-oldValue.width
-                val dh = newValue.height-oldValue.height
-                //productsTable.size(width+dw, height+dh)
-            })
+//            layoutBoundsProperty().addListener(ChangeListener() { observable, oldValue, newValue ->
+//                println(newValue)
+//                val dw = newValue.width-oldValue.width
+//                val dh = newValue.height-oldValue.height
+//                //productsTable.size(width+dw, height+dh)
+//            })
             row { add<CoolMap>() }
             row { add<ProductsSearch>() }
             row { add<ProductsTable>()  }
