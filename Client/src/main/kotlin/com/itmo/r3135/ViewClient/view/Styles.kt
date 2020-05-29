@@ -1,5 +1,6 @@
 package com.itmo.r3135.ViewClient.view
 
+import javafx.scene.Cursor
 import javafx.scene.text.FontWeight
 import tornadofx.*
 import tornadofx.WizardStyles.Companion.heading
@@ -8,18 +9,21 @@ class Styles : Stylesheet() {
     companion object {
         val main by cssclass()
         val loginScreen by cssclass()
-        val xy by cssclass()
         val productsSearch by cssclass()
         val addform by cssclass()
         val table by cssclass()
 
-        val fieldset by cssclass()
+        val loginScreenButton by cssclass()
+        val maingreedpane by cssclass()
 
-        val backgroundcolor = c("#a5ff9b")
+        val red by cssclass()
+        val green by cssclass()
 
-        val greencolor = c("#4e9830")
+        val backgroundcolor = c("#91ff91")
+        val redcolor = c("#eb1919")
+        val greencolor = c("#19eb19")
 
-        val comfortaa = loadFont("/Comfortaa-VariableFont_wght.ttf",14)!!  //Font.font("Times New Roman")
+        val comfortaa = loadFont("/Comfortaa-VariableFont_wght.ttf", 14)!!  //Font.font("Times New Roman")
     }
 
     init {
@@ -30,29 +34,36 @@ class Styles : Stylesheet() {
             fontWeight = FontWeight.BOLD
             font = comfortaa
         }
+        loginScreenButton{
+            startMargin = 10.px
+            endMargin = 10.px
+            maxWidth = 200.px
+            minWidth = maxWidth
+        }
+        red {
+            backgroundColor += redcolor
+        }
+        green {
+            backgroundColor += greencolor
+        }
         addform {
             padding = box(25.px)
             prefWidth = 450.px
             backgroundColor += backgroundcolor
-            s(xy) {
-                maxWidth = 60.px
-                minWidth = maxWidth
-                font = comfortaa
-            }
         }
-        fieldset{
+        fieldset {
             font = comfortaa
         }
-        field{
+        field {
             font = comfortaa
         }
         textField {
             font = comfortaa
         }
-        button{
+        button {
             font = comfortaa
         }
-        tableView{
+        tableView {
             font = comfortaa
         }
         loginScreen {

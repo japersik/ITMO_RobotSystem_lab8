@@ -4,9 +4,11 @@ import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.ViewClient.view.Styles.Companion.loginScreen
 import com.itmo.r3135.ViewClient.controller.ConnectController
+import com.itmo.r3135.ViewClient.view.Styles.Companion.loginScreenButton
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
+import kotlin.math.absoluteValue
 
 class LoginScreen : View("Please log in") {
     val connectController: ConnectController by inject()
@@ -37,25 +39,26 @@ class LoginScreen : View("Please log in") {
             }
         }
 
-
-        button("Login") {
-            isDefaultButton = true
-
-            action {
-                model.commit {
-                    connectController.tryLogin(
-                            model.username.value,
-                            model.password.value,
-                            model.remember.value
-                    )
+        hbox {
+            button("Login") {
+                addClass(loginScreenButton)
+                isDefaultButton = true
+                action {
+                    model.commit {
+                        connectController.tryLogin(
+                                model.username.value,
+                                model.password.value,
+                                model.remember.value
+                        )
+                    }
                 }
             }
-        }
-        button("Registration") {
-            isDefaultButton = false
-
-            action {
-                RegistrationView().openModal()
+            button("Registration") {
+                addClass(loginScreenButton)
+                isDefaultButton = false
+                action {
+                    RegistrationView().openModal()
+                }
             }
         }
     }

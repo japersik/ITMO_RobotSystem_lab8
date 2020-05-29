@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
 class ProductsSearch : View("My View") {
-    val CoolMapController : CoolMapController by inject()
+    val CoolMapController: CoolMapController by inject()
     var search = ""
 
 
@@ -16,12 +16,13 @@ class ProductsSearch : View("My View") {
     }
 
     override val root = hbox {
-            fieldset("", FontAwesomeIconView(FontAwesomeIcon.SEARCH)) {
+        fieldset(" ", FontAwesomeIconView(FontAwesomeIcon.SEARCH)) {
+        }
+        textfield(model.search) {
+            textProperty().addListener { observable, oldValue, newValue ->
+                search = newValue
+                CoolMapController.updatetable(search)
             }
-            textfield(model.search){
-                textProperty().addListener { observable, oldValue, newValue ->
-                    search = newValue
-                    CoolMapController.updatetable(search) }
-            }
+        }
     }
 }

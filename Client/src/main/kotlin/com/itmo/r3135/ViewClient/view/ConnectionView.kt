@@ -1,7 +1,10 @@
 package com.itmo.r3135.ViewClient.view
 
 import com.itmo.r3135.ViewClient.controller.ConnectController
+import com.itmo.r3135.ViewClient.view.Styles.Companion.red
+import com.itmo.r3135.ViewClient.view.Styles.Companion.redcolor
 import javafx.beans.property.SimpleStringProperty
+import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter
 import tornadofx.*
 
 class ConnectionView : View("Connect controller") {
@@ -15,10 +18,10 @@ class ConnectionView : View("Connect controller") {
     override val root = form {
         addClass(Styles.loginScreen)
         fieldset {
-            field("Host | Хостяра") {
+            field("Host") {
                 textfield(model.host) {
                     required()
-                    whenDocked { requestFocus() }
+                    //whenDocked { requestFocus() }
                 }
             }
             field("Port") {
