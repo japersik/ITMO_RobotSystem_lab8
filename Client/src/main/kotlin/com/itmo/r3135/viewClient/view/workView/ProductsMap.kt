@@ -1,15 +1,11 @@
-package com.itmo.r3135.ViewClient.view.WorkView
+package com.itmo.r3135.viewClient.view.workView
 
-import com.itmo.r3135.ViewClient.controller.ProductsController
-import javafx.collections.ObservableList
+import com.itmo.r3135.viewClient.controller.ProductsController
 import javafx.geometry.Side
-import javafx.scene.chart.Chart
 import javafx.scene.chart.NumberAxis
 import javafx.scene.chart.ScatterChart
 import javafx.scene.chart.XYChart
 import tornadofx.*
-import java.awt.List
-import java.util.*
 
 class ProductsMap : View("My View") {
     val controller: ProductsController by inject()

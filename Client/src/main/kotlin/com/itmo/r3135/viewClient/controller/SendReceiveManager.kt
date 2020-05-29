@@ -1,4 +1,4 @@
-package com.itmo.r3135.ViewClient.controller
+package com.itmo.r3135.viewClient.controller
 
 import com.itmo.r3135.Connector.Executor
 import com.itmo.r3135.Connector.PingChecker
@@ -6,7 +6,6 @@ import com.itmo.r3135.Connector.Reader
 import com.itmo.r3135.Connector.Sender
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
-import tornadofx.*
 import java.math.BigInteger
 import java.net.SocketAddress
 import java.nio.channels.DatagramChannel

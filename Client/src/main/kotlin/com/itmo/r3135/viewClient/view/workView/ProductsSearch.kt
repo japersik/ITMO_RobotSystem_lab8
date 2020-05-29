@@ -1,6 +1,6 @@
-package com.itmo.r3135.ViewClient.view.WorkView
+package com.itmo.r3135.viewClient.view.workView
 
-import com.itmo.r3135.ViewClient.controller.CoolMapController
+import com.itmo.r3135.viewClient.controller.CoolMapController
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.property.SimpleStringProperty

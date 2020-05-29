@@ -1,8 +1,8 @@
 package com.itmo.r3135.view
 
 
-import com.itmo.r3135.ViewClient.view.WorkView.*
-import com.itmo.r3135.ViewClient.view.Styles.Companion.main
+import com.itmo.r3135.viewClient.view.workView.*
+import com.itmo.r3135.viewClient.view.Styles.Companion.main
 import tornadofx.*
 
 class MainView : View("BestApplication") {

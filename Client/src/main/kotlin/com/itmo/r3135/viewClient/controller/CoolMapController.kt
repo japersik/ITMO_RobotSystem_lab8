@@ -1,15 +1,14 @@
-package com.itmo.r3135.ViewClient.controller
+package com.itmo.r3135.viewClient.controller
 
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.System.ProductWithStatus
-import com.itmo.r3135.ViewClient.view.WorkView.*
+import com.itmo.r3135.viewClient.view.workView.*
 import com.itmo.r3135.World.Product
 import javafx.collections.FXCollections
 import javafx.collections.SetChangeListener
 import javafx.util.Duration
 import tornadofx.*
-import com.itmo.r3135.ViewClient.view.WorkView.*
 import kotlin.streams.toList
 
 class CoolMapController : Controller() {

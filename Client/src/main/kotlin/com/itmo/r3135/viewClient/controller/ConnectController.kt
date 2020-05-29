@@ -1,4 +1,4 @@
-package com.itmo.r3135.ViewClient.controller
+package com.itmo.r3135.viewClient.controller
 
 import com.itmo.r3135.Connector.Executor
 import com.itmo.r3135.System.Command
@@ -11,9 +11,9 @@ import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.util.Duration
 import tornadofx.*
-import com.itmo.r3135.ViewClient.view.CodeView
-import com.itmo.r3135.ViewClient.view.ConnectionView
-import com.itmo.r3135.ViewClient.view.LoginScreen
+import com.itmo.r3135.viewClient.view.CodeView
+import com.itmo.r3135.viewClient.view.ConnectionView
+import com.itmo.r3135.viewClient.view.LoginScreen
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.ObjectInputStream

@@ -1,9 +1,9 @@
-package com.itmo.r3135.ViewClient.view.WorkView
+package com.itmo.r3135.viewClient.view.workView
 
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
-import com.itmo.r3135.ViewClient.controller.ConnectController
-import com.itmo.r3135.ViewClient.view.Styles.Companion.addform
+import com.itmo.r3135.viewClient.controller.ConnectController
+import com.itmo.r3135.viewClient.view.Styles.Companion.addform
 import com.itmo.r3135.World.Color
 import com.itmo.r3135.World.UnitOfMeasure
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon

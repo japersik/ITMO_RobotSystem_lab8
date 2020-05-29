@@ -1,11 +1,11 @@
-package com.itmo.r3135.ViewClient.view.testApp
+package com.itmo.r3135.viewClient.view.testApp
 
-import com.itmo.r3135.ViewClient.view.Styles
-import com.itmo.r3135.ViewClient.controller.ConnectController
+import com.itmo.r3135.viewClient.view.Styles
+import com.itmo.r3135.viewClient.controller.ConnectController
 import javafx.application.Application
 import javafx.stage.Stage
 import tornadofx.*
-import com.itmo.r3135.ViewClient.view.LoginScreen
+import com.itmo.r3135.viewClient.view.LoginScreen
 
 class LoginApp : App(LoginScreen::class, Styles::class) {
     val connectController: ConnectController by inject()

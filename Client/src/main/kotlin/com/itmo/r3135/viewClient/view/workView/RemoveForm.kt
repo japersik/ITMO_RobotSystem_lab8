@@ -1,9 +1,9 @@
-package com.itmo.r3135.ViewClient.view.WorkView
+package com.itmo.r3135.viewClient.view.workView
 
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
-import com.itmo.r3135.ViewClient.controller.ConnectController
-import com.itmo.r3135.ViewClient.view.Styles
+import com.itmo.r3135.viewClient.controller.ConnectController
+import com.itmo.r3135.viewClient.view.Styles
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.property.SimpleStringProperty

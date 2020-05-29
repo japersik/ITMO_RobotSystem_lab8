@@ -1,4 +1,4 @@
-package com.itmo.r3135.ViewClient.view
+package com.itmo.r3135.viewClient.view
 
 import javafx.scene.text.FontWeight
 import tornadofx.*

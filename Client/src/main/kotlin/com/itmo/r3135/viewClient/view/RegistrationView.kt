@@ -1,9 +1,9 @@
-package com.itmo.r3135.ViewClient.view
+package com.itmo.r3135.viewClient.view
 
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
-import com.itmo.r3135.ViewClient.controller.ConnectController
-import com.itmo.r3135.ViewClient.controller.NotificationsController
+import com.itmo.r3135.viewClient.controller.ConnectController
+import com.itmo.r3135.viewClient.controller.NotificationsController
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 import java.util.regex.Pattern

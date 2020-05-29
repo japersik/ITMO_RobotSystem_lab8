@@ -1,7 +1,5 @@
-package com.itmo.r3135.ViewClient.controller
+package com.itmo.r3135.viewClient.controller
 
-import javafx.scene.control.Alert
-import javafx.scene.control.Alert.AlertType
 import org.controlsfx.control.Notifications
 import tornadofx.*
 

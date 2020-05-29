@@ -1,9 +1,9 @@
-package com.itmo.r3135.ViewClient.view
+package com.itmo.r3135.viewClient.view
 
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
-import com.itmo.r3135.ViewClient.view.Styles.Companion.loginScreen
-import com.itmo.r3135.ViewClient.controller.ConnectController
+import com.itmo.r3135.viewClient.view.Styles.Companion.loginScreen
+import com.itmo.r3135.viewClient.controller.ConnectController
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*

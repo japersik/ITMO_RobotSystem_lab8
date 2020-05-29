@@ -1,4 +1,4 @@
-package com.itmo.r3135.ViewClient.view.WorkView
+package com.itmo.r3135.viewClient.view.workView
 
 import tornadofx.*
 
