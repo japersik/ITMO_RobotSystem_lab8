@@ -4,11 +4,11 @@ import com.itmo.r3135.ViewClient.controller.CoolMapController
 import tornadofx.*
 
 class ProductsTable : View("My View") {
-    //    val controller: CoolMapController by inject()
     val controller: CoolMapController by inject()
 
     override val root = tableview(controller.productssearh)
     {
+
         bindSelected(controller.selectedProduct)
         column("Id", Products::idProperty)
         column("Name", Products::nameProperty)
@@ -23,5 +23,11 @@ class ProductsTable : View("My View") {
         column("Eye color", Products::eyecolorProperty)
         column("Hair color", Products::haircolorProperty)
         column("Creator", Products::userNameProperty)
+
     }
+
+    fun size(w: Double, h: Double) {
+        root.resize(w,h)
+    }
+
 }

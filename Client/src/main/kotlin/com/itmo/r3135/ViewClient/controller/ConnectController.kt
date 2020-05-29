@@ -92,7 +92,7 @@ class ConnectController : Controller(), Executor {
             if (serverMessage.productWithStatuses != null) {
                 productsController.updateList(serverMessage.productWithStatuses)
             }
-            if (serverMessage.message != null) println(serverMessage.message)
+            //if (serverMessage.message != null) println(serverMessage.message)
             if (serverMessage.products != null) {
                 productsController.show(serverMessage.products)
             }
