@@ -45,11 +45,9 @@ class Interface : View("My View") {
                     }
                     action {
 
-                        if (controller.selectedProduct.item != null) {
+                        if (controller.selectedProduct.item.id?.toInt() != null) {
                             connectController.sendReceiveManager.send(Command(CommandList.REMOVE_BY_ID, controller.selectedProduct.item.id.toInt()))
-                        }
-//                        val removelist = controller.products.stream().filter { t: Products? -> t == controller.selectedProduct.item }.toList()
-//                        controller.products.removeAll(removelist)
+                        }else RemoveForm().openModal()
                     }
                 }
             }
