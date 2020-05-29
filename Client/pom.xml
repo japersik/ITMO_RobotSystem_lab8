@@ -59,7 +59,7 @@
                     <finalName>lab8-client</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.itmo.r3135.app.MyApp</mainClass>
+                            <mainClass>com.itmo.r3135.ViewClient.MyApp</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
