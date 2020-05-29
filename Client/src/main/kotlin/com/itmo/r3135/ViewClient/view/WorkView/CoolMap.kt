@@ -32,10 +32,8 @@ class CoolMap : View("My View") {
         }
         p.line(border, p.minHeight-border, p.minWidth-border, p.minHeight-border)
     }
-
     fun clear() {
     }
-
 }
 
 

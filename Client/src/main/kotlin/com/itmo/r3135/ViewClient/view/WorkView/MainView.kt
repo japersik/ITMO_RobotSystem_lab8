@@ -2,8 +2,6 @@ package com.itmo.r3135.view
 
 import com.itmo.r3135.ViewClient.view.WorkView.*
 import com.itmo.r3135.ViewClient.view.Styles.Companion.main
-import javafx.beans.value.ObservableValue
-import javafx.geometry.Bounds
 import tornadofx.*
 
 class MainView : View("BestApplication") {
