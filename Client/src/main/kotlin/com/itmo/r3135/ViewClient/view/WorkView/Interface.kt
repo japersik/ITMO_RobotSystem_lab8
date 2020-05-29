@@ -1,13 +1,12 @@
 package com.itmo.r3135.ViewClient.view.WorkView
 
+import ScriptForm
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
-import com.itmo.r3135.World.Generator
 import com.itmo.r3135.ViewClient.controller.ConnectController
 import com.itmo.r3135.ViewClient.controller.CoolMapController
-import com.itmo.r3135.ViewClient.controller.ProductsController
+import com.itmo.r3135.World.Generator
 import tornadofx.*
-import kotlin.streams.toList
 
 
 class Interface : View("My View") {
@@ -45,7 +44,7 @@ class Interface : View("My View") {
 
                         if (controller.selectedProduct.item.id?.toInt() != null) {
                             connectController.sendReceiveManager.send(Command(CommandList.REMOVE_BY_ID, controller.selectedProduct.item.id.toInt()))
-                        }else RemoveForm().openModal()
+                        } else RemoveForm().openModal()
                     }
                 }
             }
@@ -61,6 +60,20 @@ class Interface : View("My View") {
                     action {
                         connectController.sendReceiveManager.send(Command(CommandList.CLEAR))
 
+                    }
+                }
+            }
+            row {
+                button("SCRIPT") {
+                    tooltip("From")
+                    prefHeight = 50.0
+                    prefWidth = 80.0
+                    gridpaneConstraints {
+                        marginTop = 2.0
+                        marginLeft = 10.0
+                    }
+                    action {
+                        ScriptForm().openModal()
                     }
                 }
             }
