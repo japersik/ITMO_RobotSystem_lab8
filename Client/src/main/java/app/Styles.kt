@@ -1,18 +1,8 @@
 package com.itmo.r3135.app
 
-import com.sun.javafx.scene.control.skin.Utils.getResource
-import javafx.scene.Scene
-import javafx.scene.paint.Color.color
-import javafx.scene.shape.Path
-import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
-import jdk.nashorn.internal.objects.NativeDebug.getClass
-import org.controlsfx.glyphfont.GlyphFontRegistry
-import org.controlsfx.glyphfont.GlyphFontRegistry.font
-import org.intellij.lang.annotations.JdkConstants
 import tornadofx.*
 import tornadofx.WizardStyles.Companion.heading
-import java.io.File
 
 class Styles : Stylesheet() {
     companion object {
@@ -30,7 +20,6 @@ class Styles : Stylesheet() {
         val greencolor = c("#4e9830")
 
         val comfortaa = loadFont("/Comfortaa-VariableFont_wght.ttf",14)!!  //Font.font("Times New Roman")
-        //
     }
 
     init {
