@@ -19,17 +19,11 @@ public class ShowCommand extends AbstractCommand {
         super(dataManager, serverWorker);
     }
 
-    /**
-     *
-     */
     @Override
     public ServerMessage activate(Command command) {
         dataManager.getLock().readLock().lock();
         ArrayList<Product> products = new ArrayList<>(dataManager.getProducts());
         dataManager.getLock().readLock().unlock();
-        if (products.size() != 0) {
-            return new ServerMessage(products, dataManager.getDateChange());
-        } else return new ServerMessage("Коллекция пуста.");
-
+        return new ServerMessage(products, dataManager.getDateChange());
     }
 }
