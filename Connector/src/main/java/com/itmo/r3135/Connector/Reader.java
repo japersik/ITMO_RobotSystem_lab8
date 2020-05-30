@@ -32,6 +32,7 @@ public class Reader {
     private Executor executor;
     private DatagramSocket datagramSocket;
     private DatagramChannel datagramChannel;
+    private Thread listening;
 
     /**
      * Создаёт приёмник данных, использующий DatagramChannel
@@ -58,14 +59,14 @@ public class Reader {
     public void chanelRead() {
         byte[] b = new byte[FULL_SIZE];
         ByteBuffer buffer = ByteBuffer.wrap(b);
-        while (true)
+        while (!Thread.currentThread().isInterrupted())
             try {
                 SocketAddress address = datagramChannel.receive(buffer);
                 buffer.rewind();
                 DatagramPacket datagramPacket = new DatagramPacket(buffer.array(), FULL_SIZE, address);
                 workWithPacket(datagramPacket);
             } catch (IOException e) {
-                // логирование
+
             }
     }
 
@@ -73,14 +74,14 @@ public class Reader {
      * Приёмдпри помощи DatagramSocket
      */
     public void datagramRead() {
-        while (true)
+        while (!Thread.currentThread().isInterrupted())
             try {
                 DatagramPacket datagramPacket = new DatagramPacket(new byte[FULL_SIZE], FULL_SIZE);
                 datagramSocket.receive(datagramPacket);
 //               System.out.println("Wow, new packet");
                 workWithPacket(datagramPacket);
             } catch (IOException e) {
-//                 логирование
+//
             }
     }
 
@@ -92,11 +93,14 @@ public class Reader {
      * Запускает поток приёма пакетов
      */
     public void startListening() {
-        Thread listening;
         if (datagramMode) listening = new Thread(this::datagramRead);
         else listening = new Thread(this::chanelRead);
         listening.setDaemon(true);
         listening.start();
+    }
+
+    public void stopListening() {
+        listening.interrupt();
     }
 
     /**

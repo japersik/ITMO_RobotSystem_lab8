@@ -43,7 +43,7 @@ class RemoveForm : View("Remove Element") {
                     isDefaultButton = true
                     action {
                         model.commit {
-                            connectController.sendReceiveManager.send(Command(CommandList.REMOVE_BY_ID, model.id.value.toInt()))
+                            connectController.send(Command(CommandList.REMOVE_BY_ID, model.id.value.toInt()))
                             close()
                         }
                     }

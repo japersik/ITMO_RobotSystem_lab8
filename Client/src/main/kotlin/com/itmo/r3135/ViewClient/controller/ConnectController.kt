@@ -4,6 +4,10 @@ import com.itmo.r3135.Connector.Executor
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.System.ServerMessage
+import com.itmo.r3135.ViewClient.view.CodeView
+import com.itmo.r3135.ViewClient.view.ConnectionView
+import com.itmo.r3135.ViewClient.view.LoginScreen
+import com.itmo.r3135.ViewClient.view.WorkView.Interface
 import com.itmo.r3135.view.MainView
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
@@ -11,15 +15,14 @@ import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.util.Duration
 import tornadofx.*
-import com.itmo.r3135.ViewClient.view.CodeView
-import com.itmo.r3135.ViewClient.view.ConnectionView
-import com.itmo.r3135.ViewClient.view.LoginScreen
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.net.InetSocketAddress
 import java.net.SocketAddress
 import java.nio.channels.UnresolvedAddressException
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class ConnectController : Controller(), Executor {
     lateinit var sendReceiveManager: SendReceiveManager
@@ -28,12 +31,14 @@ class ConnectController : Controller(), Executor {
     private val mainView: MainView by inject()
     private val productsController: CoolMapController by inject()
     private val notificationsController: NotificationsController by inject()
+    private val coolMapController: CoolMapController by inject()
+    private val mainInterface: Interface by inject()
+    private lateinit var lastReceive:LocalDateTime
 
     //    private val productsController: ProductsController by inject()
     var isConnect = false
     var isLogin = false
     var needCode = false
-
     fun connectionCheck(host: String, port: Int) {
         sendReceiveManager = SendReceiveManager(InetSocketAddress(host, port), this)
         runAsync {
@@ -45,6 +50,7 @@ class ConnectController : Controller(), Executor {
         } ui { ping ->
             if (ping != -1L) {
                 isConnect = true
+                lastReceive = LocalDateTime.now()
                 connectionView.replaceWith(loginScreen, sizeToScene = true, centerOnScreen = true)
                 sendReceiveManager.startListening()
             } else {
@@ -54,17 +60,22 @@ class ConnectController : Controller(), Executor {
         }
     }
 
+    fun send(command: Command) {
+        val deltaTime = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - lastReceive.toEpochSecond(ZoneOffset.UTC))
+        if ( deltaTime >5 && isConnect) {
+            isConnect = false
+            notificationsController.errorMessage(text = "Connection is unstable")
+        } else if (deltaTime > 20 && !isConnect) {
+            notificationsController.errorMessage(text = "Connection lost")
+            newLoginCode(false, false)
+        }else 
+        sendReceiveManager.send(command)
+    }
 
     fun tryLogin(username: String, password: String, remember: Boolean) {
         val command = Command(CommandList.LOGIN)
         command.setLoginPassword(username, password)
         sendReceiveManager.send(command)
-    }
-
-
-    companion object {
-        val USERNAME = "username"
-        val PASSWORD = "password"
     }
 
     override fun execute(data: ByteArray?, inputAddress: SocketAddress?) {
@@ -73,8 +84,10 @@ class ConnectController : Controller(), Executor {
                     ByteArrayInputStream(data)).use { objectInputStream ->
                 val serverMessage = objectInputStream.readObject() as ServerMessage
                 objectInputStream.close()
-                if (serverMessage != null) processing(serverMessage)
-//                else println("Ответ сервера некорректен.")
+                if (serverMessage != null) {
+                    lastReceive = LocalDateTime.now()
+                    processing(serverMessage)
+                }
             }
         } catch (e: IOException) {
 //            println("Ошибка десериализации.")
@@ -87,6 +100,7 @@ class ConnectController : Controller(), Executor {
         Platform.runLater {
             newLoginCode(serverMessage.login, serverMessage.needCode)
             if (serverMessage.updateTime != null) {
+
                 sendReceiveManager.lastUpdateTime = serverMessage.updateTime
             }
             if (serverMessage.productWithStatuses != null) {
@@ -102,7 +116,7 @@ class ConnectController : Controller(), Executor {
     /**
      * Обновелние статуса пользователя и переход между окнами
      */
-    private fun newLoginCode(newIsLogin: Boolean, newNeedCode: Boolean) {
+    fun newLoginCode(newIsLogin: Boolean, newNeedCode: Boolean) {
         if (newNeedCode) {
             CodeView().openModal()
             notificationsController.infoMessage(text = "Check your e-mail and write a code :)")
@@ -111,13 +125,18 @@ class ConnectController : Controller(), Executor {
             if (!this.isLogin)
                 if (newIsLogin) {
                     loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
-//                    productsController.init()
+                    mainInterface.usertext.text = "Username: ${sendReceiveManager.login}"
+                    coolMapController.init()
                 } else {
                     shakeStage()
                     notificationsController.errorMessage(text = "Incorrect login or password!")
                 }
-            //если пароль изменился в процессе работы(вдруг)
-            else if (!newIsLogin) println("Пароль был изменён. Ошибка авторизации")
+            else if (!newIsLogin) {
+                isConnect = false
+                sendReceiveManager.stopListening()
+                coolMapController.stopGetUpdates()
+                mainView.replaceWith(connectionView, sizeToScene = true, centerOnScreen = true)
+            }
         this.needCode = newNeedCode
         this.isLogin = newIsLogin
     }

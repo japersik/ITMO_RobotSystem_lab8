@@ -24,14 +24,14 @@ class Styles : Stylesheet() {
         val redcolor = c("#eb1919")
         val greencolor = c("#19eb19")
 
-        val comfortaa = loadFont("/Comfortaa-VariableFont_wght.ttf", 14)!!  //Font.font("Times New Roman")
+        val comfortaa = loadFont("/Comfortaa-VariableFont_wght.ttf", 12)!!  //Font.font("Times New Roman")
     }
 
     init {
-        primaryStage.icons.add(Image("/icon.png"))
+        primaryStage.icons.add(Image(this.javaClass.classLoader.getResource("icon.png").toString()))
         label and heading {
             padding = box(100.px)
-            fontSize = 100.px
+            fontSize = 40.px
             fontWeight = FontWeight.BOLD
             font = comfortaa
         }
@@ -63,9 +63,11 @@ class Styles : Stylesheet() {
         }
         button {
             font = comfortaa
+            fontSize = 14.px
         }
         tableView {
             font = comfortaa
+            fontSize = 12.px
         }
         loginScreen {
             backgroundColor += backgroundcolor
@@ -83,7 +85,7 @@ class Styles : Stylesheet() {
         }
         table {
 
-            fontSize = 16.px
+            fontSize = 12.px
         }
         main {
             backgroundColor += backgroundcolor

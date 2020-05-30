@@ -19,7 +19,7 @@ class SendReceiveManager(var socketAddress: SocketAddress, executor: Executor) {
     var password = ""
     private var sender: Sender
     private var reader: Reader
-    var lastUpdateTime = LocalDateTime.MIN
+    var lastUpdateTime = LocalDateTime.now()
 
     init {
         val datagramChannel = DatagramChannel.open()
@@ -47,7 +47,9 @@ class SendReceiveManager(var socketAddress: SocketAddress, executor: Executor) {
     fun startListening() {
         reader.startListening()
     }
-
+    fun stopListening() {
+        reader.stopListening()
+    }
     private fun sha384(password: String): String {
         return try {
             val md = MessageDigest.getInstance("SHA-384")

@@ -12,7 +12,6 @@ fun main(args: Array<String>) {
 }
 
 class MyApp: App(ConnectionView::class, Styles::class) {
-    val controller: ProductsController by inject()
 }
 
 

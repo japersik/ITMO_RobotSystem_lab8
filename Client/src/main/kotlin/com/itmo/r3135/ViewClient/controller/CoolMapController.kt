@@ -5,6 +5,7 @@ import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.System.ProductWithStatus
 import com.itmo.r3135.ViewClient.view.WorkView.*
 import com.itmo.r3135.World.Product
+import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.collections.SetChangeListener
 import javafx.scene.Group
@@ -12,7 +13,6 @@ import javafx.scene.shape.Line
 import javafx.scene.text.Text
 import javafx.util.Duration
 import tornadofx.*
-import java.lang.Math.abs
 import kotlin.streams.toList
 
 class CoolMapController : Controller() {
@@ -35,8 +35,9 @@ class CoolMapController : Controller() {
     private var stepXLine: Double = 0.0
     private var stepYLine: Double = 0.0
 
+    lateinit var updater: Thread
+
     init {
-        products.clear()
         connectController.sendReceiveManager.send(Command(CommandList.SHOW))
         products.addListener(SetChangeListener<Products> { c ->
             if (c.elementAdded != null) {
@@ -51,6 +52,10 @@ class CoolMapController : Controller() {
         coolMap.p.children.add(lineGroup)
         coolMap.p.children.add(textGroup)
         repaintNewWindowsSize()
+    }
+
+    fun init() {
+        startGetUpdates()
     }
 
     fun repaintNewWindowsSize() {
@@ -78,26 +83,26 @@ class CoolMapController : Controller() {
     private fun repaintNewCoordinateText() {
         textGroup.children.clear()
         val deltaX = currentMaxCoordinatesX - currentMinCoordinatesX
-        var kX = (coolMap.p.width-2*border)/deltaX
+        var kX = (coolMap.p.width - 2 * border) / deltaX
         var i = currentMinCoordinatesX
-        while (i <= currentMaxCoordinatesX+5.0) {
+        while (i <= currentMaxCoordinatesX + 5.0) {
             val text = Text()
-            text.text = String.format("%.2f",i)
-            text.x = (i-currentMinCoordinatesX)*kX+border
-            text.y = coolMap.p.height-border/3
+            text.text = String.format("%.2f", i)
+            text.x = (i - currentMinCoordinatesX) * kX + border
+            text.y = coolMap.p.height - border / 3
             textGroup.children.add(text)
-            i += deltaX/10
+            i += deltaX / 10
         }
         val deltaY = currentMaxCoordinatesY - currentMinCoordinatesY
-        var kY = (coolMap.p.height-2*border)/deltaY
-         i = currentMinCoordinatesY
-        while (i <= currentMaxCoordinatesY+5.0) {
+        var kY = (coolMap.p.height - 2 * border) / deltaY
+        i = currentMinCoordinatesY
+        while (i <= currentMaxCoordinatesY + 5.0) {
             val text = Text()
-            text.text = String.format("%.2f",i)
-            text.x = 2/3*border
-            text.y = (currentMaxCoordinatesY-i)*kY+border
+            text.text = String.format("%.2f", i)
+            text.x = 2 / 3 * border
+            text.y = (currentMaxCoordinatesY - i) * kY + border
             textGroup.children.add(text)
-            i += deltaY/10
+            i += deltaY / 10
         }
     }
 
@@ -107,7 +112,7 @@ class CoolMapController : Controller() {
     fun show(showList: ArrayList<Product>) {
         for (p in showList)
             addProduct(p)
-        startGetUpdates()
+
         updateAllPoints()
         repaintNewCoordinateText()
     }
@@ -116,14 +121,23 @@ class CoolMapController : Controller() {
      *
      */
     private fun startGetUpdates() {
-        val updater = Thread(Runnable {
-            while (true) {
-                connectController.sendReceiveManager.send(Command(CommandList.GET_UPDATES))
-                Thread.sleep(100)
+        updater = Thread(Runnable {
+            try {
+                while (true) {
+                    Platform.runLater {
+                        connectController.send(Command(CommandList.GET_UPDATES))
+                    }
+                    Thread.sleep(100)
+                }
+            } catch (ignore: Exception) {
             }
         })
         updater.isDaemon = true
         updater.start()
+    }
+
+    public fun stopGetUpdates() {
+        updater.interrupt()
     }
 
     /**
