@@ -1,10 +1,7 @@
 package com.itmo.r3135.ViewClient.view
 
 import com.itmo.r3135.ViewClient.controller.ConnectController
-import com.itmo.r3135.ViewClient.view.Styles.Companion.red
-import com.itmo.r3135.ViewClient.view.Styles.Companion.redcolor
 import javafx.beans.property.SimpleStringProperty
-import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter
 import tornadofx.*
 
 class ConnectionView : View("Connect controller") {
@@ -26,8 +23,11 @@ class ConnectionView : View("Connect controller") {
             }
             field("Port") {
                 textfield(model.port) {
-                    required()
-                    filterInput { it.controlNewText.isInt() && it.controlNewText.toInt() < 64000 }
+                    filterInput { it.controlNewText.isInt() }
+                    validator {
+                        if (!it.toProperty().value.isInt() || it.toProperty().value.toInt() > 65535 || it.toProperty().value.toInt() < 0)
+                            error("Порт - это число от 0 до 65535") else null
+                    }
                 }
             }
         }
