@@ -20,19 +20,19 @@ class Products {
     var haircolor by property<Color>()
     fun haircolorProperty() = getProperty(Products::haircolor)
 
-    var price by property<String>()
+    var price by property<Double>()
     fun priceProperty() = getProperty(Products::price)
 
-    var ycoordinate by property<String>()
+    var ycoordinate by property<Double>()
     fun ycoordinatePropetry() = getProperty(Products::ycoordinate)
 
-    var xcoordinate by property<String>()
+    var xcoordinate by property<Double>()
     fun xcoordinatePropetry() = getProperty(Products::xcoordinate)
 
     var partnumeber by property<String>()
     fun partnumeberProperty() = getProperty(Products::partnumeber)
 
-    var manufacturecost by property<String>()
+    var manufacturecost by property<Float>()
     fun manufacturecostProperty() = getProperty(Products::manufacturecost)
 
     var name by property<String>()
@@ -51,13 +51,13 @@ class Products {
     constructor(product: Product) {
         this.id = product.id
         this.name = product.name
-        this.price = product.price?.toString()
+        this.price = product.price
         if (product.coordinates != null) {
-            this.ycoordinate = product.coordinates.y.toString()
-            this.xcoordinate = product.coordinates.x.toString()
+            this.ycoordinate = product.coordinates.y
+            this.xcoordinate = product.coordinates.x
         }
         this.partnumeber = product.partNumber
-        this.manufacturecost = product.manufactureCost?.toString()
+        this.manufacturecost = product.manufactureCost
         if (product.owner != null) {
             this.ownername = product.owner.name
             this.birthday = product.owner.birthday.toLocalDate()
@@ -68,20 +68,6 @@ class Products {
         this.userName = product.userName
     }
 
-
-    /*    constructor(ownername: String, birthday: LocalDate, eyecolor: Color, haircolor: Color, price: Number, ycoordinate: Number, xcoordinate: Number, partnumeber: String, manufacturecost: Number, name: String, id: Number) {
-            this.ownername = ownername
-            this.birthday = birthday
-            this.eyecolor = eyecolor
-            this.haircolor = haircolor
-            this.price = price
-            this.ycoordinate = ycoordinate
-            this.xcoordinate = xcoordinate
-            this.partnumeber = partnumeber
-            this.manufacturecost = manufacturecost
-            this.name = name
-            this.id = id
-        }*/
     fun toProduct(): Product {
         val product = Product()
         product.name = this.name
@@ -90,7 +76,7 @@ class Products {
         product.unitOfMeasure = UnitOfMeasure.GRAMS
         product.creationDate = this.birthday?.atStartOfDay()
         product.price = this.price?.toDouble()
-        if(this.xcoordinate!=null && this.ycoordinate!=null)
+        if (this.xcoordinate != null && this.ycoordinate != null)
             product.coordinates = Coordinates(this.xcoordinate.toDouble(), this.ycoordinate.toDouble())
         product.owner = Person(this.ownername, this.birthday?.atStartOfDay(), this.eyecolor, this.haircolor)
         if (this.id != null) product.id = this.id.toInt()
@@ -119,11 +105,11 @@ class ProductsModel : ItemViewModel<Products>(Products()) {
     val birthday: Property<LocalDate> = bind { item?.birthdayProperty() }
     val eyecolor: Property<Color> = bind { item?.eyecolorProperty() }
     val haircolor: Property<Color> = bind { item?.haircolorProperty() }
-    val price: StringProperty = bind { item?.priceProperty() }
-    val ycoordinate: StringProperty = bind { item?.ycoordinatePropetry() }
-    val xcoordinate: StringProperty = bind { item?.xcoordinatePropetry() }
+    val price: Property<Double> = bind { item?.priceProperty() }
+    val ycoordinate: Property<Double> = bind { item?.ycoordinatePropetry() }
+    val xcoordinate: Property<Double> = bind { item?.xcoordinatePropetry() }
     val partnumeber: StringProperty = bind { item?.partnumeberProperty() }
-    val manufacturecost: StringProperty = bind { item?.manufacturecostProperty() }
+    val manufacturecost: Property<Float> = bind { item?.manufacturecostProperty() }
     val name: StringProperty = bind { item?.nameProperty() }
     val username: StringProperty = bind { item?.userNameProperty() }
     val id: ObjectProperty<Number> = bind { item?.idProperty() }

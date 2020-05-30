@@ -10,7 +10,10 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.binding.BooleanExpression
+import javafx.util.converter.DoubleStringConverter
+import javafx.util.converter.FloatStringConverter
 import tornadofx.*
+
 
 class AddForm : View("Register Customer") {
     val connectController: ConnectController by inject()
@@ -47,17 +50,19 @@ class AddForm : View("Register Customer") {
                 textfield(model.name).required()
             }
             field("Price") {
-                textfield(model.price) {
+                textfield(model.price, DoubleStringConverter()) {
                     filterInput { it.controlNewText.isDouble() && it.controlNewText.toDouble() >= 0 }
                     required()
                 }
             }
             field("X / Y") {
-                textfield(model.xcoordinate) {
+                textfield(model.xcoordinate, DoubleStringConverter()) {
+                    id = "xId"
+
                     filterInput { it.controlNewText.isDouble() }
                     required()
                 }
-                textfield(model.ycoordinate) {
+                textfield(model.ycoordinate, DoubleStringConverter()) {
                     filterInput { it.controlNewText.isDouble() }
                     required()
                 }
@@ -68,8 +73,8 @@ class AddForm : View("Register Customer") {
                 }
             }
             field("Manufacture cost") {
-                textfield(model.manufacturecost) {
-                    filterInput { it.controlNewText.isDouble() && it.controlNewText.toDouble() >= 0 }
+                textfield(model.manufacturecost, FloatStringConverter()) {
+                    filterInput { it.controlNewText.isFloat() && it.controlNewText.toFloat() >= 0 }
                     required()
                 }
             }
