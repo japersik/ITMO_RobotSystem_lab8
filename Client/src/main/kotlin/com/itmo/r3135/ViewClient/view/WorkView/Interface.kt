@@ -65,7 +65,7 @@ class Interface : View("My View") {
             }
             row {
                 button("SCRIPT") {
-                    tooltip("From")
+                    tooltip("Execute SCRIPT")
                     prefHeight = 50.0
                     prefWidth = 80.0
                     gridpaneConstraints {

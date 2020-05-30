@@ -29,7 +29,6 @@ class Styles : Stylesheet() {
 
     init {
         primaryStage.icons.add(Image("/icon.png"))
-        println(comfortaa)
         label and heading {
             padding = box(100.px)
             fontSize = 100.px
