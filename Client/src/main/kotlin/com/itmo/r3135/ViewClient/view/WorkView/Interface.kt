@@ -6,6 +6,7 @@ import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.ViewClient.controller.ConnectController
 import com.itmo.r3135.ViewClient.controller.CoolMapController
 import com.itmo.r3135.World.Generator
+import javafx.scene.text.Font
 import tornadofx.*
 
 
@@ -13,15 +14,35 @@ class Interface : View("My View") {
     val connectController: ConnectController by inject()
     val controller: CoolMapController by inject()
     val model: ProductsModel by inject()
+    var usertext = text("Username: ${connectController.sendReceiveManager.login}") {
+        font = Font.font(16.0)
+    }
     override val root = stackpane {
         prefHeight = 800.0
-        prefWidth = 80.0
+        prefWidth = 200.0
         gridpane {
+            row() {
+                text("Данные пользователя") {
+                    font = Font.font(18.0)
+                }
+
+            }
+            row() {
+              children.add(usertext)
+            }
+            row {
+                button("Logout") {
+                    action {
+                        connectController.newLoginCode(newIsLogin = false, newNeedCode = false)
+                    }
+
+                }
+            }
             row {
                 button("+") {
                     tooltip("add new object")
                     prefHeight = 50.0
-                    prefWidth = 80.0
+                    prefWidth = 200.0
                     gridpaneConstraints {
                         marginTop = 10.0
                         marginLeft = 10.0
@@ -35,7 +56,7 @@ class Interface : View("My View") {
                 button("-") {
                     tooltip("remove object")
                     prefHeight = 50.0
-                    prefWidth = 80.0
+                    prefWidth = 200.0
                     gridpaneConstraints {
                         marginTop = 2.0
                         marginLeft = 10.0
@@ -52,7 +73,7 @@ class Interface : View("My View") {
                 button("CLEAR") {
                     tooltip("Delete yours objects")
                     prefHeight = 50.0
-                    prefWidth = 80.0
+                    prefWidth = 200.0
                     gridpaneConstraints {
                         marginTop = 2.0
                         marginLeft = 10.0
@@ -67,7 +88,7 @@ class Interface : View("My View") {
                 button("SCRIPT") {
                     tooltip("Execute SCRIPT")
                     prefHeight = 50.0
-                    prefWidth = 80.0
+                    prefWidth = 200.0
                     gridpaneConstraints {
                         marginTop = 2.0
                         marginLeft = 10.0
@@ -81,7 +102,7 @@ class Interface : View("My View") {
                 button("ADD RANDOM") {
                     tooltip("add new object")
                     prefHeight = 50.0
-                    prefWidth = 80.0
+                    prefWidth = 200.0
                     gridpaneConstraints {
                         marginTop = 30.0
                         marginLeft = 10.0
@@ -95,7 +116,7 @@ class Interface : View("My View") {
                 button("UPDATE SHOW") {
                     tooltip("FOR TEST!!!")
                     prefHeight = 50.0
-                    prefWidth = 80.0
+                    prefWidth = 200.0
                     gridpaneConstraints {
                         marginTop = 2.0
                         marginLeft = 10.0

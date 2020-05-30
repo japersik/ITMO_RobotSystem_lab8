@@ -4,6 +4,10 @@ import com.itmo.r3135.Connector.Executor
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.System.ServerMessage
+import com.itmo.r3135.ViewClient.view.CodeView
+import com.itmo.r3135.ViewClient.view.ConnectionView
+import com.itmo.r3135.ViewClient.view.LoginScreen
+import com.itmo.r3135.ViewClient.view.WorkView.Interface
 import com.itmo.r3135.view.MainView
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
@@ -11,9 +15,6 @@ import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.util.Duration
 import tornadofx.*
-import com.itmo.r3135.ViewClient.view.CodeView
-import com.itmo.r3135.ViewClient.view.ConnectionView
-import com.itmo.r3135.ViewClient.view.LoginScreen
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.ObjectInputStream
@@ -28,6 +29,8 @@ class ConnectController : Controller(), Executor {
     private val mainView: MainView by inject()
     private val productsController: CoolMapController by inject()
     private val notificationsController: NotificationsController by inject()
+    private val coolMapController: CoolMapController by inject()
+    private val mainInterface: Interface by inject()
 
     //    private val productsController: ProductsController by inject()
     var isConnect = false
@@ -59,12 +62,6 @@ class ConnectController : Controller(), Executor {
         val command = Command(CommandList.LOGIN)
         command.setLoginPassword(username, password)
         sendReceiveManager.send(command)
-    }
-
-
-    companion object {
-        val USERNAME = "username"
-        val PASSWORD = "password"
     }
 
     override fun execute(data: ByteArray?, inputAddress: SocketAddress?) {
@@ -102,7 +99,7 @@ class ConnectController : Controller(), Executor {
     /**
      * Обновелние статуса пользователя и переход между окнами
      */
-    private fun newLoginCode(newIsLogin: Boolean, newNeedCode: Boolean) {
+    fun newLoginCode(newIsLogin: Boolean, newNeedCode: Boolean) {
         if (newNeedCode) {
             CodeView().openModal()
             notificationsController.infoMessage(text = "Check your e-mail and write a code :)")
@@ -111,13 +108,18 @@ class ConnectController : Controller(), Executor {
             if (!this.isLogin)
                 if (newIsLogin) {
                     loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
-//                    productsController.init()
+                    mainInterface.usertext.text = "Username: ${sendReceiveManager.login}"
+                    coolMapController.init()
                 } else {
                     shakeStage()
                     notificationsController.errorMessage(text = "Incorrect login or password!")
                 }
-            //если пароль изменился в процессе работы(вдруг)
-            else if (!newIsLogin) println("Пароль был изменён. Ошибка авторизации")
+            else if (!newIsLogin) {
+                isConnect = false
+                sendReceiveManager.stopListening()
+                coolMapController.stopGetUpdates()
+                mainView.replaceWith(connectionView, sizeToScene = true, centerOnScreen = true)
+            }
         this.needCode = newNeedCode
         this.isLogin = newIsLogin
     }
