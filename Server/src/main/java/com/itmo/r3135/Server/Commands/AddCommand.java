@@ -34,7 +34,7 @@ public class AddCommand extends AbstractCommand {
             return new ServerMessage(Product.printRequest());
         } else {
             int id = addObjSql(addProduct, userId);
-            addProduct.setUserName(command.getLogin());
+            addProduct.setUserName(command.getLogin().split("@")[0]);
             addProduct.setId(id);
             if (id == -1) return new ServerMessage("Ошибка добавления элеемнта в базу данных");
             else {

@@ -15,31 +15,32 @@ import javafx.util.converter.FloatStringConverter
 import tornadofx.*
 
 
-class AddForm : View("Register Customer") {
+class AddForm(val mode: Int = 1) : View("Register Customer") {
     val connectController: ConnectController by inject()
     val model: ProductsModel by inject()
 
     override val root = form {
         addClass(addform)
-        fieldset("Хозяина", FontAwesomeIconView(USER))
-        {
-            field("Owner name") {
-                textfield(model.ownername).required()
-            }
-            field("Birthday") {
-                datepicker(model.birthday).required()
-            }
-            field("Owner's eye color") {
-                combobox<Color>(model.eyecolor, values = Color.values().toList()) {
-                    required()
+        if (mode == 1)
+            fieldset("Хозяина", FontAwesomeIconView(USER))
+            {
+                field("Owner name") {
+                    textfield(model.ownername).required()
+                }
+                field("Birthday") {
+                    datepicker(model.birthday).required()
+                }
+                field("Owner's eye color") {
+                    combobox<Color>(model.eyecolor, values = Color.values().toList()) {
+                        required()
+                    }
+                }
+                field("Owner's hair color") {
+                    combobox<Color>(model.haircolor, values = Color.values().toList()) {
+                        required()
+                    }
                 }
             }
-            field("Owner's hair color") {
-                combobox<Color>(model.haircolor, values = Color.values().toList()) {
-                    required()
-                }
-            }
-        }
 
         fieldset("Products", FontAwesomeIconView(FontAwesomeIcon.APPLE))
         {
@@ -52,24 +53,32 @@ class AddForm : View("Register Customer") {
             field("Price") {
                 textfield(model.price, DoubleStringConverter()) {
                     filterInput { it.controlNewText.isDouble() && it.controlNewText.toDouble() >= 0 }
-                    required()
+                    validator {
+                        if (!it.toProperty().value.isDouble() || model.price.value <= 0)
+                            error("Цена должна быть больше нуля") else null
+                    }
                 }
             }
             field("X / Y") {
                 textfield(model.xcoordinate, DoubleStringConverter()) {
                     id = "xId"
-
-                    filterInput { it.controlNewText.isDouble() }
-                    required()
+                    filterInput { it.controlNewText.isDouble() || it.controlNewText == "-" }
+                    validator {
+                        if (!it.toProperty().value.isDouble()) error("Введите число") else null
+                    }
                 }
                 textfield(model.ycoordinate, DoubleStringConverter()) {
-                    filterInput { it.controlNewText.isDouble() }
-                    required()
+                    filterInput { it.controlNewText.isDouble() || it.controlNewText == "-" }
+                    validator {
+                        if (!it.toProperty().value.isDouble()) error("Введите число") else null
+                    }
                 }
             }
             field("Partnumeber") {
                 textfield(model.partnumeber) {
-                    required()
+                    validator {
+                        if (it.toProperty().value.length < 21) error("Минимальный размер - 21 символ") else null
+                    }
                 }
             }
             field("Manufacture cost") {
