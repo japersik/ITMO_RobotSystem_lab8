@@ -5,6 +5,7 @@ import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.System.ProductWithStatus
 import com.itmo.r3135.ViewClient.view.WorkView.*
 import com.itmo.r3135.World.Product
+import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.collections.SetChangeListener
 import javafx.scene.Group
@@ -34,7 +35,7 @@ class CoolMapController : Controller() {
     private var stepXLine: Double = 0.0
     private var stepYLine: Double = 0.0
 
-    lateinit var updater:Thread
+    lateinit var updater: Thread
 
     init {
         connectController.sendReceiveManager.send(Command(CommandList.SHOW))
@@ -52,9 +53,11 @@ class CoolMapController : Controller() {
         coolMap.p.children.add(textGroup)
         repaintNewWindowsSize()
     }
-    fun init(){
+
+    fun init() {
         startGetUpdates()
     }
+
     fun repaintNewWindowsSize() {
         stepXLine = (coolMap.p.width - 2 * border) / 10
         stepYLine = (coolMap.p.height - 2 * border) / 10
@@ -121,7 +124,9 @@ class CoolMapController : Controller() {
         updater = Thread(Runnable {
             try {
                 while (true) {
-                    connectController.sendReceiveManager.send(com.itmo.r3135.System.Command(com.itmo.r3135.System.CommandList.GET_UPDATES))
+                    Platform.runLater {
+                        connectController.send(Command(CommandList.GET_UPDATES))
+                    }
                     Thread.sleep(100)
                 }
             } catch (ignore: Exception) {

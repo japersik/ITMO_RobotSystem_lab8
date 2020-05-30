@@ -21,6 +21,8 @@ import java.io.ObjectInputStream
 import java.net.InetSocketAddress
 import java.net.SocketAddress
 import java.nio.channels.UnresolvedAddressException
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class ConnectController : Controller(), Executor {
     lateinit var sendReceiveManager: SendReceiveManager
@@ -31,12 +33,12 @@ class ConnectController : Controller(), Executor {
     private val notificationsController: NotificationsController by inject()
     private val coolMapController: CoolMapController by inject()
     private val mainInterface: Interface by inject()
+    private lateinit var lastReceive:LocalDateTime
 
     //    private val productsController: ProductsController by inject()
     var isConnect = false
     var isLogin = false
     var needCode = false
-
     fun connectionCheck(host: String, port: Int) {
         sendReceiveManager = SendReceiveManager(InetSocketAddress(host, port), this)
         runAsync {
@@ -48,6 +50,7 @@ class ConnectController : Controller(), Executor {
         } ui { ping ->
             if (ping != -1L) {
                 isConnect = true
+                lastReceive = LocalDateTime.now()
                 connectionView.replaceWith(loginScreen, sizeToScene = true, centerOnScreen = true)
                 sendReceiveManager.startListening()
             } else {
@@ -57,6 +60,17 @@ class ConnectController : Controller(), Executor {
         }
     }
 
+    fun send(command: Command) {
+        val deltaTime = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - lastReceive.toEpochSecond(ZoneOffset.UTC))
+        if ( deltaTime >5 && isConnect) {
+            isConnect = false
+            notificationsController.errorMessage(text = "Connection is unstable")
+        } else if (deltaTime > 20 && !isConnect) {
+            notificationsController.errorMessage(text = "Connection lost")
+            newLoginCode(false, false)
+        }else 
+        sendReceiveManager.send(command)
+    }
 
     fun tryLogin(username: String, password: String, remember: Boolean) {
         val command = Command(CommandList.LOGIN)
@@ -70,8 +84,10 @@ class ConnectController : Controller(), Executor {
                     ByteArrayInputStream(data)).use { objectInputStream ->
                 val serverMessage = objectInputStream.readObject() as ServerMessage
                 objectInputStream.close()
-                if (serverMessage != null) processing(serverMessage)
-//                else println("Ответ сервера некорректен.")
+                if (serverMessage != null) {
+                    lastReceive = LocalDateTime.now()
+                    processing(serverMessage)
+                }
             }
         } catch (e: IOException) {
 //            println("Ошибка десериализации.")
@@ -84,6 +100,7 @@ class ConnectController : Controller(), Executor {
         Platform.runLater {
             newLoginCode(serverMessage.login, serverMessage.needCode)
             if (serverMessage.updateTime != null) {
+
                 sendReceiveManager.lastUpdateTime = serverMessage.updateTime
             }
             if (serverMessage.productWithStatuses != null) {

@@ -100,7 +100,7 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
                 action {
                     model.commit {
                         val product = model.item
-                        connectController.sendReceiveManager.send(Command(CommandList.ADD, product.toProduct()))
+                        connectController.send(Command(CommandList.ADD, product.toProduct()))
                         close()
                     }
                 }

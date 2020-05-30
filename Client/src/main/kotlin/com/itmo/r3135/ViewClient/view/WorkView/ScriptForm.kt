@@ -40,7 +40,7 @@ class ScriptForm : View("Script form") {
                             val commands = ScriptReader.read(model.filePath.value)
                             if (commands.isNotEmpty()) {
                                 val command = Command(CommandList.EXECUTE_SCRIPT, commands)
-                                connectController.sendReceiveManager.send(command)
+                                connectController.send(command)
                             }
                         }
                     }
