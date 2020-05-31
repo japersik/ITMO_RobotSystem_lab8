@@ -38,7 +38,7 @@ class CoolMapController : Controller() {
     lateinit var updater: Thread
 
     init {
-        connectController.sendReceiveManager.send(Command(CommandList.SHOW))
+        connectController.send(Command(CommandList.SHOW))
         products.addListener(SetChangeListener<Products> { c ->
             if (c.elementAdded != null) {
                 addToMap(c.elementAdded.toProduct())
@@ -112,7 +112,6 @@ class CoolMapController : Controller() {
     fun show(showList: ArrayList<Product>) {
         for (p in showList)
             addProduct(p)
-
         updateAllPoints()
         repaintNewCoordinateText()
     }
@@ -121,17 +120,21 @@ class CoolMapController : Controller() {
      *
      */
     private fun startGetUpdates() {
+        println("started")
         updater = Thread(Runnable {
             try {
-                while (true) {
+                while (!Thread.currentThread().isInterrupted && connectController.isLogin) {
                     Platform.runLater {
                         connectController.send(Command(CommandList.GET_UPDATES))
                     }
-                    Thread.sleep(100)
+                    Thread.sleep(300)
+                    if (Thread.currentThread().isInterrupted || !connectController.isLogin) break
                 }
-            } catch (ignore: Exception) {
+            } catch (e: InterruptedException) {
+                return@Runnable
             }
         })
+
         updater.isDaemon = true
         updater.start()
     }
@@ -235,14 +238,18 @@ class CoolMapController : Controller() {
      * Удаляет объект с поля
      */
     private fun removeFromMap(product: Product) {
+        var productid = product.id
+        var productf = figures[productid]
+        figures.remove(productid)
         sequentialTransition {
             timeline {
-                keyframe(Duration.seconds(1.5)) {
-                    figures[product.id]?.removeAnimation()
+                keyframe(Duration.seconds(0.625)) {
+                    productf?.removeAnimation()
                     setOnFinished {
-                        figures[product.id]?.group?.removeFromParent()
-                        figures.remove(product.id)
-                        updateCoordinates()
+                        if (connectController.isLogin) {
+                            productf?.group?.removeFromParent()
+                            updateCoordinates()
+                        }
                     }
                 }
             }

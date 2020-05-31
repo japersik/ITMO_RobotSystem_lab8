@@ -25,7 +25,6 @@ class Interface : View("My View") {
                 text("Данные пользователя") {
                     font = Font.font(18.0)
                 }
-
             }
             row() {
               children.add(usertext)
@@ -35,7 +34,6 @@ class Interface : View("My View") {
                     action {
                         connectController.newLoginCode(newIsLogin = false, newNeedCode = false)
                     }
-
                 }
             }
             row {
@@ -64,7 +62,7 @@ class Interface : View("My View") {
                     action {
 
                         if (controller.selectedProduct.item.id?.toInt() != null) {
-                            connectController.sendReceiveManager.send(Command(CommandList.REMOVE_BY_ID, controller.selectedProduct.item.id.toInt()))
+                            connectController.send(Command(CommandList.REMOVE_BY_ID, controller.selectedProduct.item.id.toInt()))
                         } else RemoveForm().openModal()
                     }
                 }
@@ -79,7 +77,7 @@ class Interface : View("My View") {
                         marginLeft = 10.0
                     }
                     action {
-                        connectController.sendReceiveManager.send(Command(CommandList.CLEAR))
+                        connectController.send(Command(CommandList.CLEAR))
 
                     }
                 }

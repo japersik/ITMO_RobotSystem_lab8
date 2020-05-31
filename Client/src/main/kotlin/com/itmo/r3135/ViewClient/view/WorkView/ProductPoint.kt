@@ -57,13 +57,13 @@ class ProductPoint(product: Product) {
     fun removeAnimation() {
         sequentialTransition {
             timeline {
-                keyframe(Duration.seconds(1.0)) {
+                keyframe(Duration.seconds(0.5)) {
                     keyvalue(group.scaleXProperty(), 3.5)
                     keyvalue(group.scaleYProperty(), 3.5)
                 }
             }
             timeline {
-                keyframe(Duration.seconds(0.25)) {
+                keyframe(Duration.seconds(0.125)) {
                     keyvalue(group.scaleXProperty(), 0.0)
                     keyvalue(group.scaleYProperty(), 0.0)
                 }

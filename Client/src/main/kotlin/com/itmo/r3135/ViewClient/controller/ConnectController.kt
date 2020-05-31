@@ -33,16 +33,18 @@ class ConnectController : Controller(), Executor {
     private val notificationsController: NotificationsController by inject()
     private val coolMapController: CoolMapController by inject()
     private val mainInterface: Interface by inject()
-    private lateinit var lastReceive:LocalDateTime
+    private lateinit var lastReceive: LocalDateTime
 
     //    private val productsController: ProductsController by inject()
     var isConnect = false
     var isLogin = false
     var needCode = false
+    var isNot = false
     fun connectionCheck(host: String, port: Int) {
         sendReceiveManager = SendReceiveManager(InetSocketAddress(host, port), this)
         runAsync {
             try {
+                Thread.sleep(100)
                 sendReceiveManager.ping()
             } catch (e: UnresolvedAddressException) {
                 -1L
@@ -62,13 +64,17 @@ class ConnectController : Controller(), Executor {
 
     fun send(command: Command) {
         val deltaTime = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - lastReceive.toEpochSecond(ZoneOffset.UTC))
-        if ( deltaTime >5 && isConnect) {
-            isConnect = false
+        if (deltaTime > 5 && !isNot) {
+            isNot = true
             notificationsController.errorMessage(text = "Connection is unstable")
-        } else if (deltaTime > 20 && !isConnect) {
+            return
+        }
+        if (deltaTime > 20 && isNot) {
+            isConnect = false
             notificationsController.errorMessage(text = "Connection lost")
             newLoginCode(false, false)
-        }else 
+            return
+        }
         sendReceiveManager.send(command)
     }
 
@@ -117,28 +123,31 @@ class ConnectController : Controller(), Executor {
      * Обновелние статуса пользователя и переход между окнами
      */
     fun newLoginCode(newIsLogin: Boolean, newNeedCode: Boolean) {
-        if (newNeedCode) {
-            CodeView().openModal()
-            notificationsController.infoMessage(text = "Check your e-mail and write a code :)")
-            return
-        } else
-            if (!this.isLogin)
-                if (newIsLogin) {
-                    loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
-                    mainInterface.usertext.text = "Username: ${sendReceiveManager.login}"
-                    coolMapController.init()
-                } else {
-                    shakeStage()
-                    notificationsController.errorMessage(text = "Incorrect login or password!")
+        if (isConnect){
+            if (newNeedCode) {
+                CodeView().openModal()
+                notificationsController.infoMessage(text = "Check your e-mail and write a code :)")
+                return
+            } else
+                if (!this.isLogin)
+                    if (newIsLogin) {
+                        loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
+                        mainInterface.usertext.text = "Username: ${sendReceiveManager.login}"
+                        coolMapController.init()
+                    } else {
+                        shakeStage()
+                        notificationsController.errorMessage(text = "Incorrect login or password!")
+                    }
+                else if (!newIsLogin) {
+                    isConnect = false
+                    sendReceiveManager.stopListening()
+                    coolMapController.stopGetUpdates()
+                    Thread.sleep(300)
+                    coolMapController.stopGetUpdates()
+                    mainView.replaceWith(connectionView, sizeToScene = true, centerOnScreen = true)
                 }
-            else if (!newIsLogin) {
-                isConnect = false
-                sendReceiveManager.stopListening()
-                coolMapController.stopGetUpdates()
-                mainView.replaceWith(connectionView, sizeToScene = true, centerOnScreen = true)
-            }
         this.needCode = newNeedCode
-        this.isLogin = newIsLogin
+        this.isLogin = newIsLogin}
     }
 
     fun shakeStage() {
