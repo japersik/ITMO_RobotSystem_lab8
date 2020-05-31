@@ -6,7 +6,6 @@ import com.itmo.r3135.Connector.Reader
 import com.itmo.r3135.Connector.Sender
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
-import tornadofx.*
 import java.math.BigInteger
 import java.net.SocketAddress
 import java.nio.channels.DatagramChannel
@@ -17,7 +16,7 @@ import java.time.LocalDateTime
 class SendReceiveManager(var socketAddress: SocketAddress, executor: Executor) {
     var login = ""
     var password = ""
-    private var sender: Sender
+    private var sender: Sender?
     private var reader: Reader
     var lastUpdateTime = LocalDateTime.now()
 
@@ -29,15 +28,17 @@ class SendReceiveManager(var socketAddress: SocketAddress, executor: Executor) {
     }
 
     fun send(command: Command) {
-        if (command.command == CommandList.REG || command.command == CommandList.LOGIN) {
-            login = command.login
-            password = sha384(command.password)
-            command.password = password
-        } else {
-            command.setLoginPassword(login, password)
+        if (sender != null) {
+            if (command.command == CommandList.REG || command.command == CommandList.LOGIN) {
+                login = command.login
+                password = sha384(command.password)
+                command.password = password
+            } else {
+                command.setLoginPassword(login, password)
+            }
+            command.lastUpdate = lastUpdateTime
+            sender!!.send(command, socketAddress)
         }
-        command.lastUpdate = lastUpdateTime
-        sender.send(command, socketAddress)
     }
 
     fun ping(): Long {
@@ -47,9 +48,13 @@ class SendReceiveManager(var socketAddress: SocketAddress, executor: Executor) {
     fun startListening() {
         reader.startListening()
     }
+
     fun stopListening() {
+        reader.setExecutor(null)
         reader.stopListening()
+        sender = null
     }
+
     private fun sha384(password: String): String {
         return try {
             val md = MessageDigest.getInstance("SHA-384")
