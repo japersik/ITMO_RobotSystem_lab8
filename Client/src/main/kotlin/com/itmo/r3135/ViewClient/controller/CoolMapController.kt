@@ -120,7 +120,6 @@ class CoolMapController : Controller() {
      *
      */
     private fun startGetUpdates() {
-        println("started")
         updater = Thread(Runnable {
             try {
                 while (!Thread.currentThread().isInterrupted && connectController.isLogin) {
@@ -139,7 +138,7 @@ class CoolMapController : Controller() {
         updater.start()
     }
 
-    public fun stopGetUpdates() {
+    fun stopGetUpdates() {
         updater.interrupt()
     }
 
@@ -280,7 +279,7 @@ class CoolMapController : Controller() {
         products.add(Products(product))
         figures[product.id]?.xReal = product.coordinates.x
         figures[product.id]?.yReal = product.coordinates.y
-        figures[product.id]?.let { updatePoint(it) }
+        figures[product.id]?.let { setPoint(it) }
     }
 
     fun updatetable(searchString: String) {

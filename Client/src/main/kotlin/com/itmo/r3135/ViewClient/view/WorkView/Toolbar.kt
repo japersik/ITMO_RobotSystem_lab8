@@ -1,65 +1,64 @@
 package com.itmo.r3135.ViewClient.view.WorkView
 
+import com.itmo.r3135.ViewClient.controller.ConnectController
+import com.itmo.r3135.ViewClient.controller.LocaleString
+import com.itmo.r3135.ViewClient.controller.LocalizationManager
 import tornadofx.*
+import kotlin.system.exitProcess
 
-class Toolbar : View("Toolbar") {
-    override val root = stackpane {
-
-        menubar {
-            menu("File") {
-                item("New").action {
-                    log.info("Opening text file")
+class Toolbar : View() {
+    private val localizationManager: LocalizationManager by inject()
+    private val connectController: ConnectController by inject()
+    override val root =
+            menubar {
+                menu {
+                    id = "language"
+                    item("Русский").action {
+                        localizationManager.setLocale("ru")
+                        connectController.updateLanguage()
+                    }
+                    separator()
+                    item("Français").action {
+                        localizationManager.setLocale("fr")
+                        connectController.updateLanguage()
+                    }
+                    separator()
+                    item("Suomalainen").action {
+                        localizationManager.setLocale("fi")
+                        connectController.updateLanguage()
+                    }
+                    separator()
+                    item("Español (Honduras)").action {
+                        localizationManager.setLocale("es")
+                        connectController.updateLanguage()
+                    }
                 }
-                separator()
-                item("Exit").action {
-                    log.info("Leaving workspace")
+                menu("Help") {
+                    id = "help"
+                    item("About...")
+                }
+                menu("Exit") {
+                    id = "exit"
+                    item("Close all") {
+                        id = "close_all"
+                        action {
+                            exitProcess(0)
+                        }
+                    }
                 }
             }
-            menu("Window") {
-                item("Close all").action {
 
-                }
-                separator()
-            }
-            menu("Help") {
-                item("About...")
-            }
-        }
+    init {
+        updateLanguage()
+    }
 
-        //add(RestProgressBar::class)
-//        with(bottomDrawer) {
-//            item( "Logs") {
-//                textarea {
-//                    addClass("consola")
-//                    val ps = PrintStream(TextAreaOutputStream(this))
-//                    java.lang.System.setErr(ps)
-//                    java.lang.System.setOut(ps)
-//                }
-//
-//            }
+
+    fun updateLanguage() {
+        root.menus[0].text = localizationManager.getNativeTitle(LocaleString.TITLE_LANGUAGE)
+        root.menus[1].text = localizationManager.getNativeTitle(LocaleString.TITLE_HELP)
+        root.menus[2].text = localizationManager.getNativeTitle(LocaleString.TITLE_EXIT)
+        root.menus[2].items[0].text = localizationManager.getNativeTitle(LocaleString.TITLE_CLOSE)
     }
 }
 
-//    private fun Menu.openWindowMenuItemsAtfer() {
-//        editorController.editorModelList.onChange { dvm ->
-//            dvm.next()
-//            if (dvm.wasAdded()) {
-//                dvm.addedSubList.forEach { x ->
-//                    val item = MenuItem(x.title)
-//                    item.action {
-//                        workspace.dock(x, true)
-//                    }
-//                    items.add(item)
-//                }
-//            } else if (dvm.wasRemoved()) {
-//                dvm.removed.forEach { x ->
-//                    workspace.viewStack.remove(x)
-//                    x.close()
-//                    println(workspace.dockedComponent)
-//                    val morituri = items.takeLast(items.size - 2).filter { item -> item.text.equals(x.title) }
-//                    items.removeAll(morituri)
-//                }
-//            }
-//        }
-//    }
 

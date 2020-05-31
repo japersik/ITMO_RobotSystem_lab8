@@ -7,7 +7,11 @@ import com.itmo.r3135.System.ServerMessage
 import com.itmo.r3135.ViewClient.view.CodeView
 import com.itmo.r3135.ViewClient.view.ConnectionView
 import com.itmo.r3135.ViewClient.view.LoginScreen
+import com.itmo.r3135.ViewClient.view.RegistrationView
 import com.itmo.r3135.ViewClient.view.WorkView.Interface
+import com.itmo.r3135.ViewClient.view.WorkView.ProductsTable
+import com.itmo.r3135.ViewClient.view.WorkView.SelectForm
+import com.itmo.r3135.ViewClient.view.WorkView.Toolbar
 import com.itmo.r3135.view.MainView
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
@@ -34,7 +38,22 @@ class ConnectController : Controller(), Executor {
     private val coolMapController: CoolMapController by inject()
     private val mainInterface: Interface by inject()
     private lateinit var lastReceive: LocalDateTime
-
+        private val interf: Interface by inject()
+    private val productsTable: ProductsTable by inject()
+    private val toolbar: Toolbar by inject()
+//    private val connectionView: ConnectionView by inject()
+//        private val loginScreen: LoginScreen by inject()
+    private val codeView: CodeView by inject()
+    private val registrationView: RegistrationView by inject()
+    fun updateLanguage() {
+        interf.updateLanguage()
+        productsTable.updateLanguage()
+        toolbar.updateLanguage()
+        connectionView.updateLanguage()
+        loginScreen.updateLanguage()
+        codeView.updateLanguage()
+        registrationView.updateLanguage()
+    }
     //    private val productsController: ProductsController by inject()
     var isConnect = false
     var isLogin = false
@@ -123,7 +142,7 @@ class ConnectController : Controller(), Executor {
      * Обновелние статуса пользователя и переход между окнами
      */
     fun newLoginCode(newIsLogin: Boolean, newNeedCode: Boolean) {
-        if (isConnect){
+        if (isConnect) {
             if (newNeedCode) {
                 CodeView().openModal()
                 notificationsController.infoMessage(text = "Check your e-mail and write a code :)")
@@ -146,8 +165,9 @@ class ConnectController : Controller(), Executor {
                     coolMapController.stopGetUpdates()
                     mainView.replaceWith(connectionView, sizeToScene = true, centerOnScreen = true)
                 }
-        this.needCode = newNeedCode
-        this.isLogin = newIsLogin}
+            this.needCode = newNeedCode
+            this.isLogin = newIsLogin
+        }
     }
 
     fun shakeStage() {

@@ -5,40 +5,49 @@ import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.ViewClient.controller.ConnectController
 import com.itmo.r3135.ViewClient.controller.CoolMapController
+import com.itmo.r3135.ViewClient.controller.LocaleString
+import com.itmo.r3135.ViewClient.controller.LocalizationManager
 import com.itmo.r3135.World.Generator
+import javafx.scene.control.Labeled
 import javafx.scene.text.Font
+import javafx.scene.text.Text
 import tornadofx.*
 
 
-class Interface : View("My View") {
+class Interface : View() {
     val connectController: ConnectController by inject()
     val controller: CoolMapController by inject()
     val model: ProductsModel by inject()
+    private val localizationManager: LocalizationManager by inject()
+
     var usertext = text("Username: ${connectController.sendReceiveManager.login}") {
         font = Font.font(16.0)
     }
+
     override val root = stackpane {
         prefHeight = 800.0
         prefWidth = 200.0
         gridpane {
             row() {
-                text("Данные пользователя") {
+                text{
+                    id = "user_data"
                     font = Font.font(18.0)
                 }
             }
             row() {
-              children.add(usertext)
+                children.add(usertext)
             }
             row {
-                button("Logout") {
+                button {
+                    id = "button_logout"
                     action {
                         connectController.newLoginCode(newIsLogin = false, newNeedCode = false)
                     }
                 }
             }
             row {
-                button("+") {
-                    tooltip("add new object")
+                button{
+                    id = "button_add"
                     prefHeight = 50.0
                     prefWidth = 200.0
                     gridpaneConstraints {
@@ -51,8 +60,39 @@ class Interface : View("My View") {
                 }
             }
             row {
-                button("-") {
-                    tooltip("remove object")
+                button {
+                    id ="button_add_if_min"
+                    prefHeight = 50.0
+                    prefWidth = 200.0
+                    gridpaneConstraints {
+                        marginTop = 2.0
+                        marginLeft = 10.0
+                    }
+                    action {
+                        AddForm(2).openModal()
+                    }
+                }
+            }
+            row {
+                button{
+                    id = "button_update"
+                    prefHeight = 50.0
+                    prefWidth = 200.0
+                    gridpaneConstraints {
+                        marginTop = 2.0
+                        marginLeft = 10.0
+                    }
+                    action {
+                        if (controller.selectedProduct.item.id?.toInt() != null &&
+                                controller.selectedProduct.item.userName == connectController.sendReceiveManager.login) {
+                            AddForm(model = controller.selectedProduct).openModal()
+                        } else SelectForm(SelectForm.Mode.UPDATE).openModal()
+                    }
+                }
+            }
+            row {
+                button{
+                    id = "button_remove"
                     prefHeight = 50.0
                     prefWidth = 200.0
                     gridpaneConstraints {
@@ -61,15 +101,16 @@ class Interface : View("My View") {
                     }
                     action {
 
-                        if (controller.selectedProduct.item.id?.toInt() != null) {
+                        if (controller.selectedProduct.item.id?.toInt() != null &&
+                                controller.selectedProduct.item.userName == connectController.sendReceiveManager.login) {
                             connectController.send(Command(CommandList.REMOVE_BY_ID, controller.selectedProduct.item.id.toInt()))
-                        } else RemoveForm().openModal()
+                        } else SelectForm(SelectForm.Mode.REMOVE).openModal()
                     }
                 }
             }
             row {
-                button("CLEAR") {
-                    tooltip("Delete yours objects")
+                button{
+                    id ="button_clear"
                     prefHeight = 50.0
                     prefWidth = 200.0
                     gridpaneConstraints {
@@ -83,8 +124,8 @@ class Interface : View("My View") {
                 }
             }
             row {
-                button("SCRIPT") {
-                    tooltip("Execute SCRIPT")
+                button{
+                    id ="button_script"
                     prefHeight = 50.0
                     prefWidth = 200.0
                     gridpaneConstraints {
@@ -110,20 +151,28 @@ class Interface : View("My View") {
                     }
                 }
             }
-            row {
-                button("UPDATE SHOW") {
-                    tooltip("FOR TEST!!!")
-                    prefHeight = 50.0
-                    prefWidth = 200.0
-                    gridpaneConstraints {
-                        marginTop = 2.0
-                        marginLeft = 10.0
-                    }
-                    action {
-                        connectController.sendReceiveManager.send(Command(CommandList.GET_UPDATES))
-                    }
-                }
-            }
         }
+    }
+
+    init {
+        updateLanguage()
+    }
+
+    fun updateLanguage() {
+        (root.lookup("#button_logout") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_LOGOUT)
+        (root.lookup("#user_data") as Text).text = localizationManager.getNativeTitle(LocaleString.TITLE_USER_DATA)
+        (root.lookup("#button_add") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_ADD)
+        (root.lookup("#button_remove") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_REMOVE)
+        (root.lookup("#button_update") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_UPDATE)
+        (root.lookup("#button_clear") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_CLEAR)
+        (root.lookup("#button_script") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_SCRIPT)
+        (root.lookup("#button_add_if_min") as Labeled).text =localizationManager.getNativeButton(LocaleString.BUTTON_ADD_IF_MIN)
+        (root.lookup("#button_add") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_ADD_TOOLTIP))
+        (root.lookup("#button_remove") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_REMOVE_TOOLTIP))
+        (root.lookup("#button_update") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_UPDATE_TOOLTIP))
+        (root.lookup("#button_clear") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_CLEAR_TOOLTIP))
+        (root.lookup("#button_script") as Labeled).tooltip( localizationManager.getNativeButton(LocaleString.BUTTON_SCRIPT_TOOLTIP))
+        (root.lookup("#button_add_if_min") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_ADD_IF_MIN_TOOLTIP))
+
     }
 }

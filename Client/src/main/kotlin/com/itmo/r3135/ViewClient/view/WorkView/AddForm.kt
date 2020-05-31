@@ -3,54 +3,87 @@ package com.itmo.r3135.ViewClient.view.WorkView
 import com.itmo.r3135.System.Command
 import com.itmo.r3135.System.CommandList
 import com.itmo.r3135.ViewClient.controller.ConnectController
+import com.itmo.r3135.ViewClient.controller.CoolMapController
+import com.itmo.r3135.ViewClient.controller.LocaleString
+import com.itmo.r3135.ViewClient.controller.LocalizationManager
 import com.itmo.r3135.ViewClient.view.Styles.Companion.addform
 import com.itmo.r3135.World.Color
 import com.itmo.r3135.World.UnitOfMeasure
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.USER
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.beans.binding.BooleanExpression
+import javafx.scene.control.Labeled
 import javafx.util.converter.DoubleStringConverter
 import javafx.util.converter.FloatStringConverter
 import tornadofx.*
+import kotlin.streams.toList
 
 
 class AddForm(val mode: Int = 1) : View("Register Customer") {
     val connectController: ConnectController by inject()
+    val coolMapController: CoolMapController by inject()
     val model: ProductsModel by inject()
+    private val localizationManager: LocalizationManager by inject()
+
+    constructor(mode: Int = 3, model: ProductsModel) : this(mode) {
+        this.model.item = model.item
+    }
 
     override val root = form {
         addClass(addform)
-        if (mode == 1)
-            fieldset("Хозяина", FontAwesomeIconView(USER))
-            {
-                field("Owner name") {
-                    textfield(model.ownername).required()
+        fieldset("", FontAwesomeIconView(FontAwesomeIcon.USER))
+        {
+            id = "owner"
+            field {
+                id = "owner_name"
+                textfield(model.ownername).required()
+            }
+            field {
+                id = "owner_birth_day"
+                datepicker(model.birthday).required()
+            }
+            field {
+                id = "owner_eye_color"
+                combobox(model.eyecolor, values = Color.values().toList()) {
+                    required()
                 }
-                field("Birthday") {
-                    datepicker(model.birthday).required()
+            }
+            field {
+                id = "owner_hair_color"
+                combobox(model.haircolor, values = Color.values().toList()) {
+                    required()
                 }
-                field("Owner's eye color") {
-                    combobox<Color>(model.eyecolor, values = Color.values().toList()) {
-                        required()
+            }
+        }
+
+        fieldset("", FontAwesomeIconView(FontAwesomeIcon.APPLE))
+        {
+            id = "product"
+            if (mode == 3) field {
+                id = "id"
+                textfield(model.id) {
+                    required()
+                    filterInput {
+                        it.controlNewText.isInt()
                     }
-                }
-                field("Owner's hair color") {
-                    combobox<Color>(model.haircolor, values = Color.values().toList()) {
-                        required()
+                    validator {
+                        if (model.id.value != null) {
+                            val product = coolMapController.products.stream().filter{
+                                p -> p.id == model.id.value.toInt() }.toList()
+                            if (product.isEmpty())
+                                error("Объекта с заданным id не найдено")
+                            else if (product[0].userName != connectController.sendReceiveManager.login)
+                                error("Объект принадлежит не Вам") else null
+                        } else error("Введите id удаляемого объекта")
                     }
                 }
             }
-
-        fieldset("Products", FontAwesomeIconView(FontAwesomeIcon.APPLE))
-        {
-//            field("ID") {
-//                textfield(model.id).required()
-//            }
-            field("Name") {
+            field {
+                id = "name"
                 textfield(model.name).required()
             }
-            field("Price") {
+            field {
+                id = "price"
                 textfield(model.price, DoubleStringConverter()) {
                     filterInput { it.controlNewText.isDouble() && it.controlNewText.toDouble() >= 0 }
                     validator {
@@ -61,7 +94,6 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
             }
             field("X / Y") {
                 textfield(model.xcoordinate, DoubleStringConverter()) {
-                    id = "xId"
                     filterInput { it.controlNewText.isDouble() || it.controlNewText == "-" }
                     validator {
                         if (!it.toProperty().value.isDouble()) error("Введите число") else null
@@ -74,28 +106,31 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
                     }
                 }
             }
-            field("Partnumeber") {
+            field {
+                id = "part_number"
                 textfield(model.partnumeber) {
                     validator {
                         if (it.toProperty().value.length < 21) error("Минимальный размер - 21 символ") else null
                     }
                 }
             }
-            field("Manufacture cost") {
+            field {
+                id = "manufacture_cost"
                 textfield(model.manufacturecost, FloatStringConverter()) {
                     filterInput { it.controlNewText.isFloat() && it.controlNewText.toFloat() >= 0 }
                     required()
                 }
             }
-            field("Unit of measure") {
-                combobox<UnitOfMeasure>(model.unitOfMeasure, values = UnitOfMeasure.values().toList()) {
+            field {
+                id = "unit_of_measure"
+                combobox(model.unitOfMeasure, values = UnitOfMeasure.values().toList()) {
                     required()
                 }
             }
         }
         hbox {
-            button("Add")
-            {
+            if (mode == 1) button {
+                id = "button_add"
                 isDefaultButton = true
                 action {
                     model.commit {
@@ -106,7 +141,32 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
                 }
                 enableWhen(model.valid)
             }
-            button("Cancel") {
+            if (mode == 2) button {
+                id = "button_add_if_min"
+                isDefaultButton = true
+                action {
+                    model.commit {
+                        val product = model.item
+                        connectController.send(Command(CommandList.ADD_IF_MIN, product.toProduct()))
+                        close()
+                    }
+                }
+                enableWhen(model.valid)
+            }
+            if (mode == 3) button {
+                id = "button_update"
+                isDefaultButton = true
+                action {
+                    model.commit {
+                        val product = model.item
+                        connectController.send(Command(CommandList.UPDATE, product.toProduct(), model.id.value.toInt()))
+                        close()
+                    }
+                }
+                enableWhen(model.valid)
+            }
+            button {
+                id = "button_cancel"
                 isCancelButton = true
                 action {
                     close()
@@ -118,6 +178,31 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
     override val savable: BooleanExpression
         get() = super.savable
 
+    init {
+        updateLanguage()
+    }
+
+
+    fun updateLanguage() {
+        (root.lookup("#owner") as Fieldset).text = localizationManager.getNativeTitle(LocaleString.TITLE_OWNER)
+        (root.lookup("#product") as Fieldset).text = localizationManager.getNativeTitle(LocaleString.TITLE_PRODUCT)
+        (root.lookup("#name") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_NAME)
+        (root.lookup("#price") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_PRICE)
+        (root.lookup("#part_number") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_PART_NUMBER)
+        (root.lookup("#unit_of_measure") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_UNIT_OF_MEASURE)
+        (root.lookup("#manufacture_cost") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_MANUFACTURE_COST)
+        (root.lookup("#owner_name") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_OWNER_NAME)
+        (root.lookup("#owner_birth_day") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_OWNER_BIRTH_DAY)
+        (root.lookup("#owner_eye_color") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_OWNER_EYE_COLOR)
+        (root.lookup("#owner_hair_color") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_OWNER_HAIR_COLOR)
+        (root.lookup("#button_cancel") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_CANCEL)
+        if (mode == 1) (root.lookup("#button_add") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_ADD)
+        if (mode == 2) (root.lookup("#button_add_if_min") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_ADD_IF_MIN)
+        if (mode == 3) {
+            (root.lookup("#button_update") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_UPDATE)
+            (root.lookup("#id") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_ID)
+        }
+    }
 }
 
 

@@ -7,6 +7,7 @@ import tornadofx.*
 
 class CoolMap : View("My View") {
     val controller: CoolMapController by inject()
+    val productsTable: ProductsTable by inject()
     val p: Pane = pane {
         minWidth = 700.0
         minHeight = 400.0
@@ -17,15 +18,10 @@ class CoolMap : View("My View") {
             controller.repaintNewWindowsSize()
 //            val dw = newValue.width-oldValue.width
 //            val dh = newValue.height-oldValue.height
-            //productsTable.size(width+dw, height+dh)
+            productsTable.size(newValue.width, newValue.height)
         })
     }
     override val root = p
-
-    init {
-//       repaint()
-
-    }
 
 }
 

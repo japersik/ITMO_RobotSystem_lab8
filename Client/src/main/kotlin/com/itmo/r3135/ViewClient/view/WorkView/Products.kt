@@ -38,7 +38,7 @@ class Products {
     var name by property<String>()
     fun nameProperty() = getProperty(Products::name)
 
-    var id by property<Number>()
+    var id by property<Int>()
     fun idProperty() = getProperty(Products::id)
 
     var unitOfMeasure by property<UnitOfMeasure>()
@@ -112,7 +112,7 @@ class ProductsModel : ItemViewModel<Products>(Products()) {
     val manufacturecost: Property<Float> = bind { item?.manufacturecostProperty() }
     val name: StringProperty = bind { item?.nameProperty() }
     val username: StringProperty = bind { item?.userNameProperty() }
-    val id: ObjectProperty<Number> = bind { item?.idProperty() }
+    val id: Property<Int> = bind { item?.idProperty() }
 }
 
 
