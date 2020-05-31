@@ -1,12 +1,15 @@
 package com.itmo.r3135.ViewClient.view
 
 import com.itmo.r3135.ViewClient.controller.ConnectController
+import com.itmo.r3135.ViewClient.controller.LocaleString
+import com.itmo.r3135.ViewClient.controller.LocalizationManager
 import javafx.beans.property.SimpleStringProperty
+import javafx.scene.control.Labeled
 import tornadofx.*
 
 class ConnectionView : View("Connect controller") {
     val connectController: ConnectController by inject()
-
+    val localizationManager: LocalizationManager by inject()
     private val model = object : ViewModel() {
         val host = bind { SimpleStringProperty() }
         val port = bind { SimpleStringProperty() }
@@ -15,13 +18,14 @@ class ConnectionView : View("Connect controller") {
     override val root = form {
         addClass(Styles.loginScreen)
         fieldset {
-            field("Host") {
+            field {
+                id = "host"
                 textfield(model.host) {
                     required()
-                    //whenDocked { requestFocus() }
                 }
             }
-            field("Port") {
+            field {
+                id = "port"
                 textfield(model.port) {
                     filterInput { it.controlNewText.isInt() }
                     validator {
@@ -31,7 +35,8 @@ class ConnectionView : View("Connect controller") {
                 }
             }
         }
-        button("Ping") {
+        button {
+            id = "ping"
             isDefaultButton = true
             action {
                 model.commit {
@@ -42,6 +47,17 @@ class ConnectionView : View("Connect controller") {
             }
         }
     }
+
+    init {
+        updateLanguage()
+    }
+
+    fun updateLanguage() {
+        (root.lookup("#port") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_HOST)
+        (root.lookup("#host") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_PORT)
+        (root.lookup("#ping") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_PING)
+    }
+
 
 }
 
