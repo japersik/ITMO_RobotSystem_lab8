@@ -89,9 +89,10 @@ class ConnectController : Controller(), Executor {
             return
         }
         if (deltaTime > 20 && isNot) {
-            isConnect = false
             notificationsController.errorMessage(text = "Connection lost")
             newLoginCode(false, false)
+            isConnect = false
+            isNot=false
             return
         }
         sendReceiveManager.send(command)
