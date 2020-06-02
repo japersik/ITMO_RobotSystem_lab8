@@ -7,6 +7,7 @@ import com.itmo.r3135.ViewClient.controller.LocaleString
 import com.itmo.r3135.ViewClient.controller.LocalizationManager
 import com.itmo.r3135.ViewClient.view.Styles.Companion.loginScreen
 import com.itmo.r3135.ViewClient.view.Styles.Companion.loginScreenButton
+import com.itmo.r3135.ViewClient.view.WorkView.Toolbar
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.Labeled
@@ -23,6 +24,7 @@ class LoginScreen : View("Please log in") {
     }
 
     override val root = form {
+        add(Toolbar::class)
         addClass(loginScreen)
         fieldset {
             field("Username") {

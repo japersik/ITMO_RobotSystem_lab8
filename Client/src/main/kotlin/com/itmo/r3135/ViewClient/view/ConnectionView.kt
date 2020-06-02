@@ -3,6 +3,7 @@ package com.itmo.r3135.ViewClient.view
 import com.itmo.r3135.ViewClient.controller.ConnectController
 import com.itmo.r3135.ViewClient.controller.LocaleString
 import com.itmo.r3135.ViewClient.controller.LocalizationManager
+import com.itmo.r3135.ViewClient.view.WorkView.Toolbar
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.Labeled
 import tornadofx.*
@@ -16,6 +17,7 @@ class ConnectionView : View("Connect controller") {
     }
 
     override val root = form {
+        add( Toolbar::class )
         addClass(Styles.loginScreen)
         fieldset {
             field {
