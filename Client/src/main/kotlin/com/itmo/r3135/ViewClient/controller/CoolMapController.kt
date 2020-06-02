@@ -38,7 +38,6 @@ class CoolMapController : Controller() {
     lateinit var updater: Thread
 
     init {
-        connectController.send(Command(CommandList.SHOW))
         products.addListener(SetChangeListener<Products> { c ->
             if (c.elementAdded != null) {
                 addToMap(c.elementAdded.toProduct())
@@ -54,7 +53,9 @@ class CoolMapController : Controller() {
         repaintNewWindowsSize()
     }
 
-    fun init() {
+    fun initial() {
+        println("lal")
+        connectController.send(Command(CommandList.SHOW))
         startGetUpdates()
     }
 

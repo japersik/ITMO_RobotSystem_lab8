@@ -34,11 +34,9 @@ class Toolbar : View() {
                     }
                 }
                 menu("Help") {
-                    id = "help"
                     item("About...")
                 }
                 menu("Exit") {
-                    id = "exit"
                     item("Close all") {
                         id = "close_all"
                         action {

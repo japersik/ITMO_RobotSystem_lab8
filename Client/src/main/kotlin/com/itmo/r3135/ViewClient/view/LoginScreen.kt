@@ -16,6 +16,8 @@ import tornadofx.*
 class LoginScreen : View("Please log in") {
     val connectController: ConnectController by inject()
     val localizationManager: LocalizationManager by inject()
+    val registrationView: RegistrationView by inject()
+    val toolbar= Toolbar()
     private val model = object : ViewModel() {
         val username = bind { SimpleStringProperty() }
         val password = bind { SimpleStringProperty() }
@@ -23,53 +25,57 @@ class LoginScreen : View("Please log in") {
 
     }
 
-    override val root = form {
-        add(Toolbar::class)
-        addClass(loginScreen)
-        fieldset {
-            field("Username") {
-                id ="name"
-                textfield(model.username) {
-                    required()
-                    whenDocked { requestFocus() }
+    override val root =
+            borderpane() {
+                top { add(toolbar) }
+        center {
+            form {   addClass(loginScreen)
+                fieldset {
+                    field("Username") {
+                        id = "name"
+                        textfield(model.username) {
+                            required()
+                            whenDocked { requestFocus() }
+                        }
+                    }
+                    field("Password") {
+                        id = "pass"
+                        passwordfield(model.password).required()
+                    }
+                    field("Remember me") {
+                        checkbox(property = model.remember) {
+                            tooltip("It's not safe.")
+                        }
+                    }
                 }
-            }
-            field("Password") {
-                id ="pass"
-                passwordfield(model.password).required()
-            }
-            field("Remember me") {
-                checkbox(property = model.remember) {
-                    tooltip("It's not safe.")
-                }
-            }
-        }
 
-        hbox {
-            button {
-                id ="login"
-                addClass(loginScreenButton)
-                isDefaultButton = true
-                action {
-                    model.commit {
-                        connectController.tryLogin(
-                                model.username.value,
-                                model.password.value,
-                                model.remember.value
-                        )
+                hbox {
+                    button {
+                        id = "login"
+                        addClass(loginScreenButton)
+                        isDefaultButton = true
+                        action {
+                            model.commit {
+                                connectController.tryLogin(
+                                        model.username.value,
+                                        model.password.value,
+                                        model.remember.value
+                                )
+                            }
+                        }
+                    }
+                    button {
+                        id = "reg"
+                        addClass(loginScreenButton)
+                        isDefaultButton = false
+                        action {
+                            registrationView.openModal()
+                        }
                     }
                 }
             }
-            button{
-                id ="reg"
-                addClass(loginScreenButton)
-                isDefaultButton = false
-                action {
-                    RegistrationView().openModal()
-                }
-            }
         }
-    }
+            }
 
     override fun onDock() {
         model.validate(decorateErrors = false)
@@ -86,10 +92,11 @@ class LoginScreen : View("Please log in") {
     }
 
     fun updateLanguage() {
-        (root.lookup("#name")as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_LOGIN)
-        (root.lookup("#pass")as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_PASSWORD)
-        (root.lookup("#login")as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_LOGIN)
-        (root.lookup("#reg")as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_REG)
+        toolbar.updateLanguage()
+        (root.lookup("#name") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_LOGIN)
+        (root.lookup("#pass") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_PASSWORD)
+        (root.lookup("#login") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_LOGIN)
+        (root.lookup("#reg") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_REG)
 
     }
 }
@@ -97,7 +104,6 @@ class LoginScreen : View("Please log in") {
 class CodeView : View("Verification Code Checker") {
     private val connectController: ConnectController by inject()
     private val localizationManager: LocalizationManager by inject()
-
     private val model = object : ViewModel() {
         val code = bind { SimpleStringProperty() }
     }
@@ -118,7 +124,7 @@ class CodeView : View("Verification Code Checker") {
             id = "send"
             action {
                 model.commit {
-                    connectController.sendReceiveManager.send(
+                    connectController.send(
                             Command(CommandList.CODE, model.code.value))
                     close()
                 }
@@ -126,14 +132,15 @@ class CodeView : View("Verification Code Checker") {
             }
         }
     }
+
     init {
         updateLanguage()
     }
 
     fun updateLanguage() {
-        (root.lookup("#code")as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_CODE)
-        (root.lookup("#send")as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_CODE)
-           }
+        (root.lookup("#code") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_CODE)
+        (root.lookup("#send") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_CODE)
+    }
 }
 
 

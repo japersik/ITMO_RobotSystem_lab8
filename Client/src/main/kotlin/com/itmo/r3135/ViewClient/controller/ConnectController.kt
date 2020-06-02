@@ -10,7 +10,6 @@ import com.itmo.r3135.ViewClient.view.LoginScreen
 import com.itmo.r3135.ViewClient.view.RegistrationView
 import com.itmo.r3135.ViewClient.view.WorkView.Interface
 import com.itmo.r3135.ViewClient.view.WorkView.ProductsTable
-import com.itmo.r3135.ViewClient.view.WorkView.SelectForm
 import com.itmo.r3135.ViewClient.view.WorkView.Toolbar
 import com.itmo.r3135.view.MainView
 import javafx.animation.KeyFrame
@@ -31,30 +30,30 @@ import java.time.ZoneOffset
 class ConnectController : Controller(), Executor {
     lateinit var sendReceiveManager: SendReceiveManager
     private val connectionView: ConnectionView by inject()
-    private val loginScreen: LoginScreen by inject()
+    private val registrationView: RegistrationView by inject()
     private val mainView: MainView by inject()
     private val productsController: CoolMapController by inject()
     private val notificationsController: NotificationsController by inject()
     private val coolMapController: CoolMapController by inject()
     private val mainInterface: Interface by inject()
-    private lateinit var lastReceive: LocalDateTime
-        private val interf: Interface by inject()
+    private val interf: Interface by inject()
     private val productsTable: ProductsTable by inject()
-    private val toolbar: Toolbar by inject()
-//    private val connectionView: ConnectionView by inject()
-//        private val loginScreen: LoginScreen by inject()
+    private val loginScreen: LoginScreen by inject()
     private val codeView: CodeView by inject()
-    private val registrationView: RegistrationView by inject()
+    private lateinit var lastReceive: LocalDateTime
+
+
+
     fun updateLanguage() {
         interf.updateLanguage()
         productsTable.updateLanguage()
-        toolbar.updateLanguage()
         connectionView.updateLanguage()
         loginScreen.updateLanguage()
         codeView.updateLanguage()
         registrationView.updateLanguage()
+        mainView.updateLanguage()
     }
-    //    private val productsController: ProductsController by inject()
+
     var isConnect = false
     var isLogin = false
     var needCode = false
@@ -92,7 +91,7 @@ class ConnectController : Controller(), Executor {
             notificationsController.errorMessage(text = "Connection lost")
             newLoginCode(false, false)
             isConnect = false
-            isNot=false
+            isNot = false
             return
         }
         sendReceiveManager.send(command)
@@ -153,7 +152,7 @@ class ConnectController : Controller(), Executor {
                     if (newIsLogin) {
                         loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
                         mainInterface.usertext.text = "Username: ${sendReceiveManager.login}"
-                        coolMapController.init()
+                        coolMapController.initial()
                     } else {
                         shakeStage()
                         notificationsController.errorMessage(text = "Incorrect login or password!")
