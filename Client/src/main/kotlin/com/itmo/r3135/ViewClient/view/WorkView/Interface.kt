@@ -20,7 +20,7 @@ class Interface : View() {
     val model: ProductsModel by inject()
     private val localizationManager: LocalizationManager by inject()
 
-    var usertext = text("Username: ${connectController.sendReceiveManager.login}") {
+    var usertext = text("Username:") {
         font = Font.font(16.0)
     }
 
@@ -147,7 +147,7 @@ class Interface : View() {
                         marginLeft = 10.0
                     }
                     action {
-                        connectController.sendReceiveManager.send(Command(CommandList.ADD, Generator.nextProduct()))
+                        connectController.send(Command(CommandList.ADD, Generator.nextProduct()))
                     }
                 }
             }
