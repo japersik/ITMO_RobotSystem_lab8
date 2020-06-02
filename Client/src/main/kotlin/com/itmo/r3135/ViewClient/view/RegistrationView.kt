@@ -6,8 +6,11 @@ import com.itmo.r3135.ViewClient.controller.ConnectController
 import com.itmo.r3135.ViewClient.controller.LocaleString
 import com.itmo.r3135.ViewClient.controller.LocalizationManager
 import com.itmo.r3135.ViewClient.controller.NotificationsController
+import com.itmo.r3135.ViewClient.view.WorkView.Interface
+import com.itmo.r3135.ViewClient.view.WorkView.Toolbar
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.Labeled
+import javafx.scene.control.ToolBar
 import tornadofx.*
 import java.awt.Button
 import java.util.regex.Pattern
@@ -23,6 +26,7 @@ class RegistrationView : View("Please reg") {
     }
 
     override val root = form {
+        add( Toolbar::class )
         fieldset {
             field("Email") {
                 id = "email"
