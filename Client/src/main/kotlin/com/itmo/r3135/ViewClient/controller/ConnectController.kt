@@ -10,7 +10,6 @@ import com.itmo.r3135.ViewClient.view.LoginScreen
 import com.itmo.r3135.ViewClient.view.RegistrationView
 import com.itmo.r3135.ViewClient.view.WorkView.Interface
 import com.itmo.r3135.ViewClient.view.WorkView.ProductsTable
-import com.itmo.r3135.ViewClient.view.WorkView.Toolbar
 import com.itmo.r3135.view.MainView
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
@@ -41,7 +40,6 @@ class ConnectController : Controller(), Executor {
     private val loginScreen: LoginScreen by inject()
     private val codeView: CodeView by inject()
     private lateinit var lastReceive: LocalDateTime
-
 
 
     fun updateLanguage() {
@@ -82,17 +80,19 @@ class ConnectController : Controller(), Executor {
 
     fun send(command: Command) {
         val deltaTime = (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - lastReceive.toEpochSecond(ZoneOffset.UTC))
-        if (deltaTime > 5 && !isNot) {
-            isNot = true
-            notificationsController.errorMessage(text = "Connection is unstable")
-            return
-        }
-        if (deltaTime > 20 && isNot) {
-            notificationsController.errorMessage(text = "Connection lost")
-            newLoginCode(false, false)
-            isConnect = false
-            isNot = false
-            return
+        if (!needCode) {
+            if (deltaTime > 5 && !isNot) {
+                isNot = true
+                notificationsController.errorMessage(text = "Connection is unstable")
+                return
+            }
+            if (deltaTime > 20 && isNot) {
+                notificationsController.errorMessage(text = "Connection lost")
+                newLoginCode(false, false)
+                isConnect = false
+                isNot = false
+                return
+            }
         }
         sendReceiveManager.send(command)
     }
