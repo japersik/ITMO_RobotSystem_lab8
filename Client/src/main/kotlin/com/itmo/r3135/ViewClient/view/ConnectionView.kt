@@ -48,7 +48,6 @@ class ConnectionView : View("Connect controller") {
                             connectController.connectionCheck(model.host.value,
                                     model.port.value.toInt())
                         }
-
                     }
                 }
             }
