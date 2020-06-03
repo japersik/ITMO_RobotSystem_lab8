@@ -42,11 +42,11 @@ class LoginScreen : View("Please log in") {
                         id = "pass"
                         passwordfield(model.password).required()
                     }
-                    field("Remember me") {
-                        checkbox(property = model.remember) {
-                            tooltip("It's not safe.")
-                        }
-                    }
+//                    field("Remember me") {
+//                        checkbox(property = model.remember) {
+//                            tooltip("It's not safe.")
+//                        }
+//                    }
                 }
 
                 hbox {
