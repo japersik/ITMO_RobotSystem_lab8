@@ -3,7 +3,6 @@ package com.itmo.r3135.ViewClient.controller
 enum class LocaleString(var stringLocale: String) {
 
     //Страны и языки
-
     LANGUAGE_RU("ru"),
     COUNTRY_RU("RU"),
     LANGUAGE_FI("fi"),
@@ -12,7 +11,8 @@ enum class LocaleString(var stringLocale: String) {
     COUNTRY_FR("FR"),
     LANGUAGE_ES("es"),
     COUNTRY_HN("HN"),
-
+    LANGUAGE_EN("en"),
+    COUNTRY_US("US"),
     //Окно соединения
 
     TITLE_HOST("host"),

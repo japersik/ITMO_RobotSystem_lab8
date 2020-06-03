@@ -12,14 +12,11 @@ import tornadofx.*
 import java.lang.Math.abs
 
 class ProductPoint(product: Product) {
-    var xReal: Double
-    var yReal: Double
+    var xReal: Double = product.coordinates.x
+    var yReal: Double = product.coordinates.y
     val group = Group()
 
     init {
-        xReal = product.coordinates.x
-        yReal = product.coordinates.y
-
         val svgpath = SVGPath()
         svgpath.content = "M-20,15 L-20,-10 L20,-10 L20,15  L-20,15 M-20,-10 L-15,-20 L15,-20, L20,-10"
         svgpath.stroke = c(abs(product.userName.hashCode() % 10000 / (10000.toDouble())),

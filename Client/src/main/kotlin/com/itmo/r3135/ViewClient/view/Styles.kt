@@ -35,7 +35,7 @@ class Styles : Stylesheet() {
             fontWeight = FontWeight.BOLD
             font = comfortaa
         }
-        loginScreenButton{
+        loginScreenButton {
             startMargin = 10.px
             endMargin = 10.px
             maxWidth = 200.px

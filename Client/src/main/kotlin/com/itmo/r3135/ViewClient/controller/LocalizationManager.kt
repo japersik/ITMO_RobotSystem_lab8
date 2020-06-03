@@ -18,6 +18,7 @@ class LocalizationManager : Controller() {
             LocaleString.LANGUAGE_ES.stringLocale -> locale = Locale(LocaleString.LANGUAGE_ES.stringLocale, LocaleString.COUNTRY_HN.stringLocale)
             LocaleString.LANGUAGE_FI.stringLocale -> locale = Locale(LocaleString.LANGUAGE_FI.stringLocale, LocaleString.COUNTRY_FI.stringLocale)
             LocaleString.LANGUAGE_FR.stringLocale -> locale = Locale(LocaleString.LANGUAGE_FR.stringLocale, LocaleString.COUNTRY_FR.stringLocale)
+            LocaleString.LANGUAGE_EN.stringLocale -> locale = Locale(LocaleString.LANGUAGE_EN.stringLocale, LocaleString.COUNTRY_US.stringLocale)
             else -> locale = Locale(LocaleString.LANGUAGE_RU.stringLocale, LocaleString.COUNTRY_RU.stringLocale)
         }
         changeLanguage()

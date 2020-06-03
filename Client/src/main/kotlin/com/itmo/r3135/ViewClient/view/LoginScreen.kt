@@ -17,7 +17,7 @@ class LoginScreen : View("Please log in") {
     val connectController: ConnectController by inject()
     val localizationManager: LocalizationManager by inject()
     val registrationView: RegistrationView by inject()
-    val toolbar= Toolbar()
+    val toolbar = Toolbar()
     private val model = object : ViewModel() {
         val username = bind { SimpleStringProperty() }
         val password = bind { SimpleStringProperty() }
@@ -26,55 +26,50 @@ class LoginScreen : View("Please log in") {
     }
 
     override val root =
-            borderpane() {
+            borderpane {
                 top { add(toolbar) }
-        center {
-            form {   addClass(loginScreen)
-                fieldset {
-                    field("Username") {
-                        id = "name"
-                        textfield(model.username) {
-                            required()
-                            whenDocked { requestFocus() }
+                center {
+                    form {
+                        addClass(loginScreen)
+                        fieldset {
+                            field("Username") {
+                                id = "name"
+                                textfield(model.username) {
+                                    required()
+                                    whenDocked { requestFocus() }
+                                }
+                            }
+                            field("Password") {
+                                id = "pass"
+                                passwordfield(model.password).required()
+                            }
                         }
-                    }
-                    field("Password") {
-                        id = "pass"
-                        passwordfield(model.password).required()
-                    }
-//                    field("Remember me") {
-//                        checkbox(property = model.remember) {
-//                            tooltip("It's not safe.")
-//                        }
-//                    }
-                }
-
-                hbox {
-                    button {
-                        id = "login"
-                        addClass(loginScreenButton)
-                        isDefaultButton = true
-                        action {
-                            model.commit {
-                                connectController.tryLogin(
-                                        model.username.value,
-                                        model.password.value,
-                                        model.remember.value
-                                )
+                        hbox {
+                            button {
+                                id = "login"
+                                addClass(loginScreenButton)
+                                isDefaultButton = true
+                                action {
+                                    model.commit {
+                                        connectController.tryLogin(
+                                                model.username.value,
+                                                model.password.value,
+                                                model.remember.value
+                                        )
+                                    }
+                                }
+                            }
+                            button {
+                                id = "reg"
+                                addClass(loginScreenButton)
+                                isDefaultButton = false
+                                action {
+                                    registrationView.openModal()
+                                }
                             }
                         }
                     }
-                    button {
-                        id = "reg"
-                        addClass(loginScreenButton)
-                        isDefaultButton = false
-                        action {
-                            registrationView.openModal()
-                        }
-                    }
                 }
-            }
-        }
             }
 
     override fun onDock() {
@@ -112,7 +107,7 @@ class CodeView : View("Verification Code Checker") {
         addClass(loginScreen)
         fieldset {
             field("Code") {
-                id= "code"
+                id = "code"
                 textfield(model.code) {
                     required()
                     whenDocked { requestFocus() }

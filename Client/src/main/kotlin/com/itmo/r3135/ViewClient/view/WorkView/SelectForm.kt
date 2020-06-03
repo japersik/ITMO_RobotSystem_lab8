@@ -15,7 +15,7 @@ import tornadofx.*
 import kotlin.streams.toList
 
 
-class SelectForm(val mode: Mode) : View("Remove Element") {
+class SelectForm(private val mode: Mode) : View() {
     private val connectController: ConnectController by inject()
     private val coolMapController: CoolMapController by inject()
     private val localizationManager: LocalizationManager by inject()
@@ -54,7 +54,7 @@ class SelectForm(val mode: Mode) : View("Remove Element") {
                             close()
                         }
                         if (mode == Mode.UPDATE) {
-                            var models = ProductsModel();
+                            val models = ProductsModel()
                             models.item = coolMapController.products.stream().filter { p -> p.id == model.id.value.toInt() }.toList()[0]
                             AddForm(model = models).openWindow()
                             close()

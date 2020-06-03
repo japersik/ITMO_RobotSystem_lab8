@@ -32,9 +32,18 @@ class Toolbar : View() {
                         localizationManager.setLocale("es")
                         connectController.updateLanguage()
                     }
+                    separator()
+                    item("English").action {
+                        localizationManager.setLocale("en")
+                        connectController.updateLanguage()
+                    }
                 }
                 menu("Help") {
-                    item("About...")
+                    item("About...") {
+                        action {
+                           AboutView().openModal()
+                        }
+                    }
                 }
                 menu("Exit") {
                     item("Close all") {

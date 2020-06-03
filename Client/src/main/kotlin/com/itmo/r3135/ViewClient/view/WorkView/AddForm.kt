@@ -19,13 +19,13 @@ import tornadofx.*
 import kotlin.streams.toList
 
 
-class AddForm(val mode: Int = 1) : View("Register Customer") {
-    val connectController: ConnectController by inject()
-    val coolMapController: CoolMapController by inject()
-    val model: ProductsModel by inject()
+class AddForm(private val mode: Mode = Mode.ADD) : View("Product form") {
+    private val connectController: ConnectController by inject()
+    private val coolMapController: CoolMapController by inject()
+    private val model: ProductsModel by inject()
     private val localizationManager: LocalizationManager by inject()
 
-    constructor(mode: Int = 3, model: ProductsModel) : this(mode) {
+    constructor(mode: Mode = Mode.UPDATE, model: ProductsModel) : this(mode) {
         this.model.item = model.item
     }
 
@@ -59,7 +59,7 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
         fieldset("", FontAwesomeIconView(FontAwesomeIcon.APPLE))
         {
             id = "product"
-            if (mode == 3) field {
+            if (mode == Mode.UPDATE) field {
                 id = "id"
                 textfield(model.id) {
                     required()
@@ -68,8 +68,7 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
                     }
                     validator {
                         if (model.id.value != null) {
-                            val product = coolMapController.products.stream().filter{
-                                p -> p.id == model.id.value.toInt() }.toList()
+                            val product = coolMapController.products.stream().filter { p -> p.id == model.id.value.toInt() }.toList()
                             if (product.isEmpty())
                                 error("Объекта с заданным id не найдено")
                             else if (product[0].userName != connectController.sendReceiveManager.login)
@@ -129,7 +128,7 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
             }
         }
         hbox {
-            if (mode == 1) button {
+            if (mode == Mode.ADD) button {
                 id = "button_add"
                 isDefaultButton = true
                 action {
@@ -141,7 +140,7 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
                 }
                 enableWhen(model.valid)
             }
-            if (mode == 2) button {
+            if (mode == Mode.ADD_IF_MIN) button {
                 id = "button_add_if_min"
                 isDefaultButton = true
                 action {
@@ -153,7 +152,7 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
                 }
                 enableWhen(model.valid)
             }
-            if (mode == 3) button {
+            if (mode == Mode.UPDATE) button {
                 id = "button_update"
                 isDefaultButton = true
                 action {
@@ -196,13 +195,19 @@ class AddForm(val mode: Int = 1) : View("Register Customer") {
         (root.lookup("#owner_eye_color") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_OWNER_EYE_COLOR)
         (root.lookup("#owner_hair_color") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_OWNER_HAIR_COLOR)
         (root.lookup("#button_cancel") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_CANCEL)
-        if (mode == 1) (root.lookup("#button_add") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_ADD)
-        if (mode == 2) (root.lookup("#button_add_if_min") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_ADD_IF_MIN)
-        if (mode == 3) {
+        if (mode == Mode.ADD) (root.lookup("#button_add") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_ADD)
+        if (mode == Mode.ADD_IF_MIN) (root.lookup("#button_add_if_min") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_ADD_IF_MIN)
+        if (mode == Mode.UPDATE) {
             (root.lookup("#button_update") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_UPDATE)
             (root.lookup("#id") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_ID)
         }
     }
+    enum class Mode {
+        ADD,
+        ADD_IF_MIN,
+        UPDATE
+    }
+
 }
 
 
