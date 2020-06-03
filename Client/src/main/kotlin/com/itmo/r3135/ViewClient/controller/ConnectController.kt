@@ -151,7 +151,7 @@ class ConnectController : Controller(), Executor {
                 if (!this.isLogin)
                     if (newIsLogin) {
                         loginScreen.replaceWith(mainView, sizeToScene = true, centerOnScreen = true)
-                        mainInterface.usertext.text = "Username: ${sendReceiveManager.login}"
+                        mainInterface.usertext.text = sendReceiveManager?.login
                         coolMapController.initial()
                     } else {
                         shakeStage()

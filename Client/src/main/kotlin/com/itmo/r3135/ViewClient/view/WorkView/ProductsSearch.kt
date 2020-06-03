@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
 class ProductsSearch : View("My View") {
-    val CoolMapController: CoolMapController by inject()
+    private val coolMapController: CoolMapController by inject()
     var search = ""
 
 
@@ -19,9 +19,9 @@ class ProductsSearch : View("My View") {
         fieldset(" ", FontAwesomeIconView(FontAwesomeIcon.SEARCH)) {
         }
         textfield(model.search) {
-            textProperty().addListener { observable, oldValue, newValue ->
+            textProperty().addListener { _, _, newValue ->
                 search = newValue
-                CoolMapController.updatetable(search)
+                coolMapController.updatetable(search)
             }
         }
     }

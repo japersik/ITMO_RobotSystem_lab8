@@ -7,6 +7,7 @@ import com.itmo.r3135.ViewClient.controller.ConnectController
 import com.itmo.r3135.ViewClient.controller.CoolMapController
 import com.itmo.r3135.ViewClient.controller.LocaleString
 import com.itmo.r3135.ViewClient.controller.LocalizationManager
+import com.itmo.r3135.ViewClient.view.Styles
 import com.itmo.r3135.World.Generator
 import javafx.scene.control.Labeled
 import javafx.scene.text.Font
@@ -20,25 +21,39 @@ class Interface : View() {
     val model: ProductsModel by inject()
     private val localizationManager: LocalizationManager by inject()
 
-    var usertext = text("Username:") {
+    var usertext = text("//username//") {
         font = Font.font(16.0)
+        gridpaneConstraints {
+            marginTop = 10.0
+            marginLeft = 10.0
+        }
+
     }
 
     override val root = stackpane {
         prefHeight = 800.0
         prefWidth = 200.0
         gridpane {
-            row() {
-                text{
+            row {
+                text {
+                    gridpaneConstraints {
+                        marginTop = 10.0
+                        marginLeft = 10.0
+                    }
                     id = "user_data"
                     font = Font.font(18.0)
                 }
             }
-            row() {
+            row {
                 children.add(usertext)
             }
             row {
                 button {
+                    gridpaneConstraints {
+                        marginTop = 10.0
+                        marginLeft = 10.0
+                    }
+                    addClass(Styles.loginScreenButton)
                     id = "button_logout"
                     action {
                         connectController.newLoginCode(newIsLogin = false, newNeedCode = false)
@@ -46,7 +61,7 @@ class Interface : View() {
                 }
             }
             row {
-                button{
+                button {
                     id = "button_add"
                     prefHeight = 50.0
                     prefWidth = 200.0
@@ -61,7 +76,7 @@ class Interface : View() {
             }
             row {
                 button {
-                    id ="button_add_if_min"
+                    id = "button_add_if_min"
                     prefHeight = 50.0
                     prefWidth = 200.0
                     gridpaneConstraints {
@@ -69,12 +84,12 @@ class Interface : View() {
                         marginLeft = 10.0
                     }
                     action {
-                        AddForm(2).openModal()
+                        AddForm(AddForm.Mode.ADD_IF_MIN).openModal()
                     }
                 }
             }
             row {
-                button{
+                button {
                     id = "button_update"
                     prefHeight = 50.0
                     prefWidth = 200.0
@@ -83,7 +98,7 @@ class Interface : View() {
                         marginLeft = 10.0
                     }
                     action {
-                        if (controller.selectedProduct.item.id?.toInt() != null &&
+                        if (controller.selectedProduct.item != null && controller.selectedProduct.item.id?.toInt() != null &&
                                 controller.selectedProduct.item.userName == connectController.sendReceiveManager.login) {
                             AddForm(model = controller.selectedProduct).openModal()
                         } else SelectForm(SelectForm.Mode.UPDATE).openModal()
@@ -91,7 +106,7 @@ class Interface : View() {
                 }
             }
             row {
-                button{
+                button {
                     id = "button_remove"
                     prefHeight = 50.0
                     prefWidth = 200.0
@@ -100,8 +115,7 @@ class Interface : View() {
                         marginLeft = 10.0
                     }
                     action {
-
-                        if (controller.selectedProduct.item.id?.toInt() != null &&
+                        if (controller.selectedProduct.item != null && controller.selectedProduct.item.id?.toInt() != null &&
                                 controller.selectedProduct.item.userName == connectController.sendReceiveManager.login) {
                             connectController.send(Command(CommandList.REMOVE_BY_ID, controller.selectedProduct.item.id.toInt()))
                         } else SelectForm(SelectForm.Mode.REMOVE).openModal()
@@ -109,8 +123,8 @@ class Interface : View() {
                 }
             }
             row {
-                button{
-                    id ="button_clear"
+                button {
+                    id = "button_clear"
                     prefHeight = 50.0
                     prefWidth = 200.0
                     gridpaneConstraints {
@@ -124,8 +138,8 @@ class Interface : View() {
                 }
             }
             row {
-                button{
-                    id ="button_script"
+                button {
+                    id = "button_script"
                     prefHeight = 50.0
                     prefWidth = 200.0
                     gridpaneConstraints {
@@ -166,13 +180,13 @@ class Interface : View() {
         (root.lookup("#button_update") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_UPDATE)
         (root.lookup("#button_clear") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_CLEAR)
         (root.lookup("#button_script") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_SCRIPT)
-        (root.lookup("#button_add_if_min") as Labeled).text =localizationManager.getNativeButton(LocaleString.BUTTON_ADD_IF_MIN)
-        (root.lookup("#button_add") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_ADD_TOOLTIP))
-        (root.lookup("#button_remove") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_REMOVE_TOOLTIP))
-        (root.lookup("#button_update") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_UPDATE_TOOLTIP))
-        (root.lookup("#button_clear") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_CLEAR_TOOLTIP))
-        (root.lookup("#button_script") as Labeled).tooltip( localizationManager.getNativeButton(LocaleString.BUTTON_SCRIPT_TOOLTIP))
-        (root.lookup("#button_add_if_min") as Labeled).tooltip (localizationManager.getNativeButton(LocaleString.BUTTON_ADD_IF_MIN_TOOLTIP))
+        (root.lookup("#button_add_if_min") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_ADD_IF_MIN)
+        (root.lookup("#button_add") as Labeled).tooltip(localizationManager.getNativeButton(LocaleString.BUTTON_ADD_TOOLTIP))
+        (root.lookup("#button_remove") as Labeled).tooltip(localizationManager.getNativeButton(LocaleString.BUTTON_REMOVE_TOOLTIP))
+        (root.lookup("#button_update") as Labeled).tooltip(localizationManager.getNativeButton(LocaleString.BUTTON_UPDATE_TOOLTIP))
+        (root.lookup("#button_clear") as Labeled).tooltip(localizationManager.getNativeButton(LocaleString.BUTTON_CLEAR_TOOLTIP))
+        (root.lookup("#button_script") as Labeled).tooltip(localizationManager.getNativeButton(LocaleString.BUTTON_SCRIPT_TOOLTIP))
+        (root.lookup("#button_add_if_min") as Labeled).tooltip(localizationManager.getNativeButton(LocaleString.BUTTON_ADD_IF_MIN_TOOLTIP))
 
     }
 }

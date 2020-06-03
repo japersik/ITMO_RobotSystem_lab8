@@ -27,10 +27,10 @@ class CoolMapController : Controller() {
     var currentMinCoordinatesY = -100.0
     var currentMaxCoordinatesX = 100.0
     var currentMaxCoordinatesY = 100.0
-    val border = 40.0
-    val indent = 10.0
-    val lineGroup = Group()
-    val textGroup = Group()
+    private val border = 40.0
+    private val indent = 10.0
+    private val lineGroup = Group()
+    private val textGroup = Group()
 
     private var stepXLine: Double = 0.0
     private var stepYLine: Double = 0.0
@@ -38,7 +38,7 @@ class CoolMapController : Controller() {
     lateinit var updater: Thread
 
     init {
-        products.addListener(SetChangeListener<Products> { c ->
+        products.addListener(SetChangeListener { c ->
             if (c.elementAdded != null) {
                 addToMap(c.elementAdded.toProduct())
             }
@@ -54,7 +54,6 @@ class CoolMapController : Controller() {
     }
 
     fun initial() {
-        println("lal")
         connectController.send(Command(CommandList.SHOW))
         startGetUpdates()
     }
@@ -84,7 +83,7 @@ class CoolMapController : Controller() {
     private fun repaintNewCoordinateText() {
         textGroup.children.clear()
         val deltaX = currentMaxCoordinatesX - currentMinCoordinatesX
-        var kX = (coolMap.p.width - 2 * border) / deltaX
+        val kX = (coolMap.p.width - 2 * border) / deltaX
         var i = currentMinCoordinatesX
         while (i <= currentMaxCoordinatesX + 5.0) {
             val text = Text()
@@ -95,7 +94,7 @@ class CoolMapController : Controller() {
             i += deltaX / 10
         }
         val deltaY = currentMaxCoordinatesY - currentMinCoordinatesY
-        var kY = (coolMap.p.height - 2 * border) / deltaY
+        val kY = (coolMap.p.height - 2 * border) / deltaY
         i = currentMinCoordinatesY
         while (i <= currentMaxCoordinatesY + 5.0) {
             val text = Text()
@@ -118,7 +117,7 @@ class CoolMapController : Controller() {
     }
 
     /**
-     *
+     * Запускает запрос обновлений
      */
     private fun startGetUpdates() {
         updater = Thread(Runnable {
@@ -187,11 +186,17 @@ class CoolMapController : Controller() {
         var maxY = currentMinCoordinatesY
         var minX = currentMaxCoordinatesX
         var minY = currentMaxCoordinatesY
-        for (pp: MutableMap.MutableEntry<Int, ProductPoint> in figures) {
-            if (maxX < pp.value.xReal) maxX = pp.value.xReal
-            if (maxY < pp.value.yReal) maxY = pp.value.yReal
-            if (minX > pp.value.xReal) minX = pp.value.xReal
-            if (minY > pp.value.yReal) minY = pp.value.yReal
+        if (figures.isNotEmpty())
+            for (pp: MutableMap.MutableEntry<Int, ProductPoint> in figures) {
+                if (maxX < pp.value.xReal) maxX = pp.value.xReal
+                if (maxY < pp.value.yReal) maxY = pp.value.yReal
+                if (minX > pp.value.xReal) minX = pp.value.xReal
+                if (minY > pp.value.yReal) minY = pp.value.yReal
+            } else {
+            maxX = 100.0
+            maxY = 100.0
+            minX = -100.0
+            minY = -100.0
         }
         currentMaxCoordinatesX = maxX + indent
         currentMaxCoordinatesY = maxY + indent
@@ -238,16 +243,16 @@ class CoolMapController : Controller() {
      * Удаляет объект с поля
      */
     private fun removeFromMap(product: Product) {
-        var productid = product.id
-        var productf = figures[productid]
-        figures.remove(productid)
+        val productId = product.id
+        val productF = figures[productId]
+        figures.remove(productId)
         sequentialTransition {
             timeline {
                 keyframe(Duration.seconds(0.625)) {
-                    productf?.removeAnimation()
+                    productF?.removeAnimation()
                     setOnFinished {
                         if (connectController.isLogin) {
-                            productf?.group?.removeFromParent()
+                            productF?.group?.removeFromParent()
                             updateCoordinates()
                         }
                     }

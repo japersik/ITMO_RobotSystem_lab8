@@ -14,17 +14,17 @@ import tornadofx.*
 import java.util.regex.Pattern
 
 class RegistrationView : View("Please reg") {
-    val connectController: ConnectController by inject()
-    val notificationsController: NotificationsController by inject()
-    val localizationManager: LocalizationManager by inject()
-    val toolbar = Toolbar()
+    private val connectController: ConnectController by inject()
+    private val notificationsController: NotificationsController by inject()
+    private val localizationManager: LocalizationManager by inject()
+    private val toolbar = Toolbar()
     private val model = object : ViewModel() {
         val login = bind { SimpleStringProperty() }
         val password = bind { SimpleStringProperty() }
     }
 
     override val root =
-            borderpane() {
+            borderpane{
                 top { add(toolbar) }
                 center {
                     form {
@@ -77,11 +77,11 @@ class RegistrationView : View("Please reg") {
                     }
                 }
             }
-    private val VALIDEMAIL: Pattern =
-            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    private val pattern: Pattern =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE)
 
     private fun validate(emailStr: String): Boolean {
-        return VALIDEMAIL.matcher(emailStr).find();
+        return pattern.matcher(emailStr).find()
     }
 
     init {
@@ -89,6 +89,7 @@ class RegistrationView : View("Please reg") {
     }
 
     fun updateLanguage() {
+        toolbar.updateLanguage()
         (root.lookup("#email") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_EMAIL)
         (root.lookup("#pass") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_PASSWORD)
         (root.lookup("#reg") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_REG)

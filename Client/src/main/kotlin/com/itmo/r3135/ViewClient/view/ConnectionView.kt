@@ -9,15 +9,15 @@ import javafx.scene.control.Labeled
 import tornadofx.*
 
 class ConnectionView : View("Connect controller") {
-    val connectController: ConnectController by inject()
-    val localizationManager: LocalizationManager by inject()
-    val toolbar= Toolbar()
+    private val connectController: ConnectController by inject()
+    private val localizationManager: LocalizationManager by inject()
+    private val toolbar= Toolbar()
     private val model = object : ViewModel() {
         val host = bind { SimpleStringProperty() }
         val port = bind { SimpleStringProperty() }
     }
 
-    override val root = borderpane() {
+    override val root = borderpane{
         top { add(toolbar) }
         center {
             form {
@@ -61,8 +61,8 @@ class ConnectionView : View("Connect controller") {
 
     fun updateLanguage() {
         toolbar.updateLanguage()
-        (root.lookup("#port") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_HOST)
-        (root.lookup("#host") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_PORT)
+        (root.lookup("#port") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_PORT)
+        (root.lookup("#host") as Field).text = localizationManager.getNativeTitle(LocaleString.TITLE_HOST)
         (root.lookup("#ping") as Labeled).text = localizationManager.getNativeButton(LocaleString.BUTTON_PING)
     }
 
