@@ -54,6 +54,7 @@ class CoolMapController : Controller() {
     }
 
     fun initial() {
+        products.clear()
         connectController.send(Command(CommandList.SHOW))
         startGetUpdates()
     }
